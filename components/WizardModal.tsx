@@ -20,7 +20,7 @@ import {
     predefinedBuiltWith,
     predefinedFeatures,
     predefinedSuitableFor,
-    predefinedTags, themeXYZStorage
+    predefinedTags, themeXYZStorage, helpDurationLabels
 } from "@/lib/utils"
 import toast from "react-hot-toast"
 import SuccessSplash from "@/components/SuccessSplash";
@@ -109,7 +109,9 @@ export const stepImages: (string | null)[] = [
 
 const licenseTypes = ["regular", "extended", "commercial"]
 
-const helpDurations = ["1m", "2m", "3m", "4m", "6m", "1y"]
+const helpDurations = ["1w", "1m", "2m", "3m", "4m", "6m", "1y"]
+
+
 const contactMethods = ["WhatsApp", "Email", "Call"]
 
 export default function SellWizardModal({ open, onClose, user }: SellWizardModalProps) {
@@ -174,7 +176,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
     const [currentContactMethod, setCurrentContactMethod] = useState("")
     const [currentContactValue, setCurrentContactValue] = useState("")
     const [currentHelpType, setCurrentHelpType] = useState<"author" | "extended">("author")
-    const [tempHelpDuration, setTempHelpDuration] = useState("6m")
+    const [tempHelpDuration, setTempHelpDuration] = useState("1w")
     const [tempHelpFeeUSD, setTempHelpFeeUSD] = useState<number | "">(0)
     const [tempHelpFeeNGN, setTempHelpFeeNGN] = useState<number | "">(0)
     const [tempLoginDetails, setTempLoginDetails] = useState({ username: "", password: "", description: "" })
@@ -256,7 +258,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         handleChange("helpDurationSettings", [...filteredSettings, newSetting])
 
         // Reset temp values
-        setTempHelpDuration("6m")
+        setTempHelpDuration("1w")
         setTempHelpFeeUSD(0)
         setTempHelpFeeNGN(0)
         setShowHelpDurationModal(false)
@@ -995,7 +997,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                                 <div>
                                                     <div className="font-medium text-sm text-gray-900 capitalize">{setting.type} Help</div>
                                                     <div className="text-xs text-gray-600">
-                                                        Duration: {setting.duration} | USD: {setting.feeUSD ? formatPrice(setting.feeUSD) : "Free"}{" "}
+                                                        Duration: {helpDurationLabels[setting.duration]} | USD: {setting.feeUSD ? formatPrice(setting.feeUSD) : "Free"}{" "}
                                                         | NGN: {setting.feeNGN ? formatPrice(setting.feeNGN) : "Free"}
                                                     </div>
                                                 </div>
@@ -2078,9 +2080,10 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                     <SelectContent>
                                         {helpDurations.map((duration) => (
                                             <SelectItem key={duration} value={duration}>
-                                                {duration}
+                                                {helpDurationLabels[duration]}
                                             </SelectItem>
                                         ))}
+
                                     </SelectContent>
                                 </Select>
                             </div>

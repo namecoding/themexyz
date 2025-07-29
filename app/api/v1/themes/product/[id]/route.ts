@@ -14,7 +14,8 @@ export async function GET(req: Request, { params }: Params) {
   try {
     await dbConnect();
 
-    const themeDoc = await Theme.findById(new ObjectId(params.id));
+    // const themeDoc = await Theme.findById(new ObjectId(params.id));
+    const themeDoc = await Theme.findOne({ slug: params.id });
 
     if (!themeDoc) {
       return NextResponse.json(

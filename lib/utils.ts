@@ -3,30 +3,24 @@ import { twMerge } from "tailwind-merge"
 import toast from "react-hot-toast";
 // import PaystackPop from "@paystack/inline-js";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { headers } from 'next/headers'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-//export const baseUrl = process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL; //'http://localhost:3000/api/v1'
-//export const serverBase = process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE; //'http://localhost:3000/api/v1'
+export const baseUrl = process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL; //'http://localhost:3000/api/v1'
+export const serverBase = process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE; //'http://localhost:3000/api/v1'
 
-export const baseUrl =
-  typeof window !== 'undefined'
-    ? process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL || ''
-    : ''
+// export const baseUrl =
+//   typeof window !== 'undefined'
+//     ? process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL
+//     : ''
 
-export const serverBase =
-  typeof window !== 'undefined'
-    ? process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE || ''
-    : (() => {
-        if (process.env.NODE_ENV === 'development') {
-          return process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE || 'http://localhost:3000'
-        }
-        const host = headers().get('host') || 'localhost:3000'
-        return `https://${host}`
-      })()
+// export const serverBase =
+//   typeof window !== 'undefined'
+//     ? process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE
+//     : ''
+
 
 export function getMembershipDuration(isoDateString: string): string {
   const createdDate = new Date(isoDateString);
@@ -652,3 +646,12 @@ export function generateSlug(title: string) {
     .replace(/(^-|-$)+/g, "");
 }
 
+export const helpDurationLabels: Record<string, string> = {
+  "1w": "1 Week",
+  "1m": "1 Month",
+  "2m": "2 Months",
+  "3m": "3 Months",
+  "4m": "4 Months",
+  "6m": "6 Months",
+  "1y": "1 Year",
+};

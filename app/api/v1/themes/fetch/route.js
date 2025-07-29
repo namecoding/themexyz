@@ -9,7 +9,7 @@ export async function GET() {
     try {
         await dbConnect();
 
-        const themes = await Theme.find();
+        const themes = await Theme.find({ isPublic: true });
 
         const formatTheme = (themeDoc) => {
             const theme = themeDoc.toObject();

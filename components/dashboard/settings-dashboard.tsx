@@ -2,21 +2,22 @@
 
 import type React from "react"
 
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
-import { User, Lock, Bell, CreditCard, Upload, Check, AlertTriangle, KeyIcon } from "lucide-react"
+import { User, Lock, Bell, CreditCard, Upload, Check, AlertTriangle, KeyIcon, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import toast from 'react-hot-toast';
-import {baseUrl, metaData} from "@/lib/utils";
+import { baseUrl, metaData } from "@/lib/utils";
 
 interface SettingsDashboardProps {
   user: any
-  id:null
+  id: null
 }
 
 export default function SettingsDashboard({ user }: SettingsDashboardProps) {
   const [activeTab, setActiveTab] = useState<"profile" | "password" | "notifications" | "billing" | "accessCode">("profile")
+  const [isProcessingAccessCode, setIsProcessingAccessCode] = useState(false)
   const [profileForm, setProfileForm] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -33,39 +34,68 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
 
 
   const [accessCodeForm, setAccessCodeForm] = useState({
-  currentCode: '',
-  newCode: '',
-  confirmCode: '',
-});
+    currentCode: '',
+    newCode: '',
+    confirmCode: '',
+  });
 
-const handleAccessCodeSubmit = async (e) => {
-  e.preventDefault();
+  const handleAccessCodeSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!user?.admin?.permission) return;
+    if (!user?.admin?.permission) return;
 
-  try {
     const token = localStorage.getItem("token"); // or however you're storing it
 
-    const res = await fetch(`${baseUrl}/admin/update-access-code`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(accessCodeForm),
-    });
-
-    const data = await res.json();
-    if (data.success) {
-      toast.success("Access code updated successfully!");
-    } else {
-      toast.error(data.message || "Failed to update access code.");
+    if (!token) {
+      return toast.error("Authentication token missing. Please log in again.");
     }
-  } catch (error) {
-    console.error("Access code update error:", error);
-    toast.error("An error occurred while updating access code.");
-  }
-};
+
+    const { newCode, confirmCode } = accessCodeForm;
+
+    // Client-side validations
+    if (newCode.length < 4) {
+      return toast.error("New access code must be at least 4 characters.");
+    }
+
+    if (newCode !== confirmCode) {
+      return toast.error("New access code and confirmation do not match.");
+    }
+
+    try {
+
+      setIsProcessingAccessCode(true)
+      const res = await fetch(`${baseUrl}/admin/update-access-code`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(accessCodeForm),
+      });
+
+      const data = await res.json();
+
+      setIsProcessingAccessCode(false)
+
+      if (data.success) {
+        toast.success("Access code updated successfully!");
+
+        setAccessCodeForm({
+          currentCode: '',
+          newCode: '',
+          confirmCode: '',
+        })
+
+
+      } else {
+        toast.error(data.message || "Failed to update access code.");
+      }
+    } catch (error) {
+      setIsProcessingAccessCode(false)
+      console.log("Access code update error:", error);
+      toast.error("An error occurred while updating access code.");
+    }
+  };
 
 
 
@@ -161,7 +191,7 @@ const handleAccessCodeSubmit = async (e) => {
       if (!response.ok || !data.success) {
         setErrorMessage(data.message || "Failed to update password");
         toast.error(data.message, { id: toastId });
-       // setTimeout(() => setErrorMessage(""), 3000);
+        // setTimeout(() => setErrorMessage(""), 3000);
         return;
       }
 
@@ -190,7 +220,7 @@ const handleAccessCodeSubmit = async (e) => {
     setTimeout(() => setSuccessMessage(""), 3000)
 
     // const toastId = toast.loading('Please Wait...');
-    toast.success('Notification settings updated successfully',{});
+    toast.success('Notification settings updated successfully', {});
 
     return
   }
@@ -220,11 +250,10 @@ const handleAccessCodeSubmit = async (e) => {
               <ul className="space-y-1">
                 <li>
                   <button
-                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${
-                      activeTab === "profile"
-                        ? "bg-green-500 text-white"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
+                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${activeTab === "profile"
+                      ? "bg-green-500 text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      }`}
                     onClick={() => setActiveTab("profile")}
                   >
                     <User className="h-4 w-4 mr-3" />
@@ -235,25 +264,23 @@ const handleAccessCodeSubmit = async (e) => {
 
                 <li>
                   <button
-                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${
-                      activeTab === "billing"
-                        ? "bg-green-500 text-white"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
+                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${activeTab === "billing"
+                      ? "bg-green-500 text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      }`}
                     onClick={() => setActiveTab("billing")}
                   >
                     <CreditCard className="h-4 w-4 mr-3" />
                     <span>Billing & Payments</span>
                   </button>
                 </li>
-                
+
                 <li>
                   <button
-                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${
-                      activeTab === "notifications"
-                        ? "bg-green-500 text-white"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
+                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${activeTab === "notifications"
+                      ? "bg-green-500 text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      }`}
                     onClick={() => setActiveTab("notifications")}
                   >
                     <Bell className="h-4 w-4 mr-3" />
@@ -264,11 +291,10 @@ const handleAccessCodeSubmit = async (e) => {
 
                 <li>
                   <button
-                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${
-                      activeTab === "password"
-                        ? "bg-green-500 text-white"
-                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
+                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${activeTab === "password"
+                      ? "bg-green-500 text-white"
+                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      }`}
                     onClick={() => setActiveTab("password")}
                   >
                     <Lock className="h-4 w-4 mr-3" />
@@ -280,21 +306,20 @@ const handleAccessCodeSubmit = async (e) => {
                   user?.admin?.permission &&
 
                   <li>
-                  <button
-                    className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${
-                      activeTab === "accessCode"
+                    <button
+                      className={`w-full flex items-center px-3 py-2 rounded-md text-sm ${activeTab === "accessCode"
                         ? "bg-green-500 text-white"
                         : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
-                    onClick={() => setActiveTab("accessCode")}
-                  >
-                    <KeyIcon className="h-4 w-4 mr-3" />
-                    <span>Change Access Code</span>
-                  </button>
-                </li>
+                        }`}
+                      onClick={() => setActiveTab("accessCode")}
+                    >
+                      <KeyIcon className="h-4 w-4 mr-3" />
+                      <span>Change Access Code</span>
+                    </button>
+                  </li>
                 }
 
-                
+
               </ul>
             </nav>
           </div>
@@ -310,10 +335,10 @@ const handleAccessCodeSubmit = async (e) => {
             )}
 
             {comingSoonMessage && (
-                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded-md flex items-center">
-                  <Check className="h-5 w-5 mr-2" />
-                  {comingSoonMessage}
-                </div>
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded-md flex items-center">
+                <Check className="h-5 w-5 mr-2" />
+                {comingSoonMessage}
+              </div>
             )}
 
             {errorMessage && (
@@ -380,61 +405,68 @@ const handleAccessCodeSubmit = async (e) => {
                     </div>
                   </div>
 
-                  <div>
-                    <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                      Username
-                    </label>
-                    <input
-                      type="text"
-                      id="username"
-                      value={profileForm.username}
-                      onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                    />
-                  </div>
+                  {
+                    user?.isAuthor &&
 
-                  <div>
-                    <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
-                      Bio
-                    </label>
-                    <textarea
-                      id="bio"
-                      rows={3}
-                      value={profileForm.bio}
-                      onChange={(e) => setProfileForm({ ...profileForm, bio: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                      placeholder="Tell us a little about yourself"
-                    ></textarea>
-                  </div>
+                    <>
+                      <div>
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                          Display Name
+                        </label>
+                        <input
+                          type="text"
+                          id="username"
+                          value={profileForm.username}
+                          onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                        />
+                      </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">
-                        Website
-                      </label>
-                      <input
-                        type="url"
-                        id="website"
-                        value={profileForm.website}
-                        onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                        placeholder="https://example.com"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-                        Location
-                      </label>
-                      <input
-                        type="text"
-                        id="location"
-                        value={profileForm.location}
-                        onChange={(e) => setProfileForm({ ...profileForm, location: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                        placeholder="City, Country"
-                      />
-                    </div>
-                  </div>
+                      <div>
+                        <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                          Bio
+                        </label>
+                        <textarea
+                          id="bio"
+                          rows={3}
+                          value={profileForm.bio}
+                          onChange={(e) => setProfileForm({ ...profileForm, bio: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                          placeholder="Tell us a little about yourself"
+                        ></textarea>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">
+                            Website
+                          </label>
+                          <input
+                            type="url"
+                            id="website"
+                            value={profileForm.website}
+                            onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            placeholder="https://example.com"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+                            Location
+                          </label>
+                          <input
+                            type="text"
+                            id="location"
+                            value={profileForm.location}
+                            onChange={(e) => setProfileForm({ ...profileForm, location: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            placeholder="City, Country"
+                          />
+                        </div>
+                      </div>
+                    </>
+
+                  }
 
                   <div className="pt-4">
                     <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white">
@@ -504,71 +536,70 @@ const handleAccessCodeSubmit = async (e) => {
 
                   {
                     isLoadingBillingHistory ?
-                        <div className="inset-0 flex items-center justify-center">
-                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 gap-1"></div>
-                          <span className="z-20 text-xs gap-1"> Fetching Data...</span>
-                        </div>
-                        :
-                        <div className="border border-gray-200 rounded-md overflow-hidden">
-                          <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                      <div className="inset-0 flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 gap-1"></div>
+                        <span className="z-20 text-xs gap-1"> Fetching Data...</span>
+                      </div>
+                      :
+                      <div className="border border-gray-200 rounded-md overflow-hidden">
+                        <table className="min-w-full divide-y divide-gray-200">
+                          <thead className="bg-gray-50">
                             <tr>
                               <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                scope="col"
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
                                 Date
                               </th>
                               <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                scope="col"
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
                                 Description
                               </th>
                               <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                scope="col"
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
                                 Amount
                               </th>
                               <th
-                                  scope="col"
-                                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                scope="col"
+                                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                               >
                                 Status
                               </th>
                             </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
                             {billingHistory.map((item, index) => (
-                                <tr key={index}>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.date}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.description}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><small className={`text-xs ${item.currency ==='NGN' ? 'text-green-600':'text-red-600'}`}>{item.currency}</small> {item.amount.toLocaleString()}</td>
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full capitalize ${
-                                    item.status === "successful" || item.status === "funded" || item.status === "completed" || item.status === "release" || item.status === "success"
-                                        ? "bg-green-100 text-green-800"
-                                        : item.status === "pending"
-                                            ? "bg-yellow-100 text-yellow-800"
-                                            : item.status === "failed" || item.status === "cancelled"
-                                                ? "bg-red-100 text-red-800"
-                                                : item.status === "refunded"
-                                                    ? "bg-blue-100 text-blue-800"
-                                                    : ""
-                                }`}
-                            >
-                              {item.status}
-                            </span>
+                              <tr key={index}>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.date}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.description}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><small className={`text-xs ${item.currency === 'NGN' ? 'text-green-600' : 'text-red-600'}`}>{item.currency}</small> {item.amount.toLocaleString()}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <span
+                                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full capitalize ${item.status === "successful" || item.status === "funded" || item.status === "completed" || item.status === "release" || item.status === "success"
+                                      ? "bg-green-100 text-green-800"
+                                      : item.status === "pending"
+                                        ? "bg-yellow-100 text-yellow-800"
+                                        : item.status === "failed" || item.status === "cancelled"
+                                          ? "bg-red-100 text-red-800"
+                                          : item.status === "refunded"
+                                            ? "bg-blue-100 text-blue-800"
+                                            : ""
+                                      }`}
+                                  >
+                                    {item.status}
+                                  </span>
 
-                                  </td>
-                                </tr>
+                                </td>
+                              </tr>
                             ))}
-                            </tbody>
+                          </tbody>
 
-                          </table>
-                        </div>
+                        </table>
+                      </div>
 
                   }
 
@@ -709,23 +740,23 @@ const handleAccessCodeSubmit = async (e) => {
               <div>
                 <h2 className="text-xl font-semibold mb-4">Password & Security</h2>
                 <form onSubmit={handlePasswordSubmit} className="space-y-4">
-                 
+
                   {
                     !user.isSocial &&
 
                     <div>
-                    <label htmlFor="current-password" className="block text-sm font-medium text-gray-700 mb-1">
-                      Current Password
-                    </label>
-                    <input
-                      type="password"
-                      id="current-password"
-                      value={passwordForm.currentPassword}
-                      onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                      required
-                    />
-                  </div>
+                      <label htmlFor="current-password" className="block text-sm font-medium text-gray-700 mb-1">
+                        Current Password
+                      </label>
+                      <input
+                        type="password"
+                        id="current-password"
+                        value={passwordForm.currentPassword}
+                        onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                        required
+                      />
+                    </div>
                   }
 
                   <div>
@@ -771,80 +802,83 @@ const handleAccessCodeSubmit = async (e) => {
                   <p className="text-sm text-gray-600 mb-4">
                     Add an extra layer of security to your account by enabling two-factor authentication.
                   </p>
-                  <Button onClick={()=>enableTwoFactor()} variant="outline">Enable Two-Factor Authentication <small className="text-red-600 text-xs">Coming soon!</small></Button>
+                  <Button onClick={() => enableTwoFactor()} variant="outline">Enable Two-Factor Authentication <small className="text-red-600 text-xs">Coming soon!</small></Button>
                 </div>
               </div>
             )}
 
 
-              {/* Access Code Tab */}
-              {activeTab === "accessCode" && (
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">Admin Access Code</h2>
+            {/* Access Code Tab */}
+            {activeTab === "accessCode" && (
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Admin Access Code</h2>
                 <div className="bg-yellow-100">
-                <p className="text-sm text-yellow-600 mb-6 px-4 py-3">
-                  If you haven’t changed your access code before, please check your email for the default one sent to you.
-                </p>
-              </div>
-
-                  <form onSubmit={handleAccessCodeSubmit} className="space-y-4">
-
-                    <div>
-                      <label htmlFor="current-access-code" className="block text-sm font-medium text-gray-700 mb-1">
-                        Current Access Code
-                      </label>
-                      <input
-                        type="password"
-                        id="current-access-code"
-                        value={accessCodeForm.currentCode}
-                        onChange={(e) => setAccessCodeForm({ ...accessCodeForm, currentCode: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="new-access-code" className="block text-sm font-medium text-gray-700 mb-1">
-                        New Access Code
-                      </label>
-                      <input
-                        type="password"
-                        id="new-access-code"
-                        value={accessCodeForm.newCode}
-                        onChange={(e) => setAccessCodeForm({ ...accessCodeForm, newCode: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                        required
-                      />
-                      <p className="text-xs text-gray-500 mt-1">
-                        Access code must be at least 8 characters and include a number and a special character.
-                      </p>
-                    </div>
-
-                    <div>
-                      <label htmlFor="confirm-access-code" className="block text-sm font-medium text-gray-700 mb-1">
-                        Confirm New Access Code
-                      </label>
-                      <input
-                        type="password"
-                        id="confirm-access-code"
-                        value={accessCodeForm.confirmCode}
-                        onChange={(e) => setAccessCodeForm({ ...accessCodeForm, confirmCode: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                        required
-                      />
-                    </div>
-
-                    <div className="pt-4">
-                      <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white">
-                        Update Access Code
-                      </Button>
-                    </div>
-                  </form>
+                  <p className="text-sm text-yellow-600 mb-6 px-4 py-3">
+                    If you haven’t changed your access code before, please check your email for the default one sent to you.
+                  </p>
                 </div>
-              )}
+
+                <form onSubmit={handleAccessCodeSubmit} className="space-y-4">
+
+                  <div>
+                    <label htmlFor="current-access-code" className="block text-sm font-medium text-gray-700 mb-1">
+                      Current Access Code
+                    </label>
+                    <input
+                      type="password"
+                      id="current-access-code"
+                      value={accessCodeForm.currentCode}
+                      onChange={(e) => setAccessCodeForm({ ...accessCodeForm, currentCode: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="new-access-code" className="block text-sm font-medium text-gray-700 mb-1">
+                      New Access Code
+                    </label>
+                    <input
+                      type="password"
+                      id="new-access-code"
+                      value={accessCodeForm.newCode}
+                      onChange={(e) => setAccessCodeForm({ ...accessCodeForm, newCode: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Access code must be at least 4 characters or more.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label htmlFor="confirm-access-code" className="block text-sm font-medium text-gray-700 mb-1">
+                      Confirm New Access Code
+                    </label>
+                    <input
+                      type="password"
+                      id="confirm-access-code"
+                      value={accessCodeForm.confirmCode}
+                      onChange={(e) => setAccessCodeForm({ ...accessCodeForm, confirmCode: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      required
+                    />
+                  </div>
+
+                  <div className="pt-4">
+                    <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white flex items-center gap-2">
+                      {isProcessingAccessCode && (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      )}
+                      {isProcessingAccessCode ? "Processing..." : "Update Access Code"}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            )}
 
 
-            
+
           </div>
         </div>
       </div>

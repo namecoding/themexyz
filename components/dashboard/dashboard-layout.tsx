@@ -121,9 +121,12 @@ export default function DashboardLayout({
               <Home className="h-4 w-4 mr-1" />
               <span>Marketplace</span>
             </Link>
-            <Link href="#" className="text-white hover:text-gray-300 hidden md:flex items-center text-sm">
+            <Link href="../wishlist" className="text-white hover:text-gray-300 hidden md:flex items-center text-sm">
               <Heart className="h-4 w-4 mr-1" />
               <span>Wishlist</span>
+              <span className="ml-1 bg-green-500 text-white text-xs rounded-full px-1.5">
+                0
+              </span>
             </Link>
             <Link href="#" className="text-white hover:text-gray-300 relative">
               <Bell className="h-5 w-5" />
@@ -304,66 +307,63 @@ export default function DashboardLayout({
                   </nav> */}
 
                   <nav>
-  <ul className="space-y-1">
-    {menuItems.map((item) => (
-      <li key={item.name}>
-        {item.name === "Sell" ? (
-          <button
-            onClick={() => {
-              user?.authorityToSell ? setOpenWizard(true) : setShowUnderReview(true)
-              setIsMobileMenuOpen(false)
-            }}
-            className={`flex items-center w-full text-left px-3 py-2 rounded-md text-sm ${
-              item.active
-                ? "bg-green-500 text-white"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-            }`}
-          >
-            <item.icon className="h-4 w-4 mr-3" />
-            <span>{item.name}</span>
-          </button>
-        ) : (
-          <Link
-            href={item.href}
-            className={`flex items-center px-3 py-2 rounded-md text-sm ${
-              item.active
-                ? "bg-green-500 text-white"
-                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-            }`}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            <item.icon className="h-4 w-4 mr-3" />
-            <span>{item.name}</span>
-            {item.active && <ChevronRight className="h-4 w-4 ml-auto" />}
-          </Link>
-        )}
-      </li>
-    ))}
-  </ul>
+                    <ul className="space-y-1">
+                      {menuItems.map((item) => (
+                        <li key={item.name}>
+                          {item.name === "Sell" ? (
+                            <button
+                              onClick={() => {
+                                user?.authorityToSell ? setOpenWizard(true) : setShowUnderReview(true)
+                                setIsMobileMenuOpen(false)
+                              }}
+                              className={`flex items-center w-full text-left px-3 py-2 rounded-md text-sm ${item.active
+                                ? "bg-green-500 text-white"
+                                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                }`}
+                            >
+                              <item.icon className="h-4 w-4 mr-3" />
+                              <span>{item.name}</span>
+                            </button>
+                          ) : (
+                            <Link
+                              href={item.href}
+                              className={`flex items-center px-3 py-2 rounded-md text-sm ${item.active
+                                ? "bg-green-500 text-white"
+                                : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                }`}
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              <item.icon className="h-4 w-4 mr-3" />
+                              <span>{item.name}</span>
+                              {item.active && <ChevronRight className="h-4 w-4 ml-auto" />}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
 
-  {user?.admin?.permission && (
-    <div className="mt-4 pt-4 border-t border-gray-100">
-      <Button
-        variant="ghost"
-        className={`w-full justify-start ${
-          isAdminModalOpen
-            ? "text-red-500 hover:text-red-500 hover:bg-red-50"
-            : "text-green-500 hover:text-green-500 hover:bg-green-50"
-        }`}
-        onClick={() => {
-          onSwitchAdmin()
-          setIsMobileMenuOpen(false)
-        }}
-      >
-        <UserRoundCheck className="h-4 w-4 mr-3" />
-        <span>{isAdminModalOpen ? "Close Admin" : "Switch Admin"}</span>
-      </Button>
-    </div>
-  )}
-</nav>
+                    {user?.admin?.permission && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start ${isAdminModalOpen
+                            ? "text-red-500 hover:text-red-500 hover:bg-red-50"
+                            : "text-green-500 hover:text-green-500 hover:bg-green-50"
+                            }`}
+                          onClick={() => {
+                            onSwitchAdmin()
+                            setIsMobileMenuOpen(false)
+                          }}
+                        >
+                          <UserRoundCheck className="h-4 w-4 mr-3" />
+                          <span>{isAdminModalOpen ? "Close Admin" : "Switch Admin"}</span>
+                        </Button>
+                      </div>
+                    )}
+                  </nav>
 
 
-                  
+
                 </div>
 
                 <div className="space-y-1">
@@ -376,12 +376,15 @@ export default function DashboardLayout({
                     <span>Marketplace</span>
                   </Link>
                   <Link
-                    href="#"
+                    href="../wishlist"
                     className="flex items-center px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Heart className="h-4 w-4 mr-3" />
                     <span>Wishlist</span>
+                    <span className="ml-1 bg-green-500 text-white text-xs rounded-full px-1.5">
+                      0
+                    </span>
                   </Link>
                 </div>
 

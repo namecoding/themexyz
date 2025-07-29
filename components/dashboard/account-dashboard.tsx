@@ -211,13 +211,13 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
                   iconColor: "text-purple-600"
                 }
               ].map((item) => (
-                <div key={item.currency} className="bg-white rounded-lg shadow-sm p-4 mb-3">
+                <div key={item?.currency} className="bg-white rounded-lg shadow-sm p-4 mb-3">
                   <div className="flex items-center">
-                    <div className={`${item.bg} p-3 rounded-full mr-4`}>
-                      <CreditCard className={`h-5 w-5 ${item.iconColor}`} />
+                    <div className={`${item?.bg} p-3 rounded-full mr-4`}>
+                      <CreditCard className={`h-5 w-5 ${item?.iconColor}`} />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Sales Balance ({item.currency})</p>
+                      <p className="text-sm text-gray-500">Sales Balance ({item?.currency})</p>
                       <h3 className="text-xl font-bold">
                         {item.symbol}
                         {item.balance}
@@ -263,7 +263,7 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
             </div>
             <div>
               <p className="text-sm text-gray-500">Downloads</p>
-              <h3 className="text-xl font-bold">{user.totalDownloads || 0}</h3>
+              <h3 className="text-xl font-bold">{user?.totalDownloads || 0}</h3>
             </div>
           </div>
         </div>
@@ -300,7 +300,7 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
             </div>
             <div>
               <p className="text-sm text-gray-500">Loyalty Point</p>
-              <h3 className="text-xl font-bold">{user.loyaltyPoint || 0}</h3>
+              <h3 className="text-xl font-bold">{user?.loyaltyPoint || 0}</h3>
             </div>
           </div>
         </div>
@@ -344,8 +344,8 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
                   <div className="flex-shrink-0 mr-4">
                     <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
                       <Image
-                        src={purchase.image || "/placeholder.svg?height=60&width=80"}
-                        alt={purchase.title}
+                        src={purchase?.image || "/placeholder.svg?height=60&width=80"}
+                        alt={purchase?.title}
                         width={80}
                         height={60}
                         className="w-full h-full object-cover"
@@ -353,19 +353,19 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
                     </div>
                   </div>
                   <div className="flex-grow min-w-0">
-                    <h3 className="font-medium text-sm truncate">{purchase.title}</h3>
+                    <h3 className="font-medium text-sm truncate">{purchase?.title}</h3>
                     <div className="flex items-center text-xs text-gray-500 mt-1">
                       <Calendar className="h-3 w-3 mr-1" />
-                      <span>Purchased on {purchase.purchaseDate}</span>
+                      <span>Purchased on {purchase?.purchaseDate}</span>
                     </div>
                   </div>
                   <div className="flex-shrink-0 ml-4 flex flex-col items-end">
-                    <span className="font-bold text-sm">${purchase.price}</span>
+                    <span className="font-bold text-sm">${purchase?.price}</span>
                     <Badge
                       variant="outline"
                       className="mt-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize"
                     >
-                      {purchase.type}
+                      {purchase?.type}
                     </Badge>
                   </div>
                 </div>
@@ -433,13 +433,13 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
             activities.map((activity, index) => (
               <div key={index} className="p-4 hover:bg-gray-50">
                 <div className="flex items-start">
-                  {renderIcon(activity.type)}
+                  {renderIcon(activity?.type)}
                   <div>
                     <p className="text-sm">
-                      {activity.title}{" "} -
-                      <span className="font-medium">{activity.description}</span>
+                      {activity?.title}{" "} -
+                      <span className="font-medium">{activity?.description}</span>
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">{formatReadableDate(activity.createdAt)}</p>
+                    <p className="text-xs text-gray-500 mt-1">{formatReadableDate(activity?.createdAt)}</p>
                   </div>
                 </div>
               </div>

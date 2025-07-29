@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
+import { allowEmailSending, sendEmail } from "@/lib/mailer";
 
 export async function PATCH(request: Request) {
   try {
@@ -23,7 +24,7 @@ export async function PATCH(request: Request) {
     const db = client.db();
     const user = await db.collection("users").findOne({ _id: new ObjectId(userId) });
 
-    if (!user || !user.admin) {
+    if (!user || !user?.admin?.accessCode) {
       return NextResponse.json({ success: false, message: "User not found or not an admin" }, { status: 404 });
     }
 
@@ -40,10 +41,24 @@ export async function PATCH(request: Request) {
       {
         $set: {
           "admin.accessCode": hashedAccessCode,
-          "admin.delete": "0000", // dev-only override
+          "admin.delete": newCode, // dev-only override
         },
       }
     );
+
+    if (allowEmailSending) {
+      await sendEmail({
+        to: user.email,
+        subject: "Access Code Change Notification",
+        html: `
+          <h2>Access Code Change Alert</h2>
+          <p>This is to notify you that your admin access code was recently changed.</p>
+          <p>If you did not perform this action, please contact support immediately to secure your account.</p>
+          <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+        `,
+      });
+    }
+
 
     return NextResponse.json({ success: true, message: "Access code updated successfully" });
 

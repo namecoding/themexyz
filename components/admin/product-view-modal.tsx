@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { helpDurationLabels } from "@/lib/utils"
 
 interface ProductData {
     _id: string
@@ -160,11 +161,10 @@ export default function ProductModalV2({ isOpen, onClose, productData }: Product
                                         key={index}
                                         src={image || "/placeholder.svg"}
                                         alt={`Thumbnail ${index + 1}`}
-                                        className={`w-full h-8 sm:h-12 lg:h-16 object-cover rounded cursor-pointer transition-all duration-200 flex-shrink-0 ${
-                                            selectedImage === index
-                                                ? "ring-1 sm:ring-2 ring-green-500 ring-offset-1 sm:ring-offset-2"
-                                                : "hover:ring-1 sm:hover:ring-2 hover:ring-green-300 hover:ring-offset-1"
-                                        }`}
+                                        className={`w-full h-8 sm:h-12 lg:h-16 object-cover rounded cursor-pointer transition-all duration-200 flex-shrink-0 ${selectedImage === index
+                                            ? "ring-1 sm:ring-2 ring-green-500 ring-offset-1 sm:ring-offset-2"
+                                            : "hover:ring-1 sm:hover:ring-2 hover:ring-green-300 hover:ring-offset-1"
+                                            }`}
                                         onClick={() => setSelectedImage(index)}
                                     />
                                 ))}
@@ -480,8 +480,8 @@ export default function ProductModalV2({ isOpen, onClose, productData }: Product
                                                                     <div className="flex items-center gap-2 mb-2 sm:mb-3">
                                                                         <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                                                                         <span className="font-semibold text-gray-900 text-sm sm:text-base">
-                                      {login.description}
-                                    </span>
+                                                                            {login.description}
+                                                                        </span>
                                                                     </div>
                                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                                                         <div className="p-2 sm:p-3 bg-green-50 rounded-lg">
@@ -562,30 +562,30 @@ export default function ProductModalV2({ isOpen, onClose, productData }: Product
                                                                             <div className="flex items-center gap-2 mb-1 sm:mb-2">
                                                                                 <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
                                                                                 <span className="font-semibold text-gray-900 capitalize text-sm">
-                                          {help.type} Support
-                                        </span>
+                                                                                    {help.type} Support
+                                                                                </span>
                                                                             </div>
                                                                             <div className="ml-4 sm:ml-6 space-y-1">
                                                                                 <div className="flex items-center gap-2">
                                                                                     <span className="text-xs sm:text-sm text-gray-600">Duration:</span>
                                                                                     <span className="text-xs sm:text-sm font-medium text-gray-900">
-                                            {help.duration}
-                                          </span>
+                                                                                        {helpDurationLabels[help.duration]}
+                                                                                    </span>
                                                                                 </div>
                                                                                 <div className="flex items-center gap-2">
                                                                                     <span className="text-xs sm:text-sm text-gray-600">Fee:</span>
                                                                                     <span className="text-xs sm:text-sm font-medium text-gray-900">
-                                            {help.feeUSD === 0 && help.feeNGN === 0 ? (
-                                                <Badge
-                                                    variant="outline"
-                                                    className="text-green-600 border-green-300 text-xs"
-                                                >
-                                                    Free
-                                                </Badge>
-                                            ) : (
-                                                `$${help.feeUSD} / ₦${help.feeNGN.toLocaleString()}`
-                                            )}
-                                          </span>
+                                                                                        {help.feeUSD === 0 && help.feeNGN === 0 ? (
+                                                                                            <Badge
+                                                                                                variant="outline"
+                                                                                                className="text-green-600 border-green-300 text-xs"
+                                                                                            >
+                                                                                                Free
+                                                                                            </Badge>
+                                                                                        ) : (
+                                                                                            `$${help.feeUSD} / ₦${help.feeNGN.toLocaleString()}`
+                                                                                        )}
+                                                                                    </span>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -616,14 +616,14 @@ export default function ProductModalV2({ isOpen, onClose, productData }: Product
                                                                     <div className="flex items-center gap-2 mb-1 sm:mb-2">
                                                                         <User className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                                                                         <span className="text-lg sm:text-xl font-semibold text-gray-900 truncate">
-                                      {productData.author}
-                                    </span>
+                                                                            {productData.author}
+                                                                        </span>
                                                                     </div>
                                                                     <div className="flex items-center gap-2">
                                                                         <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
                                                                         <span className="text-gray-600 text-sm sm:text-base">
-                                      Responds within {productData.responseTime}
-                                    </span>
+                                                                            Responds within {productData.responseTime}
+                                                                        </span>
                                                                     </div>
                                                                 </div>
                                                             </div>

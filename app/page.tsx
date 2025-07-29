@@ -518,6 +518,7 @@ export default function Home() {
       method: 'GET',
       redirect: 'follow'
     };
+    setPleaseWaitWhileYourTransactionIsProcessing(true)
 
     fetch(`${baseUrl}/themes/fetch`, requestOptions)
       .then(response => response.json())
@@ -526,8 +527,13 @@ export default function Home() {
         setFeaturedTheme(result?.data?.featured || [])
         setBestSelling(result?.data?.bestSelling || [])
         setNewestThemes(result?.data?.newest || [])
+
+        setPleaseWaitWhileYourTransactionIsProcessing(false)
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setPleaseWaitWhileYourTransactionIsProcessing(false)
+        console.log('error', error)
+      });
   }
 
   useEffect(() => {
@@ -826,7 +832,13 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {pleaseWaitWhileYourTransactionIsProcessing
                 ? Array.from({ length: 4 }).map((_, index) => (
-                  <SkeletonEffect key={index} index={index} />
+                  <div key={index} className="h-64 rounded-lg dark:bg-gray-800 animate-pulse">
+                    <div className="space-y-2 p-4 border rounded-md bg-white dark:bg-muted animate-pulse">
+                      <div className="h-40 bg-gray-300 dark:bg-gray-700 rounded-md" />
+                      <div className="h-4 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" />
+                      <div className="h-3 w-1/2 bg-gray-300 dark:bg-gray-700 rounded" />
+                    </div>
+                  </div>
                 ))
                 : bestSelling.map((item, index) => (
                   <div key={index} className="scroll-animation opacity-0 translate-y-4">
@@ -1070,7 +1082,7 @@ function ThemeCard({ id, openPreview, openTestDemo, addToCart, isInCart, toggleW
   return (
     <div className="bg-white rounded-md shadow-sm overflow-hidden h-full product-card">
       <div className="relative overflow-hidden group">
-        <Link href={`product/${id}`}>
+        <Link href={`product/${featuredTheme?.slug}`}>
           <Image
             src={featuredTheme?.galleryImages[0] || "/placeholder.svg"}
             alt="Theme preview"
@@ -1154,7 +1166,7 @@ function NewestThemeCard({ id, openPreview, openTestDemo, addToCart, isInCart, t
   return (
     <div className="bg-white rounded-md shadow-sm overflow-hidden h-full product-card">
       <div className="relative overflow-hidden group">
-        <Link href={`product/${id}`}>
+        <Link href={`product/${newestThemes?.slug}`}>
           <Image
             src={newestThemes?.galleryImages[0] || "/placeholder.svg"}
             alt="Theme preview"
@@ -1239,7 +1251,7 @@ function BestSellingCard({ id, openPreview, openTestDemo, addToCart, isInCart, t
   return (
     <div className="bg-white rounded-md shadow-sm overflow-hidden h-full product-card">
       <div className="relative overflow-hidden group">
-        <Link href={`product/${id}`}>
+        <Link href={`product/${bestSelling?.slug}`}>
           <Image
             src={bestSelling?.galleryImages[0] || "/placeholder.svg"}
             alt="Theme preview"

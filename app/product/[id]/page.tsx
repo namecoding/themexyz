@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     const item = await res.json();
     const product = item?.data || item;
 
-    const fullUrl = `${baseUrl}/product/${product.slug || id}`;
+    const fullUrl = `${baseUrl}/product/${id}`;
     const image = product.galleryImages?.[0] || `${baseUrl}/default-product-image.jpg`;
     const description = product.overview?.slice(0, 150) || "Check out this amazing product on our marketplace.";
 

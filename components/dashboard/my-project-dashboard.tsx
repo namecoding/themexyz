@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import {Download, ExternalLink, Search, Calendar, Clock, FileText, Filter, Tags, Tag} from "lucide-react"
+import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter, Tags, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import TestDemoScreen from "@/components/test-demo-screen";
-import {baseUrl, formatReadableDate} from "@/lib/utils";
+import { baseUrl, formatReadableDate } from "@/lib/utils";
 import toast from 'react-hot-toast';
 import WizardModal from "@/components/WizardModal";
 import UnderReviewModal from "@/components/UnderReviewModal";
@@ -41,9 +41,9 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
     lastDownload: string;
     authorId: string;
     userId: string;
-    releaseDate:string
-    lastUpdate:string,
-    galleryImages:any
+    releaseDate: string
+    lastUpdate: string,
+    galleryImages: any
   };
 
   useEffect(() => {
@@ -81,11 +81,11 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
     fetchRecentPurchases();
   }, []);
 
-  const handlePublish = (id:string) => {
+  const handlePublish = (id: string) => {
     console.log(id, 'publishing id')
   }
 
-  const handleView = (theme:any) => {
+  const handleView = (theme: any) => {
     setProductModalData(theme)
     setProductModal(true)
   }
@@ -131,18 +131,18 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
             </Button>
 
             {user.isAuthor === 1 && (
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-xs text-white bg-green-500"
-                    onClick={() => {
-                      user.authorityToSell ?
-                          setOpenWizard(true) : setShowUnderReview(true)
-                    }}
-                >
-                  <Tag className="h-3 w-3 mr-1 text-white" />
-                  Sell
-                </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs text-white bg-green-500"
+                onClick={() => {
+                  user.authorityToSell ?
+                    setOpenWizard(true) : setShowUnderReview(true)
+                }}
+              >
+                <Tag className="h-3 w-3 mr-1 text-white" />
+                Sell
+              </Button>
             )}
           </div>
         </div>
@@ -176,25 +176,22 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
         </div>
         <div className="mt-4 flex bg-gray-100 rounded-md p-0.5 w-fit">
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "all" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "all" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("all")}
           >
             All Items
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "themes" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "themes" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("themes")}
           >
             Themes
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "plugins" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "plugins" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("plugins")}
           >
             Plugins
@@ -216,112 +213,143 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
 
         {
           isLoadingPurchase ?
-              <div className="inset-0 flex items-center justify-center mb-6 pt-6">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 gap-1"></div>
-                <span className="z-20 text-xs gap-1"> Fetching Data...</span>
-              </div>
-              :
-              <>
-                {filteredPurchases.length > 0 ? (
-                    <div className="divide-y divide-gray-200">
-                      {filteredPurchases.map((theme) => (
-                          <div key={theme.id} className="p-4 hover:bg-gray-50">
-                            <div className="flex flex-col sm:flex-row sm:items-center">
-                              <div className="flex items-center flex-grow mb-4 sm:mb-0">
-                                <div className="flex-shrink-0 mr-4">
-                                  <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
-                                    <Image
-                                        src={theme.galleryImages[0] || "/placeholder.svg?height=60&width=80"}
-                                        alt={theme.title}
-                                        width={80}
-                                        height={60}
-                                        className="w-full h-full object-cover"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="flex-grow min-w-0">
-                                  <h3 className="font-medium text-sm truncate">{theme.title}</h3>
-                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
-                                    <div className="flex items-center">
-                                      <Calendar className="h-3 w-3 mr-1" />
-                                      <span>Released: {formatReadableDate(theme.releaseDate)}</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <Clock className="h-3 w-3 mr-1" />
-                                      <span>Updated: {formatReadableDate(theme.lastUpdate)}</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex flex-wrap items-center gap-2 sm:ml-4">
-                                <Badge
-                                    variant="outline"
-                                    className={`text-xs ${
-                                        theme.supportStatus === "active"
-                                            ? "bg-green-50 text-green-700 border-green-200"
-                                            : "bg-red-50 text-red-700 border-red-200"
-                                    }`}
-                                >
-                                  active
-                                </Badge>
-                                <Badge variant="outline" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize">
-                                  free
-                                </Badge>
-                              </div>
-                            </div>
+            <div className="divide-y divide-gray-200">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="p-4 hover:bg-gray-50 animate-pulse">
+                  <div className="flex flex-col sm:flex-row sm:items-center">
+                    <div className="flex items-center flex-grow mb-4 sm:mb-0">
+                      <div className="flex-shrink-0 mr-4">
+                        <div className="w-16 h-12 bg-gray-200 dark:bg-gray-700 rounded-md" />
+                      </div>
+                      <div className="flex-grow min-w-0 space-y-2">
+                        <div className="h-4 w-1/2 bg-gray-300 dark:bg-gray-700 rounded" />
+                        <div className="flex gap-4 mt-1">
+                          <div className="h-3 w-24 bg-gray-200 dark:bg-gray-600 rounded" />
+                          <div className="h-3 w-24 bg-gray-200 dark:bg-gray-600 rounded" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 sm:ml-4">
+                      <div className="h-6 w-12 bg-gray-200 dark:bg-gray-600 rounded" />
+                      <div className="h-6 w-10 bg-gray-200 dark:bg-gray-600 rounded" />
+                    </div>
+                  </div>
 
-                            <div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
-                              <div className="text-xs text-gray-500">
-                                <span className="font-medium">{theme?.marketData?.sales} Sales</span> | <span className="font-medium">{theme?.marketData?.reviews} Reviews</span> | <span className="font-medium">{theme?.marketData?.rating} Rating</span>
+                  <div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
+                    <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded" />
+                    <div className="flex flex-wrap gap-2">
+                      <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
+                      <div className="h-8 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+                      <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
+                      <div className="h-8 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+
+            :
+            <>
+              {filteredPurchases.length > 0 ? (
+                <div className="divide-y divide-gray-200">
+                  {filteredPurchases.map((theme) => (
+                    <div key={theme.id} className="p-4 hover:bg-gray-50">
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="flex items-center flex-grow mb-4 sm:mb-0">
+                          <div className="flex-shrink-0 mr-4">
+                            <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
+                              <Image
+                                src={theme.galleryImages[0] || "/placeholder.svg?height=60&width=80"}
+                                alt={theme.title}
+                                width={80}
+                                height={60}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-grow min-w-0">
+                            <h3 className="font-medium text-sm truncate">{theme.title}</h3>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
+                              <div className="flex items-center">
+                                <Calendar className="h-3 w-3 mr-1" />
+                                <span>Released: {formatReadableDate(theme.releaseDate)}</span>
                               </div>
-                              <div className="flex flex-wrap gap-2">
-                                <Button variant="outline" size="sm" className="text-xs">
-                                  <Download className="h-3 w-3 mr-1" />
-                                  Edit
-                                </Button>
-                                <Button onClick={()=>handlePublish(theme.id)} variant="outline" size="sm" className="text-xs">
-                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                  Publish
-                                </Button>
-                                <Button onClick={()=>handleView(theme)} variant="outline" size="sm" className="text-xs">
-                                  <FileText className="h-3 w-3 mr-1" />
-                                  View
-                                </Button>
-                                <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Boost AD</Button>
+                              <div className="flex items-center">
+                                <Clock className="h-3 w-3 mr-1" />
+                                <span>Updated: {formatReadableDate(theme.lastUpdate)}</span>
                               </div>
                             </div>
                           </div>
-                      ))}
-
-                    </div>
-                ) : (
-                    <div className="p-8 text-center">
-                      <div className="inline-block p-3 bg-gray-100 rounded-full mb-4">
-                        <Download className="h-6 w-6 text-gray-400" />
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 sm:ml-4">
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${theme.supportStatus === "active"
+                              ? "bg-green-50 text-green-700 border-green-200"
+                              : "bg-red-50 text-red-700 border-red-200"
+                              }`}
+                          >
+                            active
+                          </Badge>
+                          <Badge variant="outline" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize">
+                            free
+                          </Badge>
+                        </div>
                       </div>
-                      <h3 className="text-lg font-medium mb-2">No product found</h3>
-                      <p className="text-gray-500 mb-4">
-                        {searchQuery
-                            ? "No items match your search criteria."
-                            : "You haven't created any product yet."}
-                      </p>
-                      <Button onClick={() => {
-                        user.authorityToSell ?
-                            setOpenWizard(true) : setShowUnderReview(true)
-                      }} className="bg-green-500 hover:bg-[#7aa93c] text-white">
-                        Sell Product
-                      </Button>
+
+                      <div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
+                        <div className="text-xs text-gray-500">
+                          <span className="font-medium">{theme?.marketData?.sales} Sales</span> | <span className="font-medium">{theme?.marketData?.reviews} Reviews</span> | <span className="font-medium">{theme?.marketData?.rating} Rating</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button variant="outline" size="sm" className="text-xs">
+                            <Download className="h-3 w-3 mr-1" />
+                            Edit
+                          </Button>
+                          <Button onClick={() => handlePublish(theme.id)} variant="outline" size="sm" className="text-xs">
+                            <ExternalLink className="h-3 w-3 mr-1" />
+                            Publish
+                          </Button>
+                          <Button onClick={() => handleView(theme)} variant="outline" size="sm" className="text-xs">
+                            <FileText className="h-3 w-3 mr-1" />
+                            View
+                          </Button>
+                          <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Boost AD</Button>
+                        </div>
+                      </div>
                     </div>
-                )}
-              </>
+                  ))}
+
+                </div>
+              ) : (
+                <div className="p-8 text-center">
+                  <div className="inline-block p-3 bg-gray-100 rounded-full mb-4">
+                    <Download className="h-6 w-6 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">No product found</h3>
+                  <p className="text-gray-500 mb-4">
+                    {searchQuery
+                      ? "No items match your search criteria."
+                      : "You haven't created any product yet."}
+                  </p>
+                  <Button onClick={() => {
+                    user.authorityToSell ?
+                      setOpenWizard(true) : setShowUnderReview(true)
+                  }} className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                    Sell Product
+                  </Button>
+                </div>
+              )}
+            </>
         }
 
 
-        <WizardModal open={openWizard} onClose={() => setOpenWizard(false)} user={user}/>
+        <WizardModal open={openWizard} onClose={() => setOpenWizard(false)} user={user} />
 
         <UnderReviewModal open={showUnderReview} onClose={() => setShowUnderReview(false)} />
 
-        <ProductModal isOpen={productModal} onClose={() =>setProductModal(false)} productData={productModalData}/>
+        <ProductModal isOpen={productModal} onClose={() => setProductModal(false)} productData={productModalData} />
 
       </div>
     </div>

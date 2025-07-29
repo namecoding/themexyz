@@ -6,7 +6,7 @@ export async function GET() {
     try {
         await dbConnect();
 
-        const themes = await Theme.find();
+        const themes = await Theme.find({ isPublic: true });
 
         const enrichedThemes = themes.map(themeDoc => {
             const theme = themeDoc.toObject();
@@ -21,7 +21,7 @@ export async function GET() {
             data: enrichedThemes,
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
     }
 }
