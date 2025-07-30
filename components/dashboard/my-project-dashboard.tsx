@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import WizardModal from "@/components/WizardModal";
 import UnderReviewModal from "@/components/UnderReviewModal";
 import ProductModal from "@/components/admin/product-view-modal";
+import { Reauth } from "@/lib/auth/Reauth"
 
 interface MyProductsDashboardProps {
   user: any
@@ -138,6 +139,7 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
                 onClick={() => {
                   user.authorityToSell ?
                     setOpenWizard(true) : setShowUnderReview(true)
+
                 }}
               >
                 <Tag className="h-3 w-3 mr-1 text-white" />

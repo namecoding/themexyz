@@ -59,7 +59,7 @@ export default function DashboardLayout({
 
   const menuItems = [
     {
-      name: "My Account",
+      name: isAdminModalOpen ? "Admin Dashboard" : "My Account",
       icon: Layers,
       href: "/dashboard",
       active: currentPage === "account",
@@ -223,7 +223,7 @@ export default function DashboardLayout({
                   ))}
                 </ul>
 
-                {user?.admin?.permission && (
+                {user?.admin?.permission && currentPage === "account" && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <Button
                       variant="ghost"

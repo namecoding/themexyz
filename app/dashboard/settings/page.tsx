@@ -13,11 +13,18 @@ export default function SettingsPage() {
   const router = useRouter()
   // const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false)
+
+  const handleSwitchAdmin = () => {
+    setIsAdminModalOpen(true)
+  }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const loggedIn = localStorage.getItem("isLoggedIn") === "true"
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true"
+    const savedAdminModalState = localStorage.getItem("isAdminModalOpen")
+    const savedConfirmedAdmin = localStorage.getItem("confirmedAdminType")
 
+    const timer = setTimeout(() => {
       if (!loggedIn) {
         router.push("/")
       } else {
@@ -26,6 +33,16 @@ export default function SettingsPage() {
         }
       }
     }, 150) // slight delay to allow user state to hydrate
+
+    if (savedAdminModalState === "true") {
+      setIsAdminModalOpen(true)
+    }
+
+    if (savedConfirmedAdmin) {
+      //setConfirmedAdminType(savedConfirmedAdmin)
+    }
+
+    setIsLoading(false)
 
     return () => clearTimeout(timer)
   }, [user, router, isLoggedIn])
@@ -59,7 +76,8 @@ export default function SettingsPage() {
   }
 
   return (
-    <DashboardLayout currentPage="settings" user={user} onLogout={handleLogout}>
+    <DashboardLayout currentPage="settings" user={user} onLogout={handleLogout} isAdminModalOpen={isAdminModalOpen}
+      onSwitchAdmin={handleSwitchAdmin}>
       <SettingsDashboard user={user} />
     </DashboardLayout>
   )

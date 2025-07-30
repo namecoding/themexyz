@@ -19,9 +19,12 @@ export default function PurchasesPage() {
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const loggedIn = localStorage.getItem("isLoggedIn") === "true"
 
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true"
+    const savedAdminModalState = localStorage.getItem("isAdminModalOpen")
+    const savedConfirmedAdmin = localStorage.getItem("confirmedAdminType")
+
+    const timer = setTimeout(() => {
       if (!loggedIn) {
         router.push("/")
       } else {
@@ -30,6 +33,16 @@ export default function PurchasesPage() {
         }
       }
     }, 150) // slight delay to allow user state to hydrate
+
+    if (savedAdminModalState === "true") {
+      setIsAdminModalOpen(true)
+    }
+
+    if (savedConfirmedAdmin) {
+      //setConfirmedAdminType(savedConfirmedAdmin)
+    }
+
+    setIsLoading(false)
 
     return () => clearTimeout(timer)
   }, [user, router, isLoggedIn])
