@@ -3,6 +3,14 @@ import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 const JWT_SECRET = process.env.JWT_SECRET!; // Ensure this is defined in your env
 

@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
     try {

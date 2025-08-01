@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { initializeApp, getApps } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {metaData} from "@/lib/utils";
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_KEY,
