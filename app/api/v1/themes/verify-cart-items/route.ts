@@ -2,8 +2,16 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import dbConnect from '/lib/dbConnect';
-import Theme from '/components/models/Theme';
+import dbConnect from '@/lib/dbConnect';
+import Theme from '@/components/models/Theme';
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -12,9 +20,12 @@ export async function POST(request: Request) {
     const { productIds } = await request.json();
 
     if (!Array.isArray(productIds) || productIds.length === 0) {
-      return NextResponse.json(
-        { success: false, message: 'Invalid product IDs provided.' },
-        { status: 400 }
+      return new NextResponse(
+        JSON.stringify({ success: false, message: 'Invalid product IDs provided.' }),
+        {
+          status: 400,
+          headers: corsHeaders,
+        }
       );
     }
 
@@ -27,7 +38,6 @@ export async function POST(request: Request) {
       const theme = themeDoc.toObject();
       theme.id = theme._id.toString();
 
-      // Remove sensitive/unwanted fields
       delete theme._id;
       delete theme.__v;
       delete theme.downloadUrl;
@@ -39,12 +49,21 @@ export async function POST(request: Request) {
 
     const enrichedThemes = themes.map(formatTheme);
 
-    return NextResponse.json({ success: true, data: enrichedThemes });
+    return new NextResponse(
+      JSON.stringify({ success: true, data: enrichedThemes }),
+      {
+        status: 200,
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.error('[VERIFY CART ITEMS API ERROR]', error);
-    return NextResponse.json(
-      { success: false, message: 'Server error' },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ success: false, message: 'Server error' }),
+      {
+        status: 500,
+        headers: corsHeaders,
+      }
     );
   }
 }

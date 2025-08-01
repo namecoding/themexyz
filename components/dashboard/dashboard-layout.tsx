@@ -50,10 +50,24 @@ export default function DashboardLayout({
   const [isMounted, setIsMounted] = useState(false)
   const [openWizard, setOpenWizard] = useState(false)
   const [showUnderReview, setShowUnderReview] = useState(false)
+  const [wishlistItems, setWishlistItems] = useState([])
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  useEffect(()=>{
+     const savedWishlistItems = localStorage.getItem("wishlistItems");
+
+     if (savedWishlistItems) {
+      try {
+        setWishlistItems(JSON.parse(savedWishlistItems));
+      } catch (e) {
+        console.log("Error parsing wishlist items", e);
+      }
+    }
+
+  },[])
 
   if (!isMounted) return null
 
@@ -125,7 +139,7 @@ export default function DashboardLayout({
               <Heart className="h-4 w-4 mr-1" />
               <span>Wishlist</span>
               <span className="ml-1 bg-green-500 text-white text-xs rounded-full px-1.5">
-                0
+                 {wishlistItems.length}
               </span>
             </Link>
             <Link href="#" className="text-white hover:text-gray-300 relative">
@@ -384,7 +398,7 @@ export default function DashboardLayout({
                     <Heart className="h-4 w-4 mr-3" />
                     <span>Wishlist</span>
                     <span className="ml-1 bg-green-500 text-white text-xs rounded-full px-1.5">
-                      0
+                      {wishlistItems.length}
                     </span>
                   </Link>
                 </div>

@@ -1,5 +1,6 @@
 export const runtime = "nodejs";
 
+
 export async function GET() {
     const IPDATA_API_KEY = process.env.IPDATA_API_KEY;
     const IPINFO_API_KEY = process.env.IPINFO_API_KEY;

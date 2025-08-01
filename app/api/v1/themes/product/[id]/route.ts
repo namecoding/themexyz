@@ -1,26 +1,36 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
-import { ObjectId } from 'mongodb';
 
+import { ObjectId } from 'mongodb';
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect'; // adjust path if different
-import Theme from '@/components/models/Theme'; // assuming you're still using Theme model
+import dbConnect from '@/lib/dbConnect';
+import Theme from '@/components/models/Theme';
+import { corsHeaders } from '@/lib/cors';
 
 interface Params {
-  params: { id: string }
+  params: { id: string };
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
 }
 
 export async function GET(req: Request, { params }: Params) {
   try {
     await dbConnect();
 
-    // const themeDoc = await Theme.findById(new ObjectId(params.id));
     const themeDoc = await Theme.findOne({ slug: params.id });
 
     if (!themeDoc) {
-      return NextResponse.json(
-        { success: false, message: 'Product not found' },
-        { status: 404 }
+      return new NextResponse(
+        JSON.stringify({ success: false, message: 'Product not found' }),
+        {
+          status: 404,
+          headers: corsHeaders,
+        }
       );
     }
 
@@ -34,15 +44,24 @@ export async function GET(req: Request, { params }: Params) {
     delete theme.downloadInstructions;
     delete theme.loginDetails;
 
-    return NextResponse.json({
-      success: true,
-      data: theme,
-    });
+    return new NextResponse(
+      JSON.stringify({
+        success: true,
+        data: theme,
+      }),
+      {
+        status: 200,
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.error('[PRODUCT GET ERROR]', error);
-    return NextResponse.json(
-      { success: false, message: 'Server error' },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ success: false, message: 'Server error' }),
+      {
+        status: 500,
+        headers: corsHeaders,
+      }
     );
   }
 }

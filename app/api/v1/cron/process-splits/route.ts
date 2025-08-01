@@ -1,7 +1,16 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
-// http://localhost:3000/api/v1/cron/process-splits
+import { corsHeaders } from '@/lib/cors';
+// http://localhost:3000/api/v1/cron/process-splits // keep this line, i am using it
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET() {
     try {
         const db = await clientPromise;
@@ -17,7 +26,10 @@ export async function GET() {
         }).toArray();
 
         if (dueSplits.length === 0) {
-            return NextResponse.json({ success: true, message: "No split payments to process" });
+            return new NextResponse(JSON.stringify({ success: true, message: "No split payments to process" }), {
+                status: 401,
+                headers: corsHeaders,
+              });
         }
 
         let processedCount = 0;
@@ -88,16 +100,26 @@ export async function GET() {
             processedCount++;
         }
 
-        return NextResponse.json({
-            success: true,
-            message: `${processedCount} split payments processed successfully`,
-        });
+        return new NextResponse(
+              JSON.stringify({
+                success: true,
+                 message: `${processedCount} split payments processed successfully`,
+              }),
+              {
+                status: 200,
+                headers: corsHeaders,
+              }
+            );
 
     } catch (error: any) {
-        console.error("Split processing error:", error);
-        return NextResponse.json(
-            { success: false, message: error.message || "Internal Server Error" },
-            { status: 500 }
-        );
+        console.log("Split processing error:", error);
+    
+        return new NextResponse(
+              JSON.stringify({ success: false, message: 'Internal Server error' }),
+              {
+                status: 500,
+                headers: corsHeaders,
+              }
+            );
     }
 }

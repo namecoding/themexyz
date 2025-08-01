@@ -808,7 +808,7 @@ export default function CheckoutPage({
                             id="agree-terms"
                             checked={agreeTerms}
                             onChange={(e) => setAgreeTerms(e.target.checked)}
-                            className="h-4 w-4 text-[#82b440] bg-green-600 focus:ring-[#82b440] border-gray-300 rounded"
+                            className="h-4 w-4 text-[#82b440] bg-green-500 focus:ring-[#82b440] border-gray-300 rounded"
                             required
                           />
                           <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-700">
@@ -1186,7 +1186,7 @@ export default function CheckoutPage({
                             required
                           />
                         </div>
-                        <Button disabled={pleaseWaitWhileYourTransactionIsProcessing} type="submit" className="w-full bg-green-600 hover:bg-[#7aa93c] text-white">
+                        <Button disabled={pleaseWaitWhileYourTransactionIsProcessing} type="submit" className="w-full bg-green-500 hover:bg-[#7aa93c] text-white">
                           {
                             pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : <>{hasBillingDetails ? "Update Billing Details" : "Save Billing Details"}</>
                           }
@@ -1260,7 +1260,7 @@ export default function CheckoutPage({
                                     } flex items-center justify-center`}
                                 >
                                   {paymentMethod === method.key && (
-                                    <div className="w-3 h-3 rounded-full bg-green-600"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
                                   )}
                                 </div>
                               </div>
@@ -1309,7 +1309,7 @@ export default function CheckoutPage({
 
 
             <Button
-              className="bg-green-600 hover:bg-[#7aa93c] text-white mb-3"
+              className="bg-green-500 hover:bg-[#7aa93c] text-white mb-3"
               disabled={!isLoggedIn || !hasBillingDetails || !paymentMethod || processingPayment}
               onClick={handlePayment}
             >
@@ -1390,7 +1390,7 @@ export default function CheckoutPage({
 
 
               <Button
-                className="w-full bg-green-600 hover:bg-[#7aa93c] text-white mb-3"
+                className="w-full bg-green-500 hover:bg-[#7aa93c] text-white mb-3"
                 disabled={!isLoggedIn || !hasBillingDetails || !paymentMethod || processingPayment}
                 onClick={handlePayment}
               >

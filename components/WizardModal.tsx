@@ -181,6 +181,225 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
     const [tempHelpFeeNGN, setTempHelpFeeNGN] = useState<number | "">(0)
     const [tempLoginDetails, setTempLoginDetails] = useState({ username: "", password: "", description: "" })
     const [loginUrlType, setLoginUrlType] = useState<"demo" | "admin">("demo")
+    
+    //mic recording
+    const [interimTranscript, setInterimTranscript] = useState(""); 
+    const [recording, setRecording] = useState(false);
+    const recognitionRef = useRef(null);
+
+    const [interimTranscript2, setInterimTranscript2] = useState(""); 
+    const [recording2, setRecording2] = useState(false);
+    const recognitionRef2 = useRef(null);
+
+
+    //update when done
+    const handleMicClick_2 = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Your browser does not support speech recognition.");
+        return;
+    }
+
+    // Stop recording if already active
+    if (recording) {
+        recognitionRef.current?.stop();
+        setRecording(false);
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let lastTranscript = ""; // Prevent repeated appending
+
+    recognition.onresult = (event) => {
+        let finalTranscript = "";
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            const result = event.results[i];
+            if (result.isFinal) {
+                finalTranscript += result[0].transcript;
+            }
+        }
+
+        // Clean and append only if new
+        finalTranscript = finalTranscript.trim();
+        if (
+            finalTranscript &&
+            finalTranscript !== lastTranscript
+        ) {
+            lastTranscript = finalTranscript;
+
+            // Add punctuation if missing
+            if (!/[.!?]$/.test(finalTranscript)) {
+                finalTranscript += ".";
+            }
+
+            setFormData((prev) => ({
+                ...prev,
+                overview: prev.overview + " " + finalTranscript,
+            }));
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech recognition error:", event.error);
+        setRecording(false);
+    };
+
+    recognition.onend = () => {
+        setRecording(false);
+    };
+
+    recognition.start();
+    setRecording(true);
+};
+
+//update in real-time
+const handleMicClick = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Your browser does not support speech recognition.");
+        return;
+    }
+
+    if (recording) {
+        recognitionRef.current?.stop();
+        setRecording(false);
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let finalContent = ""; // Final transcript cache
+
+    recognition.onresult = (event) => {
+        let interim = "";
+        let newlyFinal = "";
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            const result = event.results[i];
+            const transcript = result[0].transcript;
+
+            if (result.isFinal) {
+                newlyFinal += transcript;
+            } else {
+                interim += transcript;
+            }
+        }
+
+        // Update interim view
+        setInterimTranscript(interim);
+
+        // If new final content, add it to the formData
+        if (newlyFinal) {
+            finalContent += newlyFinal;
+
+            let cleaned = newlyFinal.trim();
+            if (!/[.!?]$/.test(cleaned)) {
+                cleaned += ".";
+            }
+
+            setFormData((prev) => ({
+                ...prev,
+                overview: prev.overview + " " + cleaned,
+            }));
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.log("Speech recognition error:", event.error);
+        setRecording(false);
+        setInterimTranscript("");
+    };
+
+    recognition.onend = () => {
+        setRecording(false);
+        setInterimTranscript("");
+    };
+
+    recognition.start();
+    setRecording(true);
+};
+
+const handleMicClick2 = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Your browser does not support speech recognition.");
+        return;
+    }
+
+    if (recording) {
+        recognitionRef2.current?.stop();
+        setRecording2(false);
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef2.current = recognition;
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let finalContent = ""; // Final transcript cache
+
+    recognition.onresult = (event) => {
+        let interim = "";
+        let newlyFinal = "";
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            const result = event.results[i];
+            const transcript = result[0].transcript;
+
+            if (result.isFinal) {
+                newlyFinal += transcript;
+            } else {
+                interim += transcript;
+            }
+        }
+
+        // Update interim view
+        setInterimTranscript2(interim);
+
+        // If new final content, add it to the formData
+        if (newlyFinal) {
+            finalContent += newlyFinal;
+
+            let cleaned = newlyFinal.trim();
+            if (!/[.!?]$/.test(cleaned)) {
+                cleaned += ".";
+            }
+
+            setFormData((prev) => ({
+                ...prev,
+                downloadInstructions: prev.downloadInstructions + " " + cleaned,
+            }));
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.log("Speech recognition error:", event.error);
+        setRecording2(false);
+        setInterimTranscript2("");
+    };
+
+    recognition.onend = () => {
+        setRecording2(false);
+        setInterimTranscript2("");
+    };
+
+    recognition.start();
+    setRecording2(true);
+};
+
+
 
     useEffect(() => {
         if (currentHelpType === "author") {
@@ -189,52 +408,9 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         }
     }, [currentHelpType])
 
-    const [recording, setRecording] = useState(false);
-    const recognitionRef = useRef(null);
 
 
-    const handleMicClick = () => {
-        // Browser compatibility
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            alert("Your browser does not support speech recognition.");
-            return;
-        }
 
-        if (recording) {
-            recognitionRef.current?.stop();
-            setRecording(false);
-            return;
-        }
-
-        const recognition = new SpeechRecognition();
-        recognitionRef.current = recognition;
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "en-US";
-
-        recognition.onresult = (event) => {
-            let transcript = "";
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                transcript += event.results[i][0].transcript;
-            }
-
-            // Append or replace the text in overview
-            handleChange("overview", formData.overview + " " + transcript);
-        };
-
-        recognition.onerror = (event) => {
-            console.error("Speech recognition error:", event.error);
-            setRecording(false);
-        };
-
-        recognition.onend = () => {
-            setRecording(false);
-        };
-
-        recognition.start();
-        setRecording(true);
-    };
 
     const formatPrice = (value: number | string): string => {
         if (!value) return ""
@@ -1317,13 +1493,56 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <p className="text-xs text-gray-500 mb-2">
                                     Step-by-step instructions on how to download, install, and set up your product
                                 </p>
-                                <Textarea
+                                {/* <Textarea
                                     id="downloadInstructions"
                                     placeholder="1. Click the download link&#10;2. Extract the files&#10;3. Follow the setup guide..."
                                     value={formData.downloadInstructions}
                                     onChange={(e) => handleChange("downloadInstructions", e.target.value)}
                                     className="bg-white border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px]"
-                                />
+                                /> */}
+
+                                {/* Wrapper for positioning */}
+                            <div className="relative">
+                                {/* <Textarea
+                                    id="downloadInstructions"
+                                    placeholder="Describe your product, its key benefits, unique features, and what problems it solves..."
+                                    value={formData.downloadInstructions}
+                                    onChange={(e) => handleChange("downloadInstructions", e.target.value)}
+                                    className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500 pr-10" // extra padding for icon
+                                /> */}
+
+                                <Textarea
+                                    id="downloadInstructions"
+                                    placeholder="Describe your product..."
+                                    value={`${formData.downloadInstructions}${interimTranscript2 ? ' ' + interimTranscript2 : ''}`}
+                                    onChange={(e) => handleChange("downloadInstructions", e.target.value)}
+                                    className="..."
+                                    />
+
+
+                                {/* Mic icon button */}
+                                <button
+                                    type="button"
+                                    onClick={handleMicClick2} // You can define this function
+                                    className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
+                                    title="Record voice"
+                                >
+
+                                    {/* Recording indicator */}
+                                    {recording2 && (
+                                    <div className="absolute bottom-0 right-10 flex items-center space-x-1 animate-pulse text-red-600 text-xs">
+                                        <span className="w-2 h-2 bg-red-600 rounded-full" />
+                                        <span>Recording…</span>
+                                    </div>
+                                    )}
+
+                                    {
+                                        !recording2 ? <Mic className="h-4 w-4 text-gray-600" /> : <StopCircle className="h-4 w-4 text-red-600" />
+                                    }
+                                </button>
+                            </div>
+
+
                                 {errors.downloadInstructions && (
                                     <p className="text-red-500 text-xs mt-1">{errors.downloadInstructions}</p>
                                 )}
@@ -1708,13 +1927,22 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
                             {/* Wrapper for positioning */}
                             <div className="relative">
-                                <Textarea
+                                {/* <Textarea
                                     id="overview"
                                     placeholder="Describe your product, its key benefits, unique features, and what problems it solves..."
                                     value={formData.overview}
                                     onChange={(e) => handleChange("overview", e.target.value)}
                                     className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500 pr-10" // extra padding for icon
-                                />
+                                /> */}
+
+                                <Textarea
+                                    id="overview"
+                                    placeholder="Describe your product..."
+                                    value={`${formData.overview}${interimTranscript ? ' ' + interimTranscript : ''}`}
+                                    onChange={(e) => handleChange("overview", e.target.value)}
+                                    className="..."
+                                    />
+
 
                                 {/* Mic icon button */}
                                 <button
@@ -1723,7 +1951,18 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                     className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
                                     title="Record voice"
                                 >
-                                    <Mic className="h-4 w-4 text-gray-600" />
+
+                                    {/* Recording indicator */}
+                                    {recording && (
+                                    <div className="absolute bottom-0 right-10 flex items-center space-x-1 animate-pulse text-red-600 text-xs">
+                                        <span className="w-2 h-2 bg-red-600 rounded-full" />
+                                        <span>Recording…</span>
+                                    </div>
+                                    )}
+
+                                    {
+                                        !recording ? <Mic className="h-4 w-4 text-gray-600" /> : <StopCircle className="h-4 w-4 text-red-600" />
+                                    }
                                 </button>
                             </div>
 

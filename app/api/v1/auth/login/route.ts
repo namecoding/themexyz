@@ -2,8 +2,16 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import clientPromise from "@/lib/mongodb";
+import { corsHeaders } from "@/lib/cors";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
     try {
@@ -14,13 +22,19 @@ export async function POST(request: Request) {
 
         const user = await db.collection("users").findOne({ email });
         if (!user) {
-            return NextResponse.json({success: false, message: "Invalid credentials" }, { status: 401 });
+            return new NextResponse(
+                JSON.stringify({ success: false, message: "Invalid credentials" }),
+                { status: 401, headers: corsHeaders }
+            );
         }
 
         // Compare passwords
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return NextResponse.json({success: false, message: "Invalid credentials" }, { status: 401 });
+            return new NextResponse(
+                JSON.stringify({ success: false, message: "Invalid credentials" }),
+                { status: 401, headers: corsHeaders }
+            );
         }
 
         // Sign JWT
@@ -35,15 +49,27 @@ export async function POST(request: Request) {
 
         const { password: _, ...userWithoutPassword } = user;
 
-        return NextResponse.json({
-            success: true,
-            message: "Login successful",
-            token,
-            user: {
-                ...userWithoutPassword,
-            },
-        });
+         return new NextResponse(
+      JSON.stringify({
+        success: true,
+        message: "Login successful",
+        token,
+        user: userWithoutPassword,
+      }),
+      {
+        status: 200,
+        headers: corsHeaders,
+      }
+    );
+
     } catch (error) {
-        return NextResponse.json({success: false, message: "Internal Server Error" }, { status: 500 });
+        return new NextResponse(
+      JSON.stringify({ success: false, message: "Internal Server Error" }),
+      {
+        status: 500,
+        headers: corsHeaders,
+      }
+    );
+    
     }
 }
