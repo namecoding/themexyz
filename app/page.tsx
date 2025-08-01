@@ -519,7 +519,12 @@ export default function Home() {
   const fetchThemes = () => {
     let requestOptions = {
       method: 'GET',
-      redirect: 'follow'
+      headers: {
+    'Content-Type': 'application/json',
+    // 'Authorization': 'Bearer token' if needed
+  },
+      mode: 'cors', // VERY IMPORTANT
+  credentials: 'include', // Only if you need cookies/sessions
     };
     setPleaseWaitWhileYourTransactionIsProcessing(true)
 
