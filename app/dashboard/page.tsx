@@ -62,9 +62,18 @@ const [showPassword, setShowPassword] = useState(false)
     return () => clearTimeout(timer)
   }, [router])
 
+  // useEffect(() => {
+  //   localStorage.setItem("isAdminModalOpen", isAdminModalOpen.toString())
+  // }, [isAdminModalOpen])
+
   useEffect(() => {
-    localStorage.setItem("isAdminModalOpen", isAdminModalOpen.toString())
-  }, [isAdminModalOpen])
+  if (isAdminModalOpen) {
+    localStorage.setItem("isAdminModalOpen", "true");
+  } else {
+    localStorage.removeItem("isAdminModalOpen");
+  }
+}, [isAdminModalOpen]);
+
 
   useEffect(() => {
     if (confirmedAdminType) {
@@ -108,6 +117,8 @@ const [showPassword, setShowPassword] = useState(false)
     //localStorage.removeItem("user")
     localStorage.removeItem("token")
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isAdminModalOpen")
+    localStorage.removeItem("confirmedAdminType")
     signOut({
       callbackUrl: '/', // or your desired post-logout page
       redirect: true,
@@ -140,9 +151,7 @@ const [showPassword, setShowPassword] = useState(false)
     }
   }
 
-  const verifyAccessCode = () => {
-    return accessCode === "12345"
-  }
+
 
 const verifyAccessCodeWithBackend = async () => {
   try {

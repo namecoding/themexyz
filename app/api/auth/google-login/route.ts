@@ -63,7 +63,8 @@ export async function POST(request: Request) {
                         badge: true,
                     }
                 },
-                loyaltyPoint: 0
+                loyaltyPoint: 0,
+                accountStatus: true
             };
 
             const result = await db.collection('users').insertOne(newUser);

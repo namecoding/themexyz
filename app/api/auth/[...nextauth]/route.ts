@@ -65,7 +65,8 @@ export const authOptions: NextAuthOptions = {
                                 badge: true,
                             }
                         },
-                        loyaltyPoint: 0
+                        loyaltyPoint: 0,
+                        accountStatus: true
                     });
 
 

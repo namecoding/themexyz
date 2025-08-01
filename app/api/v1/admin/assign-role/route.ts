@@ -60,33 +60,32 @@ export async function POST(req: Request) {
     for (const role of roles) {
       if (updatedPermissions.includes(role)) {
         removedRoles.push(role)
-        const index = updatedPermissions.indexOf(role)
-        if (index > -1) updatedPermissions.splice(index, 1)
+        updatedPermissions.splice(updatedPermissions.indexOf(role), 1)
       } else {
         addedRoles.push(role)
         updatedPermissions.push(role)
       }
     }
 
-    let accessCode = user?.admin?.accessCode
-    let hashedAccessCode = user?.admin?.hashedAccessCode
+    let accessCode: string | undefined = undefined
+    const updateFields: any = {
+      'admin.permission': updatedPermissions,
+    }
 
-    if (!accessCode || !hashedAccessCode) {
+    // Only generate and save access code if not already present
+    if (!user?.admin?.accessCode) {
       accessCode = generateAccessCode()
-      hashedAccessCode = await bcrypt.hash(accessCode, 10)
+      const hashed = await bcrypt.hash(accessCode, 10)
+      updateFields['admin.accessCode'] = hashed
+      updateFields['admin.delete'] = accessCode
     }
 
     await db.collection('users').updateOne(
       { _id: new ObjectId(userId) },
-      {
-        $set: {
-          'admin.permission': updatedPermissions,
-          'admin.delete':accessCode,
-          'admin.accessCode': hashedAccessCode,
-        },
-      }
+      { $set: updateFields }
     )
 
+    // Send email if enabled and user has email
     if (allowEmailSending && user.email) {
       await sendEmail({
         to: user.email,
@@ -108,7 +107,7 @@ export async function POST(req: Request) {
             <p><strong>Your updated roles:</strong> ${updatedPermissions.join(', ')}</p>
             ${
               accessCode
-                ? `<p>Your access code remains: <strong>${accessCode}</strong></p>`
+                ? `<p>Your access code is: <strong>${accessCode}</strong></p>`
                 : ''
             }
             <p>You can now log in and access admin tools accordingly.</p>
@@ -125,7 +124,7 @@ export async function POST(req: Request) {
       addedRoles,
       removedRoles,
       allRoles: updatedPermissions,
-      accessCode,
+      // ...(accessCode && { accessCode }), // only include if generated
     })
   } catch (error) {
     console.error('Admin role toggle error:', error)

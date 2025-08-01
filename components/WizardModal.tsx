@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { X, RefreshCw } from "lucide-react"
+import { X, RefreshCw, Mic, StopCircle } from "lucide-react"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import ProgressOverlay from "@/components/progressBar"
 import {
@@ -188,6 +188,53 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             setTempHelpFeeNGN(0)
         }
     }, [currentHelpType])
+
+    const [recording, setRecording] = useState(false);
+    const recognitionRef = useRef(null);
+
+
+    const handleMicClick = () => {
+        // Browser compatibility
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support speech recognition.");
+            return;
+        }
+
+        if (recording) {
+            recognitionRef.current?.stop();
+            setRecording(false);
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+
+        recognition.onresult = (event) => {
+            let transcript = "";
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                transcript += event.results[i][0].transcript;
+            }
+
+            // Append or replace the text in overview
+            handleChange("overview", formData.overview + " " + transcript);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            setRecording(false);
+        };
+
+        recognition.onend = () => {
+            setRecording(false);
+        };
+
+        recognition.start();
+        setRecording(true);
+    };
 
     const formatPrice = (value: number | string): string => {
         if (!value) return ""
@@ -733,7 +780,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -850,7 +897,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -914,7 +961,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1028,7 +1075,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1226,7 +1273,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1289,7 +1336,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1434,7 +1481,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1578,7 +1625,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1651,23 +1698,38 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 </Select>
                             </div>
 
-                            {/* Product Overview */}
-                            <div>
-                                <Label htmlFor="overview" className="text-sm text-gray-700">
-                                    Product Overview
-                                </Label>
-                                <p className="text-xs text-gray-500 mb-2">
-                                    Write a detailed description of your product, its benefits, and what makes it unique
-                                </p>
+                        <div>
+                            <Label htmlFor="overview" className="text-sm text-gray-700">
+                                Product Overview
+                            </Label>
+                            <p className="text-xs text-gray-500 mb-2">
+                                Write a detailed description of your product, its benefits, and what makes it unique
+                            </p>
+
+                            {/* Wrapper for positioning */}
+                            <div className="relative">
                                 <Textarea
                                     id="overview"
                                     placeholder="Describe your product, its key benefits, unique features, and what problems it solves..."
                                     value={formData.overview}
                                     onChange={(e) => handleChange("overview", e.target.value)}
-                                    className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                                    className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500 pr-10" // extra padding for icon
                                 />
-                                {errors.overview && <p className="text-red-500 text-xs mt-1">{errors.overview}</p>}
+
+                                {/* Mic icon button */}
+                                <button
+                                    type="button"
+                                    onClick={handleMicClick} // You can define this function
+                                    className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
+                                    title="Record voice"
+                                >
+                                    <Mic className="h-4 w-4 text-gray-600" />
+                                </button>
                             </div>
+
+                            {errors.overview && <p className="text-red-500 text-xs mt-1">{errors.overview}</p>}
+                        </div>
+
 
                             {/* Is Published */}
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -1706,7 +1768,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 variant="ghost"
                                 onClick={prevStep}
                                 disabled={step === 1}
-                                className="text-gray-600 hover:text-gray-900 disabled:opacity-50"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900 disabled:opacity-50"
                             >
                                 Back
                             </Button>
@@ -1775,7 +1837,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 </ul>
                                 {formData.helpDurationSettings.map(s => (
                                     <p key={s.type} className="text-xs">
-                                        <strong className="capitalize">{s.type} Help:</strong> {s.duration}&nbsp;
+                                        <strong className="capitalize">{s.type} Help:</strong> {helpDurationLabels[s.duration]}&nbsp;
                                         — USD {formatPrice(s.feeUSD || 0)} / NGN {formatPrice(s.feeNGN || 0)}
                                     </p>
                                 ))}
@@ -1825,7 +1887,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                             <Button
                                 variant="ghost"
                                 onClick={prevStep}
-                                className="text-gray-600 hover:text-gray-900"
+                                className="text-gray-600 bg-gray-100 hover:text-gray-900"
                             >
                                 Back
                             </Button>
@@ -1862,27 +1924,28 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
             <Dialog open={open} onOpenChange={handleCloseClick}>
                 {/*<DialogContent className="w-full max-w-full h-full p-0 flex flex-col bg-white text-gray-900 border-0 sm:max-w-4xl sm:h-auto">*/}
-                <DialogContent className="w-full max-w-full max-h-[90vh] p-0 flex flex-col bg-white text-gray-900 border-0 sm:max-w-4xl overflow-hidden">
+                <DialogContent className="w-full max-w-full max-h-[90vh] p-0 flex flex-col bg-white text-gray-900 border-0 sm:max-w-4xl overflow-hidden [&>button]:hidden">
                     <VisuallyHidden>
                         <DialogTitle>Create a product</DialogTitle>
                     </VisuallyHidden>
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
-                        <div className="flex items-center gap-4">
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleCloseClick}
-                                className="text-gray-600 hover:text-gray-900"
-                            >
-                                <X className="h-6 w-6 text-red-500" />
-                            </Button>
-                            <h2 className="text-lg font-semibold text-gray-900">Create a product</h2>
-                        </div>
-                        <div className="text-sm text-gray-600">
-                            Step {step} of {totalSteps}
-                        </div>
+                    <div className="flex items-center gap-4">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleCloseClick}
+                            className="text-gray-600 hover:text-gray-900"
+                        >
+                            <X className="h-6 w-6 text-red-500" />
+                        </Button>
+                        <h2 className="text-lg font-semibold text-gray-900">Create a product</h2>
                     </div>
+                    <div className="text-sm text-gray-600">
+                        Step {step} of {totalSteps}
+                    </div>
+                </div>
+
 
                     {/* Progress Bar */}
                     <div className="w-full bg-gray-200 h-1">

@@ -7,7 +7,7 @@ import { X, ShoppingCart, Minus, Plus, Trash2, ChevronRight } from "lucide-react
 import { Button } from "@/components/ui/button"
 import ConfirmationModal from "./confirmation-modal"
 import CheckoutPage from "./checkout-page"
-import { defaultCurrency, getAuthorHelpDuration, getHelpDurationByType, metaData, helpDurationLabels } from "@/lib/utils"
+import { defaultCurrency, getAuthorHelpDuration, getHelpDurationByType, metaData, helpDurationLabels, baseUrl } from "@/lib/utils"
 import { useActiveCurrency } from "@/lib/currencyTag"
 import Leaf from "@/components/leaf"
 import { useRouter } from "next/navigation";
@@ -31,10 +31,7 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
   const { currency, symbol } = useActiveCurrency(defaultCurrency)
   const router = useRouter();
 
-
-  useEffect(() => {
-    console.log(userData, 'user data from cart')
-  }, [router])
+  const [reupdatingCart, setReupdatingCart] = useState(true)
 
   useEffect(() => {
     const itemsWithQuantity = cartItems.map(item => ({
@@ -43,6 +40,132 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
     }))
     setCartItems(itemsWithQuantity)
   }, [])
+
+//  useEffect(() => {
+//   const verifyCartItems = async () => {
+//     const productIds = cartItems.map(item => item.id);
+//     if (productIds.length === 0) return;
+
+//     setReupdatingCart(true)
+//     try {
+//       const res = await fetch(`${baseUrl}/themes/verify-cart-items`, {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({ productIds })
+//       });
+
+//       if (!res.ok) throw new Error('Failed to fetch updated cart data');
+
+//       const result = await res.json();
+
+//        setReupdatingCart(false)
+
+//       if (!result.success || !Array.isArray(result.data)) {
+//         throw new Error('Invalid data from server');
+//       }
+
+//       const updatedProducts = result.data; // now accessing data correctly
+
+//       const verifiedCartItems = cartItems
+//         .map(cartItem => {
+//           const updatedProduct = updatedProducts.find(p => p.id === cartItem.id);
+//           if (!updatedProduct) {
+//             return null; // product no longer available
+//           }
+//           return {
+//             ...cartItem,
+//             priceNGN: updatedProduct.priceNGN,
+//             priceUSD: updatedProduct.priceUSD,
+//             isPublished: updatedProduct.isPublished,
+//             // update more fields if needed
+//             license:updatedProduct.license,
+//             helpDurationSettings:updatedProduct.helpDurationSettings
+//           };
+//         })
+//         .filter(item => item && item.isPublished); // removes unavailable items
+
+//       setCartItems(verifiedCartItems as any[]);
+
+//       // Optionally, update localStorage:
+//       localStorage.setItem('cartItems', JSON.stringify(verifiedCartItems));
+
+//     } catch (error) {
+//       setReupdatingCart(false)
+//       console.log('Error verifying cart items:', error);
+//     }
+//   };
+
+//   verifyCartItems();
+
+//   // Optionally, run periodically (every 5 minutes)
+//   const intervalId = setInterval(verifyCartItems, 5 * 60 * 1000);
+
+//   return () => clearInterval(intervalId);
+// }, [cartItems.length]);
+
+useEffect(() => {
+  const verifyCartItems = async () => {
+    const productIds = cartItems.map(item => item.id);
+    if (productIds.length === 0) return;
+
+    setReupdatingCart(true);
+
+    try {
+      const res = await fetch(`${baseUrl}/themes/verify-cart-items`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ productIds })
+      });
+
+      if (!res.ok) throw new Error('Failed to fetch updated cart data');
+
+      const result = await res.json();
+      setReupdatingCart(false);
+
+      if (!result.success || !Array.isArray(result.data)) {
+        throw new Error('Invalid data from server');
+      }
+
+      const updatedProducts = result.data;
+
+      const verifiedCartItems = cartItems
+        .map(cartItem => {
+          const updatedProduct = updatedProducts.find(p => p.id === cartItem.id);
+          if (!updatedProduct || !updatedProduct.isPublished) return null;
+          return {
+            ...cartItem,
+            priceNGN: updatedProduct.priceNGN,
+            priceUSD: updatedProduct.priceUSD,
+            isPublished: updatedProduct.isPublished,
+            license: updatedProduct.license,
+            helpDurationSettings: updatedProduct.helpDurationSettings
+          };
+        })
+        .filter(Boolean); // Remove nulls (unavailable products)
+
+      // Only update cart if it actually changed
+      const isChanged = JSON.stringify(cartItems) !== JSON.stringify(verifiedCartItems);
+
+      if (isChanged) {
+        setCartItems(verifiedCartItems as any[]);
+        localStorage.setItem('cartItems', JSON.stringify(verifiedCartItems));
+      }
+    } catch (error) {
+      setReupdatingCart(false);
+      console.log('Error verifying cart items:', error);
+    }
+  };
+
+  verifyCartItems();
+
+  const intervalId = setInterval(verifyCartItems, 5 * 60 * 1000);
+
+  return () => clearInterval(intervalId);
+}, []); // 🔁 Removed `cartItems.length` dependency
 
 
   useEffect(() => {
@@ -83,7 +206,6 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
       [itemId]: !prev[itemId],
     }))
   }
-
 
 
   const increaseQuantity = (itemId: number) => {
@@ -218,6 +340,8 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
     )
   }
 
+
+
   return (
     <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
       <header className="bg-[#333333] text-white py-3 px-4">
@@ -234,12 +358,69 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
           <h1 className="text-2xl font-bold">Your Cart</h1>
         </div>
 
+        {
+          reupdatingCart ?
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+            <div className="lg:col-span-2 space-y-6">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="bg-white rounded-md shadow-sm p-4 space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <div className="h-4 w-32 bg-gray-200 rounded" />
+                    <div className="h-4 w-16 bg-gray-200 rounded" />
+                  </div>
+                  {[...Array(2)].map((_, j) => (
+                    <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
+                      <div className="w-20 h-20 bg-gray-200 rounded-md" />
+                      <div className="flex flex-col gap-2 flex-grow">
+                        <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                        <div className="h-3 w-1/2 bg-gray-200 rounded" />
+                        <div className="h-3 w-2/3 bg-gray-200 rounded" />
+                        <div className="h-4 w-1/3 bg-gray-200 rounded" />
+                      </div>
+                      <div className="flex-shrink-0">
+                        <div className="h-4 w-12 bg-gray-200 rounded mb-2" />
+                        <div className="h-3 w-24 bg-gray-200 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-md shadow-sm p-4 space-y-4 sticky top-4">
+                <div className="h-5 w-40 bg-gray-200 rounded" />
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <div className="h-3 w-16 bg-gray-200 rounded" />
+                    <div className="h-3 w-10 bg-gray-200 rounded" />
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="h-3 w-24 bg-gray-200 rounded" />
+                    <div className="h-3 w-12 bg-gray-200 rounded" />
+                  </div>
+                  <div className="border-t pt-2 mt-2 flex justify-between">
+                    <div className="h-4 w-16 bg-gray-200 rounded" />
+                    <div className="h-4 w-12 bg-gray-200 rounded" />
+                  </div>
+                </div>
+                <div className="h-10 w-full bg-gray-200 rounded" />
+                <div className="h-3 w-2/3 bg-gray-200 rounded mx-auto" />
+              </div>
+            </div>
+          </div>
+          :
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-white rounded-md shadow-sm mb-6">
               <div className="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 className="font-semibold">
-                  Cart Items ({cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0)})
+                  Cart Items (
+                    {
+                      // cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0)
+                       cartItems.length
+                    }
+                    )
                 </h2>
                 {cartItems.length > 1 && (
                   <button onClick={handleClearCart} className="text-red-500 hover:text-red-700 text-sm">
@@ -357,6 +538,9 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
             </div>
           </div>
         </div>
+        }
+
+
       </div>
 
       {showConfirmation && (
@@ -382,6 +566,14 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
           isDestructive={true}
         />
       )}
+
+
+      {/* Real-time cart update notice */}
+      <div className="fixed bottom-0 left-0 right-0 bg-yellow-100 border-t border-yellow-300 text-yellow-800 text-center p-2 text-xs z-50">
+        Note: Items in your cart can change in real-time. Prices may update or items may become unavailable.
+      </div>
+
+
     </div>
   )
 }

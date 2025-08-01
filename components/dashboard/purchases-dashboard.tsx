@@ -7,20 +7,22 @@ import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter } fro
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import TestDemoScreen from "@/components/test-demo-screen";
-import {baseUrl} from "@/lib/utils";
+import {baseUrl, isExpired, formatReadableDate} from "@/lib/utils";
 import toast from 'react-hot-toast';
+import PurchasePopover from "@/components/togglePopover"
+import ProjectPlaceholder from "../projcet-placeholder"
 
 interface PurchasesDashboardProps {
   user: any
 }
 
 export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
-  const [activeTab, setActiveTab] = useState<"all" | "themes" | "plugins">("all")
+  const [activeTab, setActiveTab] = useState<"all" | "project" | "template" | "design" | "component">("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [sortBy, setSortBy] = useState<"recent" | "oldest" | "name" | "price">("recent")
   const [showFilters, setShowFilters] = useState(false)
   const [isLoadingPurchase, setIsLoadingPurchase] = useState(true);
-
+const [showMore, setShowMore] = useState(false);
   // Mock data for purchases
   // const [allPurchases, setAllPurchases] = useState([
   //   {
@@ -95,6 +97,26 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
   //   },
   // ]);
 
+
+  const x ={
+    title: "Shopify - eCommerce WordPress Theme",
+    image: "/placeholder.svg?height=60&width=80",
+    purchaseDate: "2025-04-15T00:00:00.000Z",
+    expiryDate:"2025-07-15T00:00:00.000Z",
+    price:59,
+    type:"project",
+    supportDuration: "2025-04-15T00:00:00.000Z",
+    supportExpiryDate:"2025-07-15T00:00:00.000Z",
+    downloads:5,
+    lastDownload:"3 days ago",
+    authorId:"6842c5705df72c7ddac0633",
+    userId:"685aea9d3abdf17351e0467b",
+    downloadInstructions:"just download and unzip",
+    loginDetails:[],
+    license:''
+  }
+
+
   const [allPurchases, setAllPurchases] = useState<Purchase[]>([]);
 
   type Purchase = {
@@ -145,6 +167,16 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
 
     fetchRecentPurchases();
   }, []);
+
+
+  const handleDownload = (purchase: any)=>{
+    if(isExpired(purchase)){
+      console.log("This item has expired.");
+    }else{
+      console.log(purchase)
+    }
+    
+  }
 
 
 
@@ -230,19 +262,35 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
           </button>
           <button
             className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "themes" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              activeTab === "project" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
             }`}
-            onClick={() => setActiveTab("themes")}
+            onClick={() => setActiveTab("project")}
           >
-            Themes
+            Projects
           </button>
           <button
             className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "plugins" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              activeTab === "template" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
             }`}
-            onClick={() => setActiveTab("plugins")}
+            onClick={() => setActiveTab("template")}
           >
-            Plugins
+            Templates
+          </button>
+          <button
+            className={`px-4 py-1.5 text-sm rounded-md ${
+              activeTab === "design" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+            }`}
+            onClick={() => setActiveTab("design")}
+          >
+            UI/UX Designs
+          </button>
+          <button
+            className={`px-4 py-1.5 text-sm rounded-md ${
+              activeTab === "component" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+            }`}
+            onClick={() => setActiveTab("component")}
+          >
+            Components
           </button>
         </div>
       </div>
@@ -261,10 +309,7 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
 
         {
           isLoadingPurchase ?
-              <div className="inset-0 flex items-center justify-center mb-6 pt-6">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 gap-1"></div>
-                <span className="z-20 text-xs gap-1"> Fetching Data...</span>
-              </div>
+              <ProjectPlaceholder i={3}/>
               :
               <>
                 {filteredPurchases.length > 0 ? (
@@ -289,11 +334,14 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
                                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
                                     <div className="flex items-center">
                                       <Calendar className="h-3 w-3 mr-1" />
-                                      <span>Purchased: {purchase.purchaseDate}</span>
+                                      <span>Purchased: {formatReadableDate(purchase.purchaseDate)}</span>
                                     </div>
                                     <div className="flex items-center">
                                       <Clock className="h-3 w-3 mr-1" />
-                                      <span>Support until: {purchase.expiryDate}</span>
+                                      
+                                      <span>
+                                     Download expiring date: <span className={`${isExpired(purchase) ? "text-red-500" : "text-green-500"}`}> {formatReadableDate(purchase.expiryDate)}</span>
+                                    </span>
                                     </div>
                                   </div>
                                 </div>
@@ -320,22 +368,28 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
                                 <span className="font-medium">{purchase.downloads}</span> downloads (last download:{" "}
                                 {purchase.lastDownload})
                               </div>
-                              <div className="flex flex-wrap gap-2">
-                                <Button variant="outline" size="sm" className="text-xs">
+                              <div className="flex flex-wrap gap-2 overflow-visible relative">
+                                
+                                {
+                                !isExpired(purchase) ? (
+                                <Button onClick={()=>handleDownload(purchase)} variant="outline" size="sm" className="text-xs">
                                   <Download className="h-3 w-3 mr-1" />
                                   Download
                                 </Button>
-                                <Button variant="outline" size="sm" className="text-xs">
-                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                  View Demo
+                                )
+                                :
+                                <Button disabled variant="outline" size="sm" className="text-xs">
+                                  <Download className="h-3 w-3 mr-1" />
+                                  <span className="text-xs text-red-500">Download Expired</span>
                                 </Button>
-                                <Button variant="outline" size="sm" className="text-xs">
-                                  <FileText className="h-3 w-3 mr-1" />
-                                  License
-                                </Button>
-                                {purchase.supportStatus === "expired" && (
-                                    <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Extend Support</Button>
-                                )}
+                                
+                              }
+
+
+                                <PurchasePopover purchase={purchase}/>
+                                
+                              <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Extend Support</Button>
+                                
                               </div>
                             </div>
                           </div>

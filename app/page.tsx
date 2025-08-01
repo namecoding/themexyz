@@ -323,7 +323,8 @@ export default function Home() {
   }
 
   const getCartCount = () => {
-    return cartItems.reduce((total, item) => total + (item.quantity || 1), 0)
+    // return cartItems.reduce((total, item) => total + (item.quantity || 1), 0)
+    return cartItems.length
   }
 
   const toggleWishlist = (item) => {
@@ -499,6 +500,8 @@ export default function Home() {
     //localStorage.removeItem("user")
     localStorage.removeItem("token")
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isAdminModalOpen")
+    localStorage.removeItem("confirmedAdminType")
     signOut({
       callbackUrl: '/', // or your desired post-logout page
       redirect: true,

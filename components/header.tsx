@@ -111,7 +111,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
                     </nav>
                 </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-6">
                     <div className="relative hidden md:block">
                         <input
                             type="text"

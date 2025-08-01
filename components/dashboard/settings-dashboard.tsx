@@ -21,10 +21,13 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
   const [profileForm, setProfileForm] = useState({
     name: user?.name || "",
     email: user?.email || "",
-    username: user?.username || "",
-    bio: user?.bio || "",
-    website: user?.website || "",
-    location: user?.location || "",
+    username: user?.profile?.displayName || "",
+    bio: user?.profile?.bio || "",
+    website: user?.profile?.website || "",
+    location: user?.state || "",
+    country:user?.country || "",
+    phone:user?.phone || "",
+    company:user?.company || ""
   })
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
@@ -398,6 +401,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                       <input
                         type="email"
                         id="email"
+                        disabled={!user.isSocial}
                         value={profileForm.email}
                         onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
@@ -438,6 +442,35 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
+                          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                            Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            id="phone"
+                            value={profileForm.phone}
+                            onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            placeholder="phone number"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                            Company
+                          </label>
+                          <input
+                            type="text"
+                            id="company"
+                            value={profileForm.company}
+                            onChange={(e) => setProfileForm({ ...profileForm, company: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            placeholder="company"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
                           <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">
                             Website
                           </label>
@@ -469,8 +502,8 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                   }
 
                   <div className="pt-4">
-                    <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white">
-                      Save Changes
+                    <Button type="submit" disabled className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                      Coming soon
                     </Button>
                   </div>
                 </form>

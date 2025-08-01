@@ -61,6 +61,8 @@ export default function MyProducts() {
     //localStorage.removeItem("user")
     localStorage.removeItem("token")
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isAdminModalOpen")
+    localStorage.removeItem("confirmedAdminType")
     signOut({
       callbackUrl: '/', // or your desired post-logout page
       redirect: true,

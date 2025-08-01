@@ -175,20 +175,17 @@ export default function CheckoutPage({
 
 
   useEffect(() => {
-    setScreenLoading(true)
-    const timer = setTimeout(() => {
-      setScreenLoading(false)
-    }, 3000)
-    return () => clearTimeout(timer)
-  }, [pathname])
+  setScreenLoading(true);
+  const timer = setTimeout(() => setScreenLoading(false), 1000); // Faster test
+  return () => clearTimeout(timer);
+}, [pathname, userData, cartItems]);
+
 
 
 
   useEffect(() => {
     if (userData) {
-      //localStorage.setItem("user", JSON.stringify(user))
-      //console.log(user, 'savedUser 2')
-
+    
       setBillingDetails((prev) => ({
         ...prev,
         name: userData.name || "",
@@ -247,26 +244,6 @@ export default function CheckoutPage({
 
   }, [currency]);
 
-
-  // useEffect(() => {
-  //   const savedUser = localStorage.getItem("user")
-
-  //   if (savedUser) {
-  //     //console.log(savedUser, 'savedUser')
-
-  //     try {
-  //       const parsedUser = JSON.parse(savedUser)
-  //       setUser(parsedUser)
-  //       setIsLoggedIn(true)
-
-  //     } catch (e) {
-  //       console.log("Error parsing user data", e)
-  //     }
-
-  //   }
-  // }, [router])
-
-
   const closeLoginModal = () => {
     setShowLoginModal(false)
     document.body.style.overflow = "auto"
@@ -303,27 +280,6 @@ export default function CheckoutPage({
   const handlePaymentMethodSelect = (method: string) => {
     setPaymentMethod(method)
   }
-
-  // const usePaystack = async (toastId:string, refNo:string) => {
-  //
-  //   setTimeout(()=>{ toast.success("Payment completed with "+refNo, { id: toastId }) },3000)
-  //
-  //  // onClose()
-  // }
-
-  // const waitForPaystack = (): Promise<void> => {
-  //   return new Promise((resolve, reject) => {
-  //     const check = () => {
-  //       if (typeof window !== "undefined" && window.PaystackPop) {
-  //         resolve();
-  //       } else {
-  //         setTimeout(check, 100);
-  //       }
-  //     };
-  //     check();
-  //   });
-  // };
-
 
   const handlePayment = async () => {
     const toastId = toast.loading("Processing payment...");
@@ -680,11 +636,8 @@ export default function CheckoutPage({
     }
   }
 
-  if (screenLoading) {
-    return (
-      <ScreenLoading />
-    )
-  }
+
+
 
 
   if (isPaymentProcessing.pleaseWait) {
@@ -719,6 +672,60 @@ export default function CheckoutPage({
             <X size={24} />
           </button>
         </div>
+
+        {
+          screenLoading ? 
+           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+            <div className="lg:col-span-2 space-y-6">
+              {[...Array(1)].map((_, i) => (
+                <div key={i} className="bg-white rounded-md shadow-sm p-4 space-y-4">
+                  <div className="flex justify-between items-center border-b pb-2">
+                    <div className="h-4 w-32 bg-gray-200 rounded" />
+                    <div className="h-4 w-16 bg-gray-200 rounded" />
+                  </div>
+                  {[...Array(1)].map((_, j) => (
+                    <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
+                      <div className="w-20 h-20 bg-gray-200 rounded-md" />
+                      <div className="flex flex-col gap-2 flex-grow">
+                        <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                        <div className="h-3 w-1/2 bg-gray-200 rounded" />
+                        <div className="h-3 w-2/3 bg-gray-200 rounded" />
+                        <div className="h-4 w-1/3 bg-gray-200 rounded" />
+                      </div>
+                      <div className="flex-shrink-0">
+                        <div className="h-4 w-12 bg-gray-200 rounded mb-2" />
+                        <div className="h-3 w-24 bg-gray-200 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-md shadow-sm p-4 space-y-4 sticky top-4">
+                <div className="h-5 w-40 bg-gray-200 rounded" />
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <div className="h-3 w-16 bg-gray-200 rounded" />
+                    <div className="h-3 w-10 bg-gray-200 rounded" />
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="h-3 w-24 bg-gray-200 rounded" />
+                    <div className="h-3 w-12 bg-gray-200 rounded" />
+                  </div>
+                  <div className="border-t pt-2 mt-2 flex justify-between">
+                    <div className="h-4 w-16 bg-gray-200 rounded" />
+                    <div className="h-4 w-12 bg-gray-200 rounded" />
+                  </div>
+                </div>
+                <div className="h-10 w-full bg-gray-200 rounded" />
+                <div className="h-3 w-2/3 bg-gray-200 rounded mx-auto" />
+              </div>
+            </div>
+          </div>
+
+          :
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -806,17 +813,17 @@ export default function CheckoutPage({
                           />
                           <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-700">
                             I agree to the{" "}
-                            <a href="#" className="text-[#82b440] hover:underline">
+                            <a href="#" className="text-green-500 hover:underline">
                               Terms of Service
                             </a>{" "}
                             and{" "}
-                            <a href="#" className="text-[#82b440] hover:underline">
+                            <a href="#" className="text-green-500 hover:underline">
                               Privacy Policy
                             </a>
                           </label>
                         </div>
 
-                        <Button type="submit" className="w-full bg-[#82b440] hover:bg-[#7aa93c] text-white">
+                        <Button type="submit" className="w-full bg-green-500 hover:bg-[#7aa93c] text-white">
                           {
                             pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Create Free Account'
                           }
@@ -990,7 +997,7 @@ export default function CheckoutPage({
                             required
                           />
                         </div>
-                        <Button type="submit" className="w-full bg-[#82b440] hover:bg-[#7aa93c] text-white">
+                        <Button type="submit" className="w-full bg-green-500 hover:bg-[#7aa93c] text-white">
                           {
                             pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Sign In'
                           }
@@ -1006,7 +1013,7 @@ export default function CheckoutPage({
                       <div className="text-center">
                         <p className="text-sm text-gray-600">
                           Don't have an account?{" "}
-                          <button onClick={() => switchStage('signup')} className="text-[#82b440] hover:underline font-medium">
+                          <button onClick={() => switchStage('signup')} className="text-green-500 hover:underline font-medium">
                             Sign up
                           </button>
                         </p>
@@ -1287,146 +1294,6 @@ export default function CheckoutPage({
                           </div>
                         ))}
                     </div>
-
-                    {/*<div className="p-6">*/}
-                    {/*  {!hasBillingDetails ? (*/}
-                    {/*      <div className="flex items-center p-4 bg-amber-50 text-amber-800 rounded-md mb-4">*/}
-                    {/*        <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />*/}
-                    {/*        <p className="text-sm">*/}
-                    {/*          Please complete your billing details before selecting a payment method.*/}
-                    {/*        </p>*/}
-                    {/*      </div>*/}
-                    {/*  ) : (*/}
-                    {/*      <div className="space-y-4">*/}
-
-                    {/*        <div*/}
-                    {/*            className={`border rounded-md p-4 cursor-pointer ${*/}
-                    {/*                paymentMethod === "paystack"*/}
-                    {/*                    ? "border-[#82b440] bg-green-50"*/}
-                    {/*                    : "border-gray-200 hover:border-gray-300"*/}
-                    {/*            }`}*/}
-                    {/*            onClick={() => handlePaymentMethodSelect("paystack")}*/}
-                    {/*        >*/}
-                    {/*          <div className="flex items-center">*/}
-                    {/*            <div className="mr-3">*/}
-                    {/*              <div*/}
-                    {/*                  className={`w-5 h-5 rounded-full border ${*/}
-                    {/*                      paymentMethod === "paystack" ? "border-[#82b440]" : "border-gray-300"*/}
-                    {/*                  } flex items-center justify-center`}*/}
-                    {/*              >*/}
-                    {/*                {paymentMethod === "paystack" && (*/}
-                    {/*                    <div className="w-3 h-3 rounded-full bg-green-600"></div>*/}
-                    {/*                )}*/}
-                    {/*              </div>*/}
-                    {/*            </div>*/}
-                    {/*            <div className="flex-grow">*/}
-                    {/*              <span className="font-medium">Paystack</span>*/}
-                    {/*              <p className="text-xs text-gray-500 mt-1">Payment is secured with Paystack</p>*/}
-                    {/*            </div>*/}
-                    {/*            <div>*/}
-                    {/*              <Image*/}
-                    {/*                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsWKza4IaoogsTAPXl8mjQ1JPg0ii8Jmp_6Q&s?height=24&width=60"*/}
-                    {/*                  alt="Paystack"*/}
-                    {/*                  width={60}*/}
-                    {/*                  height={24}*/}
-                    {/*                  className="rounded"*/}
-                    {/*              />*/}
-                    {/*            </div>*/}
-                    {/*          </div>*/}
-                    {/*        </div>*/}
-
-                    {/*        <div*/}
-                    {/*            className={`border rounded-md p-4 cursor-pointer ${*/}
-                    {/*                paymentMethod === "flutterwave"*/}
-                    {/*                    ? "border-[#82b440] bg-green-50"*/}
-                    {/*                    : "border-gray-200 hover:border-gray-300"*/}
-                    {/*            }`}*/}
-                    {/*            onClick={() => {*/}
-                    {/*              //handlePaymentMethodSelect("flutterwave")*/}
-                    {/*            }}*/}
-
-                    {/*        >*/}
-                    {/*          <div className="flex items-center">*/}
-                    {/*            <div className="mr-3">*/}
-                    {/*              <div*/}
-                    {/*                  className={`w-5 h-5 rounded-full border ${*/}
-                    {/*                      paymentMethod === "flutterwave" ? "border-[#82b440]" : "border-gray-300"*/}
-                    {/*                  } flex items-center justify-center`}*/}
-                    {/*              >*/}
-                    {/*                {paymentMethod === "flutterwave" && (*/}
-                    {/*                    <div className="w-3 h-3 rounded-full bg-green-600"></div>*/}
-                    {/*                )}*/}
-                    {/*              </div>*/}
-                    {/*            </div>*/}
-                    {/*            <div className="flex-grow">*/}
-                    {/*              <span className="font-medium">Flutterwave <small className="text-sm text-red-600">(coming soon!)</small></span>*/}
-                    {/*              <p className="text-xs text-gray-500 mt-1">Payment is secured with Flutterwave</p>*/}
-                    {/*            </div>*/}
-                    {/*            <div>*/}
-                    {/*              <Image*/}
-                    {/*                  src="https://cdn.prod.website-files.com/6640cd28f51f13175e577c05/664e0089db946469af04fca4_79d28911-5c01-5982-ae24-b90a2ba6d6b9.svg?height=24&width=60"*/}
-                    {/*                  alt="Paystack"*/}
-                    {/*                  width={60}*/}
-                    {/*                  height={24}*/}
-                    {/*                  className="rounded"*/}
-                    {/*              />*/}
-                    {/*            </div>*/}
-                    {/*          </div>*/}
-                    {/*        </div>*/}
-
-
-                    {/*        <div*/}
-                    {/*            className={`border rounded-md p-4 cursor-pointer ${*/}
-                    {/*                paymentMethod === "wallet"*/}
-                    {/*                    ? "border-[#82b440] bg-green-50"*/}
-                    {/*                    : "border-gray-200 hover:border-gray-300"*/}
-                    {/*            }`}*/}
-                    {/*            onClick={() => {*/}
-                    {/*              currency ==='NGN'? user?.wallet?.NGN?.balance : user?.wallet?.USD?.balance > total ?*/}
-                    {/*              handlePaymentMethodSelect("wallet")*/}
-                    {/*                  :*/}
-                    {/*                  toast.error('no cash')*/}
-                    {/*            }}*/}
-                    {/*        >*/}
-                    {/*          <div className="flex items-center">*/}
-                    {/*            <div className="mr-3">*/}
-                    {/*              <div*/}
-                    {/*                  className={`w-5 h-5 rounded-full border ${*/}
-                    {/*                      paymentMethod === "wallet" ? "border-[#82b440]" : "border-gray-300"*/}
-                    {/*                  } flex items-center justify-center`}*/}
-                    {/*              >*/}
-                    {/*                {paymentMethod === "wallet" && (*/}
-                    {/*                    <div className="w-3 h-3 rounded-full bg-green-600"></div>*/}
-                    {/*                )}*/}
-                    {/*              </div>*/}
-                    {/*            </div>*/}
-                    {/*            <div className="flex-grow">*/}
-                    {/*              <span className="font-medium">Pay from Wallet</span>*/}
-                    {/*              <p className="text-xs text-gray-500 mt-1">Balance {symbol}{currency ==='NGN'? user?.wallet?.NGN?.balance : user?.wallet?.USD?.balance}</p>*/}
-                    {/*              <small className="text-red-600">{*/}
-                    {/*                (currency === 'NGN'*/}
-                    {/*                    ? user?.wallet?.NGN?.balance ?? 0*/}
-                    {/*                    : user?.wallet?.USD?.balance ?? 0) < total*/}
-                    {/*                    ? 'insufficient'*/}
-                    {/*                    : null*/}
-                    {/*              }</small>*/}
-                    {/*            </div>*/}
-
-                    {/*            <div>*/}
-                    {/*              <Image*/}
-                    {/*                  src="https://cdn-icons-png.flaticon.com/512/5167/5167008.png"*/}
-                    {/*                  alt="wallet"*/}
-                    {/*                  width={60}*/}
-                    {/*                  height={24}*/}
-                    {/*                  className="rounded"*/}
-                    {/*              />*/}
-                    {/*            </div>*/}
-                    {/*          </div>*/}
-                    {/*        </div>*/}
-
-                    {/*      </div>*/}
-                    {/*  )}*/}
-                    {/*</div>*/}
                   </div>
                 }
 
@@ -1435,7 +1302,7 @@ export default function CheckoutPage({
 
             <p className="text-xs text-left text-gray-500 mb-4">
               By continuing with your purchase, you agree to our{" "}
-              <a href="#" onClick={() => setShowTerms(true)} className="text-[#82b440] hover:underline">
+              <a href="#" onClick={() => setShowTerms(true)} className="text-green-500 hover:underline">
                 Terms of Purchase
               </a>.
             </p>
@@ -1516,7 +1383,7 @@ export default function CheckoutPage({
 
               <p className="text-xs text-left text-gray-500 mb-4">
                 By continuing with your purchase, you agree to our{" "}
-                <a href="#" onClick={() => setShowTerms(true)} className="text-[#82b440] hover:underline">
+                <a href="#" onClick={() => setShowTerms(true)} className="text-green-500 hover:underline">
                   Terms of Purchase
                 </a>.
               </p>
@@ -1570,6 +1437,12 @@ export default function CheckoutPage({
             </div>
           </div>
         </div>
+
+        }
+
+        
+
+
       </div>
     </div>
   )

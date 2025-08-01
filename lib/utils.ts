@@ -655,3 +655,10 @@ export const helpDurationLabels: Record<string, string> = {
   "6m": "6 Months",
   "1y": "1 Year",
 };
+
+export function isExpired(purchase: any) {
+  const now = new Date();
+  const expiry = new Date(purchase.expiryDate);
+
+  return now > expiry;
+}

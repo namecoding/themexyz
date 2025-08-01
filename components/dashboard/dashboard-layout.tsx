@@ -166,7 +166,8 @@ export default function DashboardLayout({
         <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar */}
           {/* <aside className="w-full md:w-64 hidden md:block flex-shrink-0 sticky top-20 self-start"></aside> */}
-          <aside className="w-full md:w-64 hidden md:block flex-shrink-0">
+          <aside className="w-full md:w-64 hidden md:block flex-shrink-0 sticky top-20 self-start">
+          {/* <aside className="w-full md:w-64 hidden md:block flex-shrink-0"> */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center space-x-3">

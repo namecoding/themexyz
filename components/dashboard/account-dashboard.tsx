@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Download, CreditCard, Clock, Star, Calendar, ChevronRight, ExternalLink, Loader, Coins, Tag } from "lucide-react"
+import { Download, CreditCard, Clock, Star, Calendar, ChevronRight, ExternalLink, Loader, Coins, Tag, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { baseUrl, formatReadableDate, getMembershipDuration } from "@/lib/utils";
@@ -13,6 +13,9 @@ import ProgressDonut from "@/components/progressBar";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import UnderReviewModal from "@/components/UnderReviewModal";
+import ProjectPlaceholder from "../projcet-placeholder"
+
+
 interface AccountDashboardProps {
   user: any
 }
@@ -28,13 +31,14 @@ interface Activity {
 }
 
 export default function AccountDashboard({ user }: AccountDashboardProps) {
-  const [activeTab, setActiveTab] = useState<"all" | "themes" | "plugins">("all")
+  const [activeTab, setActiveTab] = useState<"all" | "project" | "design" | "component" | "template">("all")
   const [loading, setLoading] = useState(true);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [openWizard, setOpenWizard] = useState(false);
   const [showUnderReview, setShowUnderReview] = useState(false);
-
-  useEffect(() => {
+const [isLoadingPurchase, setIsLoadingPurchase] = useState(true);
+  
+useEffect(() => {
     const fetchActivities = async () => {
       try {
         const token = localStorage.getItem("token"); // adjust the key if different
@@ -58,10 +62,10 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
         if (data.success) {
           setActivities(data.activities);
         } else {
-          console.error("Failed to fetch activities:", data.message);
+          console.log("Failed to fetch activities:", data.message);
         }
       } catch (error) {
-        console.error("Fetch error:", error);
+        console.log("Fetch error:", error);
       } finally {
         setLoading(false);
       }
@@ -103,7 +107,7 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
         });
 
         const data = await response.json();
-
+        setIsLoadingPurchase(false)
         if (data.success) {
           setRecentPurchases(data.purchases);
         } else {
@@ -111,6 +115,7 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
           toast.error("Failed to fetch purchases");
         }
       } catch (error) {
+         setIsLoadingPurchase(false)
         console.log("Fetch error:", error);
         toast.error("Fetch error");
       }
@@ -320,22 +325,42 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
               All
             </button>
             <button
-              className={`px-3 py-1 text-xs rounded-md ${activeTab === "themes" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              className={`px-3 py-1 text-xs rounded-md ${activeTab === "project" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
                 }`}
-              onClick={() => setActiveTab("themes")}
+              onClick={() => setActiveTab("project")}
             >
-              Themes
+              Projects
             </button>
             <button
-              className={`px-3 py-1 text-xs rounded-md ${activeTab === "plugins" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              className={`px-3 py-1 text-xs rounded-md ${activeTab === "template" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
                 }`}
-              onClick={() => setActiveTab("plugins")}
+              onClick={() => setActiveTab("template")}
             >
-              Plugins
+              Templates
+            </button>
+
+            <button
+              className={`px-3 py-1 text-xs rounded-md ${activeTab === "design" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+                }`}
+              onClick={() => setActiveTab("design")}
+            >
+              UI/UX Designs
+            </button>
+
+            <button
+              className={`px-3 py-1 text-xs rounded-md ${activeTab === "component" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+                }`}
+              onClick={() => setActiveTab("component")}
+            >
+              Components
             </button>
           </div>
         </div>
 
+        {
+          isLoadingPurchase ?
+          <ProjectPlaceholder i={2}/>
+          :
         <div className="divide-y divide-gray-200">
           {filteredPurchases.length > 0 ? (
             filteredPurchases.map((purchase) => (
@@ -374,10 +399,14 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
                     <Download className="h-3 w-3 mr-1" />
                     Download
                   </Button>
+                
                   <Button variant="outline" size="sm" className="text-xs">
-                    <ExternalLink className="h-3 w-3 mr-1" />
-                    View Demo
-                  </Button>
+                   <FileText className="h-3 w-3 mr-1" />
+                    License
+                    </Button>
+                    {purchase.supportStatus === "expired" && (
+                        <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Extend Support</Button>
+                    )}
                 </div>
               </div>
             ))
@@ -394,10 +423,13 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
             </div>
           )}
         </div>
+        }
+
+       
 
         {filteredPurchases.length > 0 && (
           <div className="p-4 border-t border-gray-200 text-center">
-            <Button asChild variant="link" className="text-[#82b440]">
+            <Button asChild variant="link" className="text-green-500">
               <Link href="/dashboard/purchases">
                 View All Purchases <ChevronRight className="h-4 w-4 ml-1" />
               </Link>
@@ -421,10 +453,17 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
 
         <div className="divide-y divide-gray-200">
           {loading ? (
-            <div className="flex justify-center items-center py-10">
-              <Loader className="animate-spin h-6 w-6 text-gray-400" />
-              <span className="ml-2 text-gray-500">Loading activities...</span>
-            </div>
+            <div className="space-y-4 p-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="animate-pulse flex space-x-4">
+                <div className="rounded-full bg-gray-300 h-8 w-8" />
+                <div className="flex-1 space-y-2 py-1">
+                  <div className="h-3 bg-gray-300 rounded w-3/4" />
+                  <div className="h-2 bg-gray-200 rounded w-1/2" />
+                </div>
+              </div>
+            ))}
+          </div>
           ) : activities.length === 0 ? (
             <div className="flex justify-center items-center py-10">
               <span className="text-gray-500">No activities found.</span>

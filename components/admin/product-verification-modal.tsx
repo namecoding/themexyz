@@ -23,6 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { Product } from "@/components/admin/types/admin"
+import {helpDurationLabels} from "@/lib/utils"
 
 interface ProductVerificationModalProps {
     isOpen: boolean
@@ -79,7 +80,7 @@ export default function ProductVerificationModal({
         if (product.isPublic) {
             return <Badge className="bg-green-100 text-green-800">Approved</Badge>
         }
-        return <Badge className="bg-yellow-100 text-yellow-800">Pending Review</Badge>
+        return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
     }
 
     return (
@@ -467,7 +468,7 @@ export default function ProductVerificationModal({
                                                         {product.helpDurationSettings.map((help, index) => (
                                                             <div key={index} className="flex items-center gap-2">
                                                                 <span className="font-medium">{help.type} support:</span>
-                                                                <span>{help.duration}</span>
+                                                                <span>{helpDurationLabels[help.duration]}</span>
                                                                 {help.feeUSD === 0 && help.feeNGN === 0 ? (
                                                                     <Badge variant="outline" className="text-green-600">
                                                                         Free
