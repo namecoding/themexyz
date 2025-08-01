@@ -10,6 +10,7 @@ export async function OPTIONS() {
     headers: corsHeaders,
   });
 }
+
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_KEY,
     authDomain: "themexyz-eba33.firebaseapp.com",

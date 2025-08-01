@@ -4,16 +4,19 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
-import { corsHeaders } from '@/lib/cors';
+import { getCorsHeaders } from '@/lib/cors';
 
-export async function OPTIONS() {
+export async function OPTIONS(req: Request) {
+  const origin = req.headers.get("origin") || "*";
   return new NextResponse(null, {
     status: 204,
-    headers: corsHeaders,
+    headers: getCorsHeaders(origin),
   });
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const origin = req.headers.get("origin") || "*";
+
   try {
     await dbConnect();
 
@@ -23,7 +26,6 @@ export async function GET() {
       const theme = themeDoc.toObject();
       theme.id = theme._id.toString();
 
-      // Remove fields you don't want on frontend
       delete theme._id;
       delete theme.__v;
       delete theme.downloadUrl;
@@ -57,21 +59,22 @@ export async function GET() {
       }),
       {
         status: 200,
-        headers: corsHeaders,
+        headers: getCorsHeaders(origin),
       }
     );
   } catch (error) {
-    console.error('[THEME API ERROR]', error);
+    console.error("[THEME API ERROR]", error);
 
     return new NextResponse(
       JSON.stringify({
         success: false,
-        message: 'Server error',
+        message: "Server error",
       }),
       {
         status: 500,
-        headers: corsHeaders,
+        headers: getCorsHeaders(origin),
       }
     );
   }
 }
+
