@@ -33,3 +33,4 @@ docker-image.tar
 .DS_Store
 
 .dockerignoreclient_secret_*.json
+client_secret_*.json
