@@ -32,4 +32,4 @@ docker-image.tar
 
 .DS_Store
 
-.dockerignore
+.dockerignoreclient_secret_*.json
