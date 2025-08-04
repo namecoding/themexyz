@@ -1,25 +1,25 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
-import { getCorsHeaders } from '@/lib/cors';
+// import { getCorsHeaders } from '@/lib/cors';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-function getOrigin(req: Request): string {
-  return req.headers.get('origin') || '*';
-}
+// function getOrigin(req: Request): string {
+//   return req.headers.get('origin') || '*';
+// }
 
-export async function OPTIONS(req: Request) {
-  const origin = getOrigin(req);
-  return new NextResponse(null, {
-    status: 204,
-    headers: getCorsHeaders(origin),
-  });
-}
+// export async function OPTIONS(req: Request) {
+//   const origin = getOrigin(req);
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: getCorsHeaders(origin),
+//   });
+// }
 
 export async function GET(req: Request) {
-  const origin = getOrigin(req);
+  // const origin = getOrigin(req);
 
   try {
     await dbConnect();
@@ -50,7 +50,7 @@ export async function GET(req: Request) {
       data: { featured, newest, bestSelling },
     }), {
       status: 200,
-      headers: getCorsHeaders(origin),
+      // headers: getCorsHeaders(origin),
     });
   } catch (error) {
     console.error('[THEME API ERROR]', error);
@@ -59,7 +59,7 @@ export async function GET(req: Request) {
       message: 'Server error',
     }), {
       status: 500,
-      headers: getCorsHeaders(origin),
+      // headers: getCorsHeaders(origin),
     });
   }
 }
