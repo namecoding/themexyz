@@ -3,8 +3,8 @@ import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
 // import { getCorsHeaders } from '@/lib/cors';
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
+// export const dynamic = 'force-dynamic';
+// export const runtime = 'nodejs';
 
 // function getOrigin(req: Request): string {
 //   return req.headers.get('origin') || '*';
