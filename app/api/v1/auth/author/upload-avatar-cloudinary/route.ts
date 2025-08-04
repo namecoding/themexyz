@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { corsHeaders } from '@/lib/cors';
+// import { corsHeaders } from '@/lib/cors';
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();

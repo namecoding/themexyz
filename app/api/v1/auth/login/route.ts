@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import clientPromise from "@/lib/mongodb";
-import { corsHeaders } from "@/lib/cors";
+// import { corsHeaders } from "@/lib/cors";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 
 export async function POST(request: Request) {
     try {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         if (!user) {
             return new NextResponse(
                 JSON.stringify({ success: false, message: "Invalid credentials" }),
-                { status: 401, headers: corsHeaders }
+                { status: 401 }
             );
         }
 
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         if (!isPasswordValid) {
             return new NextResponse(
                 JSON.stringify({ success: false, message: "Invalid credentials" }),
-                { status: 401, headers: corsHeaders }
+                { status: 401}
             );
         }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       }),
       {
         status: 200,
-        headers: corsHeaders,
+        // headers: corsHeaders,
       }
     );
 
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       JSON.stringify({ success: false, message: "Internal Server Error" }),
       {
         status: 500,
-        headers: corsHeaders,
+        // headers: corsHeaders,
       }
     );
     

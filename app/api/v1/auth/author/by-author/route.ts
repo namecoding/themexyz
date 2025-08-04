@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
-import { corsHeaders } from '@/lib/cors';
+// import { corsHeaders } from '@/lib/cors';
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 
 export async function GET(request: Request) {
     try {

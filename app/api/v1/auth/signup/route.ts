@@ -4,16 +4,16 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendEmail, allowEmailSending } from '@/lib/mailer';
 import { metaData } from '@/lib/utils';
-import { corsHeaders } from "@/lib/cors";
+// import { corsHeaders } from "@/lib/cors";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 
 export async function POST(request: Request) {
   try {
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     if (!email || !password || !name) {
       return new NextResponse(
         JSON.stringify({ success: false, message: 'Missing required fields' }),
-        { status: 400, headers: corsHeaders }
+        { status: 400 }
       );
     }
 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     if (!emailRegex.test(email)) {
       return new NextResponse(
         JSON.stringify({ success: false, message: 'Invalid email format' }),
-        { status: 400, headers: corsHeaders }
+        { status: 400 }
       );
     }
 
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     if (existingUser) {
       return new NextResponse(
         JSON.stringify({ success: false, message: 'User already exists with this email' }),
-        { status: 409, headers: corsHeaders }
+        { status: 409 }
       );
     }
 
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
     if (!user) {
       return new NextResponse(
         JSON.stringify({ success: false, message: 'User fetch failed after creation' }),
-        { status: 500, headers: corsHeaders }
+        { status: 500 }
       );
     }
 
@@ -141,13 +141,13 @@ export async function POST(request: Request) {
           ...safeUser,
         },
       }),
-      { status: 201, headers: corsHeaders }
+      { status: 201 }
     );
   } catch (error) {
     console.error('Signup error:', error);
     return new NextResponse(
       JSON.stringify({ success: false, message: 'Internal Server Error' }),
-      { status: 500, headers: corsHeaders }
+      { status: 500 }
     );
   }
 }

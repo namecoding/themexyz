@@ -5,14 +5,14 @@ import { sendEmail, allowEmailSending } from '@/lib/mailer'
 import { metaData } from '@/lib/utils'
 import { verifyTokenFromHeader } from '@/lib/jwt'
 import bcrypt from 'bcryptjs'
-import { corsHeaders } from '@/lib/cors';
+// import { corsHeaders } from '@/lib/cors';
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 
 function generateAccessCode(): string {
   return Math.floor(1000 + Math.random() * 9000).toString()

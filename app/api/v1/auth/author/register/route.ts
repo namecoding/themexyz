@@ -4,14 +4,14 @@ import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import { sendEmail, allowEmailSending } from '@/lib/mailer';
 import { metaData } from '@/lib/utils';
-import { corsHeaders } from '@/lib/cors';
+// import { corsHeaders } from '@/lib/cors';
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 
 export async function POST(request: Request) {
     try {

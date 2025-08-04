@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
-import { corsHeaders } from '@/lib/cors';
+// import { corsHeaders } from '@/lib/cors';
 // http://localhost:3000/api/v1/cron/process-splits // keep this line, i am using it
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
-}
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: corsHeaders,
+//   });
+// }
 
 export async function GET() {
     try {
@@ -28,7 +28,7 @@ export async function GET() {
         if (dueSplits.length === 0) {
             return new NextResponse(JSON.stringify({ success: true, message: "No split payments to process" }), {
                 status: 401,
-                headers: corsHeaders,
+                // headers: corsHeaders,
               });
         }
 
@@ -107,7 +107,7 @@ export async function GET() {
               }),
               {
                 status: 200,
-                headers: corsHeaders,
+                // headers: corsHeaders,
               }
             );
 
@@ -118,7 +118,7 @@ export async function GET() {
               JSON.stringify({ success: false, message: 'Internal Server error' }),
               {
                 status: 500,
-                headers: corsHeaders,
+                // headers: corsHeaders,
               }
             );
     }
