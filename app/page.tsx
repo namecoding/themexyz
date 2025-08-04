@@ -523,8 +523,6 @@ export default function Home() {
     'Content-Type': 'application/json',
     // 'Authorization': 'Bearer token' if needed
   },
-      mode: 'cors', // VERY IMPORTANT
-  credentials: 'include', // Only if you need cookies/sessions
     };
     setPleaseWaitWhileYourTransactionIsProcessing(true)
 

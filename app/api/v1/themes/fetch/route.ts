@@ -1,22 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
-// import { getCorsHeaders } from '@/lib/cors';
-
-// export const dynamic = 'force-dynamic';
-// export const runtime = 'nodejs';
-
-// function getOrigin(req: Request): string {
-//   return req.headers.get('origin') || '*';
-// }
-
-// export async function OPTIONS(req: Request) {
-//   const origin = getOrigin(req);
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: getCorsHeaders(origin),
-//   });
-// }
 
 export async function GET(req: Request) {
   // const origin = getOrigin(req);
