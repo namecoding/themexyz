@@ -34,3 +34,4 @@ docker-image.tar
 
 .dockerignoreclient_secret_*.json
 client_secret_*.json
+.env
