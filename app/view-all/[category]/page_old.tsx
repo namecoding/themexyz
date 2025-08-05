@@ -14,7 +14,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import Loading from "@/app/loading";
 import CartConsent from "@/components/cart-consent";
 import CartPage from "@/components/cart-page";
-import {baseUrl} from "@/lib/utils";
+import {SERVER_PUBLIC} from "@/lib/utils";
 import PreviewModal from "@/components/preview-modal";
 
 
@@ -52,7 +52,7 @@ export default function ViewAllPage() {
 
       setPleaseWaitWhileYourTransactionIsProcessing(true)
 
-      fetch(`${baseUrl}/themes/fetch2`, requestOptions)
+      fetch(`${SERVER_PUBLIC}/themes/fetch2`, requestOptions)
           .then(response => response.json())
           .then(result => {
             console.log(result?.data, 'theme result');

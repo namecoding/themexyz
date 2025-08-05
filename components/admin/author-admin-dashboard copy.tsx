@@ -24,7 +24,7 @@ import type { User, AuthorApplication } from "@/components/admin/types/admin"
 import { sampleAuthorApplications } from "@/components/admin/data/admin-data"
 import AuthorApplicationModal from "@/components/admin/author-application-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { baseUrl, maskEmail } from "@/lib/utils"
+import { SERVER_PUBLIC, maskEmail } from "@/lib/utils"
 
 interface AuthorAdminDashboardProps {
     currentUser: User
@@ -73,7 +73,7 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
 
     setFetchingApplication(true)
 
-    const response = await fetch(`${baseUrl}/admin/author-applications`, {
+    const response = await fetch(`${SERVER_PUBLIC}/admin/author-applications`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -133,7 +133,7 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
       return
     }
 
-    const res = await fetch(`${baseUrl}/admin/author-decision`, {
+    const res = await fetch(`${SERVER_PUBLIC}/admin/author-decision`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/lib/store/auth"
-import { baseUrl } from "@/lib/utils"
+import { SERVER_PUBLIC } from "@/lib/utils"
 
 export async function Reauth() {
     const token = localStorage.getItem("token")
@@ -11,7 +11,7 @@ export async function Reauth() {
         auth.setToken(token)
 
         try {
-            const res = await fetch(`${baseUrl}/auth/me`, {
+            const res = await fetch(`${SERVER_PUBLIC}/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

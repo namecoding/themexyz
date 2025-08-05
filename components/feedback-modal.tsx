@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {baseUrl, loyaltyPointsReward} from "@/lib/utils";
+import {SERVER_PUBLIC, loyaltyPointsReward} from "@/lib/utils";
 import toast from "react-hot-toast";
 import {useAuthStore} from "@/lib/store/auth";
 
@@ -68,7 +68,7 @@ export default function FeedbackModal({ isOpen, onClose, type, data, onSubmit, u
         };
 
         try {
-            const res = await fetch(`${baseUrl}/auth/feedback`, {
+            const res = await fetch(`${SERVER_PUBLIC}/auth/feedback`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

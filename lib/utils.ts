@@ -8,18 +8,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const baseUrl = process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL; //'http://localhost:3000/api/v1'
-export const serverBase = process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE; //'http://localhost:3000/api/v1'
-
-// export const baseUrl =
-//   typeof window !== 'undefined'
-//     ? process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL
-//     : ''
-
-// export const serverBase =
-//   typeof window !== 'undefined'
-//     ? process.env.NEXT_PUBLIC_BACKEND_SERVER_LOCAL_BASE
-//     : ''
+export const SERVER_PUBLIC = process.env.NEXT_PUBLIC_BACKEND_SERVER;
+export const BASE_PUBLIC = process.env.NEXT_PUBLIC_BASE_URL;
 
 
 export function getMembershipDuration(isoDateString: string): string {
@@ -75,7 +65,6 @@ export function maskEmail(email?: string): string {
 
   return `${maskedLocal}@${domain}`;
 }
-
 
 
 export const metaData = {
@@ -242,7 +231,7 @@ export const loginHandler = async ({
   try {
     setPleaseWaitWhileYourTransactionIsProcessing(true);
 
-    const response = await fetch(`${baseUrl}/auth/login`, {
+    const response = await fetch(`${SERVER_PUBLIC}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

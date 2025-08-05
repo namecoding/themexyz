@@ -1,12 +1,12 @@
 // Get dynamic metadata based on product
 import ProductDetails from "@/components/ProductDetails";
-import { baseUrl } from "@/lib/utils";
+import { SERVER_PUBLIC } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const id = decodeURIComponent(params.id);
 
   try {
-    const res = await fetch(`${baseUrl}/themes/product/${id}`, {
+    const res = await fetch(`${SERVER_PUBLIC}/themes/product/${id}`, {
       cache: "no-store",
     });
 
@@ -15,8 +15,8 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     const item = await res.json();
     const product = item?.data || item;
 
-    const fullUrl = `${baseUrl}/product/${id}`;
-    const image = product.galleryImages?.[0] || `${baseUrl}/default-product-image.jpg`;
+    const fullUrl = `${SERVER_PUBLIC}/product/${id}`;
+    const image = product.galleryImages?.[0] || `${SERVER_PUBLIC}/default-product-image.jpg`;
     const description = product.overview?.slice(0, 150) || "Check out this amazing product on our marketplace.";
 
     return {
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
       alternates: {
         canonical: fullUrl,
       },
-      metadataBase: new URL(baseUrl),
+      metadataBase: new URL(SERVER_PUBLIC),
     };
   } catch (error) {
     return {
@@ -62,7 +62,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
   const id = decodeURIComponent(params.id); // explicitly decode
 
   try {
-    const res = await fetch(`${baseUrl}/themes/product/${id}`, {
+    const res = await fetch(`${SERVER_PUBLIC}/themes/product/${id}`, {
       cache: "no-store",
     });
 

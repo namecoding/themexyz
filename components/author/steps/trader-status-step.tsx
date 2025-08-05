@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, FileText, AlertCircle } from "lucide-react";
-import {baseUrl, themeXYZStorage} from "@/lib/utils";
+import {SERVER_PUBLIC, themeXYZStorage} from "@/lib/utils";
 import toast from "react-hot-toast";
 
 interface TraderStatusStepProps {
@@ -51,7 +51,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
         const formData = new FormData();
         formData.append("avatar", payload.profile.avatar);
 
-        const res = await fetch(`${baseUrl}/auth/author/upload-avatar`, {
+        const res = await fetch(`${SERVER_PUBLIC}/auth/author/upload-avatar`, {
           method: "POST",
           body: formData,
         });
@@ -76,7 +76,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
         throw new Error("User is not authenticated");
       }
 
-      const saveRes = await fetch(`${baseUrl}/auth/author/register`, {
+      const saveRes = await fetch(`${SERVER_PUBLIC}/auth/author/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
         const form = new FormData();
         form.append("avatar", payload.profile.avatar); // File object
 
-        const res = await fetch(`${baseUrl}/auth/author/upload-avatar-cloudinary`, {
+        const res = await fetch(`${SERVER_PUBLIC}/auth/author/upload-avatar-cloudinary`, {
           method: "POST",
           body: form, // Don't manually set Content-Type
         });
@@ -145,7 +145,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
         throw new Error("User is not authenticated");
       }
 
-      const saveRes = await fetch(`${baseUrl}/auth/author/register`, {
+      const saveRes = await fetch(`${SERVER_PUBLIC}/auth/author/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

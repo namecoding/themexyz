@@ -26,7 +26,7 @@ import SignupModal from "@/components/signup-modal"
 import TestDemoScreen from "@/components/test-demo-screen"
 import { LoginModal2 } from "@/components/login-modal2";
 import CartConsent from "@/components/cart-consent";
-import { baseUrl, defaultCurrency, metaData, serverBase } from "@/lib/utils";
+import { SERVER_PUBLIC, defaultCurrency, metaData, BASE_PUBLIC } from "@/lib/utils";
 import SiteHeader from "@/components/header";
 import SiteFooter from "@/components/footer";
 import IsThemely from "@/components/isThemely";
@@ -101,7 +101,7 @@ export default function Home() {
           setIsLoaded(true);
           setIsFetchingGoogleData(true);
 
-          const res = await fetch(`${serverBase}/api/auth/google-login`, {
+          const res = await fetch(`${BASE_PUBLIC}/api/auth/google-login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: session.user.email, name: session.user.name }),
@@ -375,7 +375,7 @@ export default function Home() {
     try {
 
       setPleaseWaitWhileYourTransactionIsProcessing(true)
-      const response = await fetch(`${baseUrl}/auth/login`, {
+      const response = await fetch(`${SERVER_PUBLIC}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -437,7 +437,7 @@ export default function Home() {
   const handleSignup = async (name, email, password) => {
     const toastId = toast.loading('Uploading...');
     try {
-      const response = await fetch(`${baseUrl}/auth/signup`, {
+      const response = await fetch(`${SERVER_PUBLIC}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -526,7 +526,7 @@ export default function Home() {
     };
     setPleaseWaitWhileYourTransactionIsProcessing(true)
 
-    fetch(`${baseUrl}/themes/fetch`, requestOptions)
+    fetch(`${SERVER_PUBLIC}/themes/fetch`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log(result?.data, 'theme result')

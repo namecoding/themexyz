@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {baseUrl} from "@/lib/utils";
+import {SERVER_PUBLIC} from "@/lib/utils";
 
 const OPayButton = ({ amount, name, email }) => {
     const [loading, setLoading] = useState(false);
@@ -10,7 +10,7 @@ const OPayButton = ({ amount, name, email }) => {
 
         // Call backend to get checkout token (optional)
         try {
-            const res = await fetch(`${baseUrl}/opay-init-payment`, {
+            const res = await fetch(`${SERVER_PUBLIC}/opay-init-payment`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ amount, name, email, reference }),

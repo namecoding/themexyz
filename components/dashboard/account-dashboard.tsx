@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Download, CreditCard, Clock, Star, Calendar, ChevronRight, ExternalLink, Loader, Coins, Tag, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { baseUrl, formatReadableDate, getMembershipDuration } from "@/lib/utils";
+import { SERVER_PUBLIC, formatReadableDate, getMembershipDuration } from "@/lib/utils";
 import toast from "react-hot-toast";
 import WizardModal from "@/components/WizardModal";
 import ProgressDonut from "@/components/progressBar";
@@ -49,7 +49,7 @@ useEffect(() => {
           return;
         }
 
-        const res = await fetch(`${baseUrl}/auth/activities?recent=true`, {
+        const res = await fetch(`${SERVER_PUBLIC}/auth/activities?recent=true`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -99,7 +99,7 @@ useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No token found");
 
-        const response = await fetch(`${baseUrl}/auth/purchases?recent=true`, {
+        const response = await fetch(`${SERVER_PUBLIC}/auth/purchases?recent=true`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

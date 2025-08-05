@@ -15,7 +15,7 @@ import { X, RefreshCw, Mic, StopCircle } from "lucide-react"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import ProgressOverlay from "@/components/progressBar"
 import {
-    baseUrl,
+    SERVER_PUBLIC,
     categories, defaultCurrency,
     predefinedBuiltWith,
     predefinedFeatures,
@@ -666,7 +666,7 @@ const handleMicClick2 = () => {
             })
 
             // 2️⃣ Upload images
-            const imageRes = await fetch(`${baseUrl}/auth/author/product-image`, {
+            const imageRes = await fetch(`${SERVER_PUBLIC}/auth/author/product-image`, {
                 method: "POST",
                 body: imageFormData,
             })
@@ -693,7 +693,7 @@ const handleMicClick2 = () => {
             }
 
             // 4️⃣ Submit final product data
-            const productRes = await fetch(`${baseUrl}/auth/author/product-upload`, {
+            const productRes = await fetch(`${SERVER_PUBLIC}/auth/author/product-upload`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -756,7 +756,7 @@ const handleMicClick2 = () => {
             );
 
             // 2️⃣ Upload images to Cloudinary
-            const imageRes = await fetch(`${baseUrl}/auth/author/product-image-cloudinary`, {
+            const imageRes = await fetch(`${SERVER_PUBLIC}/auth/author/product-image-cloudinary`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ files: base64Images }),
@@ -784,7 +784,7 @@ const handleMicClick2 = () => {
             }
 
             // 4️⃣ Submit final product data
-            const productRes = await fetch(`${baseUrl}/auth/author/product-upload`, {
+            const productRes = await fetch(`${SERVER_PUBLIC}/auth/author/product-upload`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -8,7 +8,7 @@ import { User, Lock, Bell, CreditCard, Upload, Check, AlertTriangle, KeyIcon, Lo
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import toast from 'react-hot-toast';
-import { baseUrl, metaData } from "@/lib/utils";
+import { SERVER_PUBLIC, metaData } from "@/lib/utils";
 
 interface SettingsDashboardProps {
   user: any
@@ -67,7 +67,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
     try {
 
       setIsProcessingAccessCode(true)
-      const res = await fetch(`${baseUrl}/admin/update-access-code`, {
+      const res = await fetch(`${SERVER_PUBLIC}/admin/update-access-code`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -122,7 +122,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No token found");
 
-        const res = await fetch(`${baseUrl}/auth/history?recent=true`, {
+        const res = await fetch(`${SERVER_PUBLIC}/auth/history?recent=true`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -180,7 +180,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
         return;
       }
 
-      const response = await fetch(`${baseUrl}/auth/cpwd`, {
+      const response = await fetch(`${SERVER_PUBLIC}/auth/cpwd`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

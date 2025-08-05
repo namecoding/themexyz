@@ -25,7 +25,7 @@ import CookieConsent from "@/components/cookie-consent";
 import { LoginModal2 } from "@/components/login-modal2";
 import SignupModal from "@/components/signup-modal";
 import toast from "react-hot-toast";
-import { baseUrl, metaData } from "@/lib/utils";
+import { SERVER_PUBLIC, metaData } from "@/lib/utils";
 import { useAuthStore } from "@/lib/store/auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -593,7 +593,7 @@ export default function BecomeAuthorLanding() {
     try {
 
       setPleaseWaitWhileYourTransactionIsProcessing(true)
-      const response = await fetch(`${baseUrl}/auth/login`, {
+      const response = await fetch(`${SERVER_PUBLIC}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -650,7 +650,7 @@ export default function BecomeAuthorLanding() {
   const handleSignup = async (name, email, password) => {
     const toastId = toast.loading('Uploading...');
     try {
-      const response = await fetch(`${baseUrl}/auth/signup`, {
+      const response = await fetch(`${SERVER_PUBLIC}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

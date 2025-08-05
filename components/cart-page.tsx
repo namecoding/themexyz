@@ -7,7 +7,7 @@ import { X, ShoppingCart, Minus, Plus, Trash2, ChevronRight } from "lucide-react
 import { Button } from "@/components/ui/button"
 import ConfirmationModal from "./confirmation-modal"
 import CheckoutPage from "./checkout-page"
-import { defaultCurrency, getAuthorHelpDuration, getHelpDurationByType, metaData, helpDurationLabels, baseUrl } from "@/lib/utils"
+import { defaultCurrency, getAuthorHelpDuration, getHelpDurationByType, metaData, helpDurationLabels, SERVER_PUBLIC } from "@/lib/utils"
 import { useActiveCurrency } from "@/lib/currencyTag"
 import Leaf from "@/components/leaf"
 import { useRouter } from "next/navigation";
@@ -41,70 +41,6 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
     setCartItems(itemsWithQuantity)
   }, [])
 
-//  useEffect(() => {
-//   const verifyCartItems = async () => {
-//     const productIds = cartItems.map(item => item.id);
-//     if (productIds.length === 0) return;
-
-//     setReupdatingCart(true)
-//     try {
-//       const res = await fetch(`${baseUrl}/themes/verify-cart-items`, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ productIds })
-//       });
-
-//       if (!res.ok) throw new Error('Failed to fetch updated cart data');
-
-//       const result = await res.json();
-
-//        setReupdatingCart(false)
-
-//       if (!result.success || !Array.isArray(result.data)) {
-//         throw new Error('Invalid data from server');
-//       }
-
-//       const updatedProducts = result.data; // now accessing data correctly
-
-//       const verifiedCartItems = cartItems
-//         .map(cartItem => {
-//           const updatedProduct = updatedProducts.find(p => p.id === cartItem.id);
-//           if (!updatedProduct) {
-//             return null; // product no longer available
-//           }
-//           return {
-//             ...cartItem,
-//             priceNGN: updatedProduct.priceNGN,
-//             priceUSD: updatedProduct.priceUSD,
-//             isPublished: updatedProduct.isPublished,
-//             // update more fields if needed
-//             license:updatedProduct.license,
-//             helpDurationSettings:updatedProduct.helpDurationSettings
-//           };
-//         })
-//         .filter(item => item && item.isPublished); // removes unavailable items
-
-//       setCartItems(verifiedCartItems as any[]);
-
-//       // Optionally, update localStorage:
-//       localStorage.setItem('cartItems', JSON.stringify(verifiedCartItems));
-
-//     } catch (error) {
-//       setReupdatingCart(false)
-//       console.log('Error verifying cart items:', error);
-//     }
-//   };
-
-//   verifyCartItems();
-
-//   // Optionally, run periodically (every 5 minutes)
-//   const intervalId = setInterval(verifyCartItems, 5 * 60 * 1000);
-
-//   return () => clearInterval(intervalId);
-// }, [cartItems.length]);
-
 useEffect(() => {
   const verifyCartItems = async () => {
     const productIds = cartItems.map(item => item.id);
@@ -113,7 +49,7 @@ useEffect(() => {
     setReupdatingCart(true);
 
     try {
-      const res = await fetch(`${baseUrl}/themes/verify-cart-items`, {
+      const res = await fetch(`${SERVER_PUBLIC}/themes/verify-cart-items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

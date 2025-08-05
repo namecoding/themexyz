@@ -11,7 +11,7 @@ import ContentAdminDashboard from "@/components/admin/content-admin-dashboard"
 import SuperAdminDashboard from "@/components/admin/super-admin-dashboard"
 import AuthorAdminDashboard from "@/components/admin/author-admin-dashboard"
 import FeedbackAdminDashboard from "@/components/admin/feedback-admin-dashboard"
-import { baseUrl } from "@/lib/utils"
+import { SERVER_PUBLIC } from "@/lib/utils"
 
 type User = {
   name: string
@@ -160,7 +160,7 @@ const verifyAccessCodeWithBackend = async () => {
 
     setCheckingAccessCode(true)
 
-    const response = await fetch(`${baseUrl}/admin/verify-access-code`, {
+    const response = await fetch(`${SERVER_PUBLIC}/admin/verify-access-code`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

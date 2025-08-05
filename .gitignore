@@ -18,7 +18,7 @@ yarn-error.log*
 
 # env files
 #.env*
-#.env
+.env
 .env.local
 
 # vercel
@@ -34,4 +34,3 @@ docker-image.tar
 
 .dockerignoreclient_secret_*.json
 client_secret_*.json
-.env

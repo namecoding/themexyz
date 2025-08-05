@@ -23,7 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { Product } from "@/components/admin/types/admin"
 import { sampleProducts } from "@/components/admin/data/admin-data"
 import ProductVerificationModal from "@/components/admin/product-verification-modal"
-import { baseUrl } from "@/lib/utils"
+import { SERVER_PUBLIC } from "@/lib/utils"
 
 interface ContentAdminDashboardProps {
     currentUser: any
@@ -130,7 +130,7 @@ export default function ContentAdminDashboard({ currentUser, onClose }: ContentA
             setLoadingProducts(true)
     
             try {
-            const res = await fetch(`${baseUrl}/admin/products`, {
+            const res = await fetch(`${SERVER_PUBLIC}/admin/products`, {
                 method: "GET",
                 headers: {
                 "Content-Type": "application/json",

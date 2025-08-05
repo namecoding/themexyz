@@ -1,4 +1,4 @@
-import { baseUrl } from "@/lib/utils";
+import { SERVER_PUBLIC } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 type Currency = "NGN" | "USD";
@@ -21,7 +21,7 @@ export const useUserCurrency = (): CountryCurrency => {
     useEffect(() => {
         const fetchCurrency = async () => {
             try {
-                const res = await fetch(`${baseUrl}/geo`);
+                const res = await fetch(`${SERVER_PUBLIC}/geo`);
                 const data = await res.json();
 
                 console.log("Geo response:", data);

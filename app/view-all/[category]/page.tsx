@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import CartConsent from "@/components/cart-consent"
 import CartPage from "@/components/cart-page"
-import { baseUrl, categories, defaultCurrency } from "@/lib/utils"
+import { SERVER_PUBLIC, categories, defaultCurrency } from "@/lib/utils"
 import PreviewModal from "@/components/preview-modal"
 import { useActiveCurrency } from "@/lib/currencyTag";
 
@@ -70,7 +70,7 @@ export default function ViewAllPage() {
 
       setPleaseWaitWhileYourTransactionIsProcessing(true)
 
-      fetch(`${baseUrl}/themes/fetch2`, requestOptions)
+      fetch(`${SERVER_PUBLIC}/themes/fetch2`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
           console.log(result?.data, "theme result")

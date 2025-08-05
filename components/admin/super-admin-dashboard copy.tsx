@@ -32,7 +32,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 // import type { User } from "@/components/types/admin"
 import { sampleUsers, adminStats } from "@/components/admin/data/admin-data"
 import AdminRoleAssignmentModal from "@/components/admin/admin-role-assignment-modal"
-import {baseUrl} from "@/lib/utils";
+import {SERVER_PUBLIC} from "@/lib/utils";
 import FullScreenLoader from "@/components/FullScreenLoader";
 
 interface SuperAdminDashboardProps {
@@ -101,7 +101,7 @@ const fetchAllAdminUsers = async () => {
   try {
     setFetchingUsers(true)
 
-    const res = await fetch(`${baseUrl}/admin/users`, {
+    const res = await fetch(`${SERVER_PUBLIC}/admin/users`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -149,7 +149,7 @@ const hasPermission = (user: User, key: string) =>
 
     setIsProcessing(userId)
 
-    const response = await fetch(`${baseUrl}/admin/remove-admin`, {
+    const response = await fetch(`${SERVER_PUBLIC}/admin/remove-admin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const handleRoleAssignment = async (userId: string, role: AdminRole) => {
     }
 
     // 3. Send request to backend
-    const response = await fetch(`${baseUrl}/admin/assign-role`, {
+    const response = await fetch(`${SERVER_PUBLIC}/admin/assign-role`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

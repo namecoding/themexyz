@@ -7,7 +7,7 @@ import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter } fro
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import TestDemoScreen from "@/components/test-demo-screen";
-import {baseUrl, isExpired, formatReadableDate} from "@/lib/utils";
+import {SERVER_PUBLIC, isExpired, formatReadableDate} from "@/lib/utils";
 import toast from 'react-hot-toast';
 import PurchasePopover from "@/components/togglePopover"
 import ProjectPlaceholder from "../projcet-placeholder"
@@ -140,7 +140,7 @@ const [showMore, setShowMore] = useState(false);
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No token found");
 
-        const response = await fetch(`${baseUrl}/auth/purchases`, {
+        const response = await fetch(`${SERVER_PUBLIC}/auth/purchases`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

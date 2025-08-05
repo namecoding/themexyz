@@ -7,7 +7,7 @@ import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter, Tags
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import TestDemoScreen from "@/components/test-demo-screen";
-import { baseUrl, formatReadableDate } from "@/lib/utils";
+import { SERVER_PUBLIC, formatReadableDate } from "@/lib/utils";
 import toast from 'react-hot-toast';
 import WizardModal from "@/components/WizardModal";
 import UnderReviewModal from "@/components/UnderReviewModal";
@@ -53,7 +53,7 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No token found");
 
-        const response = await fetch(`${baseUrl}/auth/author/by-author`, {
+        const response = await fetch(`${SERVER_PUBLIC}/auth/author/by-author`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

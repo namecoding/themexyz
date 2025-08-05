@@ -23,7 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { User, FeedbackItem } from "@/components/admin/types/admin"
 import { sampleFeedback } from "@/components/admin/data/admin-data"
 import FeedbackReviewModal from "@/components/admin/feedback-review-modal"
-import { baseUrl } from "@/lib/utils"
+import { SERVER_PUBLIC } from "@/lib/utils"
 
 interface FeedbackAdminDashboardProps {
     currentUser: User
@@ -67,7 +67,7 @@ export default function FeedbackAdminDashboard({ currentUser, onClose }: Feedbac
         setLoadingFeedBack(true)
 
         try {
-        const res = await fetch(`${baseUrl}/admin/feedback`, {
+        const res = await fetch(`${SERVER_PUBLIC}/admin/feedback`, {
             method: "GET",
             headers: {
             "Content-Type": "application/json",

@@ -7,7 +7,7 @@ import { X, ChevronLeft, CreditCard, Check, AlertCircle, Loader } from "lucide-r
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import {
-  baseUrl,
+  SERVER_PUBLIC,
   countriesWithStates,
   defaultCurrency,
   loginHandler,
@@ -316,7 +316,7 @@ export default function CheckoutPage({
     setProcessingPayment(true);
 
     try {
-      const res = await fetch(`${baseUrl}/auth/payment`, {
+      const res = await fetch(`${SERVER_PUBLIC}/auth/payment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -360,7 +360,7 @@ export default function CheckoutPage({
                   pleaseWait: true
                 })
 
-                const cancelRes = await fetch(`${baseUrl}/auth/payment-cancel`, {
+                const cancelRes = await fetch(`${SERVER_PUBLIC}/auth/payment-cancel`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -399,7 +399,7 @@ export default function CheckoutPage({
             })
 
 
-            const verifyRes = await fetch(`${baseUrl}/auth/verify-paystack`, {
+            const verifyRes = await fetch(`${SERVER_PUBLIC}/auth/verify-paystack`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -487,7 +487,7 @@ export default function CheckoutPage({
 
       setPleaseWaitWhileYourTransactionIsProcessing(true)
 
-      const res = await fetch(`${baseUrl}/auth/billing`, {
+      const res = await fetch(`${SERVER_PUBLIC}/auth/billing`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -591,7 +591,7 @@ export default function CheckoutPage({
   const handleSignup = async (name, email, password) => {
     const toastId = toast.loading('Uploading...');
     try {
-      const response = await fetch(`${baseUrl}/auth/signup`, {
+      const response = await fetch(`${SERVER_PUBLIC}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
