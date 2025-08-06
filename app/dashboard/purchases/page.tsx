@@ -70,7 +70,7 @@ export default function PurchasesPage() {
 
   }
 
-  if (hasHydrated) {
+  if (!hasHydrated) {
     return <IsThemely />
   }
 

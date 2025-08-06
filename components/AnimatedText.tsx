@@ -28,8 +28,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             >
                 <g fill="#00C853">
                     <path className="svg-part" style={{ animationDelay: '0s' }} d="M32 4L4 16L32 28L60 16L32 4Z" />
-                    <path className="svg-part" style={{ animationDelay: '0.15s' }} d="M4 24L32 36L60 24V30L32 42L4 30V24Z" />
-                    <path className="svg-part" style={{ animationDelay: '0.3s' }} d="M4 38L32 50L60 38V44L32 56L4 44V38Z" />
+                    <path className="svg-part" style={{ animationDelay: '0.25s' }} d="M4 24L32 36L60 24V30L32 42L4 30V24Z" />
+                    <path className="svg-part" style={{ animationDelay: '0.10s' }} d="M4 38L32 50L60 38V44L32 56L4 44V38Z" />
                 </g>
             </svg>
 
