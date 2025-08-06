@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter, Tags, Tag } from "lucide-react"
+import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter, Tags, Tag, X, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import TestDemoScreen from "@/components/test-demo-screen";
@@ -46,6 +46,8 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
     lastUpdate: string,
     galleryImages: any
   };
+
+  const [toggleCondition, setToggleCondition] = useState(null);
 
   useEffect(() => {
     const fetchRecentPurchases = async () => {
@@ -287,13 +289,17 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
                         <div className="flex flex-wrap items-center gap-2 sm:ml-4">
                           <Badge
                             variant="outline"
-                            className={`text-xs ${theme.supportStatus === "active"
+                            className={`text-xs ${ theme?.isPublic  && theme?.isPublished
                               ? "bg-green-50 text-green-700 border-green-200"
                               : "bg-red-50 text-red-700 border-red-200"
                               }`}
                           >
-                            active
+                        
+                           {
+                            theme?.isPublic  && theme?.isPublished ? "Acive" : "Inactive"
+                           }
                           </Badge>
+
                           <Badge variant="outline" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize">
                             free
                           </Badge>
@@ -309,10 +315,62 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
                             <Download className="h-3 w-3 mr-1" />
                             Edit
                           </Button>
-                          <Button onClick={() => handlePublish(theme.id)} variant="outline" size="sm" className="text-xs">
+
+                          
+                              <Button onClick={() => setToggleCondition(theme.id)} variant="outline" size="sm" className={`text-xs ${theme?.isPublic  && theme?.isPublished? "text-red-500" : "text-green-500"} `}>
                             <ExternalLink className="h-3 w-3 mr-1" />
-                            Publish
+                             {
+                              theme?.isPublic  && theme?.isPublished? 
+                              "Unpublish"
+                              :
+                              "Publish"
+                            }
                           </Button>
+                          
+                          {
+                            toggleCondition === theme?.id && 
+                            
+                            <div className="fixed z-100 max-w-xs w-full bg-white border border-gray-200 rounded-lg shadow-lg animate-slide-in">
+                              <div className="flex justify-between items-center px-4 py-2 border-b bg-gray-50 rounded-t-lg">
+                                  <span className="text-sm font-medium">
+                                    {theme.title}
+                                  </span>
+                                
+                                </div>
+                        
+                                <div className="p-4 text-sm text-gray-700">
+
+                                  <p> Are you sure, you want to {
+                                      theme?.isPublic  && theme?.isPublished? 
+                                      "Unpublish"
+                                      :
+                                      "Publish"
+                                    } this project
+                                  </p>
+                                  
+                                  <div className="flex flex-wrap gap-2 pt-3">
+                                    <Button onClick={() => setToggleCondition(null)} variant="outline" size="sm" className="text-xs">
+                                  <X className="h-4 w-4" />
+                                  Close
+                                </Button>
+
+                                <Button onClick={() => handlePublish(theme.id)} variant="outline" size="sm" className={`${!theme?.isPublic  && !theme?.isPublished? "text-green-500 hover:text-green-600" : "text-red-500 hover:text-red-600"} text-xs`}>
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  {
+                                    !theme?.isPublic  && !theme?.isPublished? 
+                                    "Publish"
+                                    :
+                                    "Unpublish"
+                                  }
+                                </Button>
+                                  </div>
+                                </div>
+                              </div>
+                          }
+                          
+
+
+                          
                           <Button onClick={() => handleView(theme)} variant="outline" size="sm" className="text-xs">
                             <FileText className="h-3 w-3 mr-1" />
                             View

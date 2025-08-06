@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper to extract and verify token
 export function verifyTokenFromHeader(req: Request) {

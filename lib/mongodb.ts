@@ -1,14 +1,14 @@
 // lib/mongodb.ts
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI!;
+const uri = process.env.THEMEXYZ_DATABASE!;
 const options = {};
 
 let client;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.MONGODB_URI) {
-    throw new Error("Please add your Mongo URI to .env");
+if (!process.env.THEMEXYZ_DATABASE) {
+    throw new Error("Please add your THEMEXYZ DATABASE to .env");
 }
 
 declare global {
