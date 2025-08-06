@@ -1,20 +1,7 @@
-export function getCorsHeaders(origin: string = "") {
-  const allowedOrigins = [
-    "https://themexyz.com",
-    "https://www.themexyz.com",
-  ];
+// lib/cors.ts
 
-  const headers: Record<string, string> = {
-    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Credentials": "true",
-  };
-
-  if (allowedOrigins.includes(origin)) {
-    headers["Access-Control-Allow-Origin"] = origin;
-  } else {
-    headers["Access-Control-Allow-Origin"] = "https://www.themexyz.com"; // fallback or remove this line to block
-  }
-
-  return headers;
-}
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // Replace with your domain in production
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
