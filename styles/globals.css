@@ -48,6 +48,7 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -88,6 +89,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -98,17 +100,19 @@ body {
   0% {
     transform: translateY(0px) scale(1);
     opacity: 0.6;
-    text-shadow: 0 0 3px #82b440;
+    text-shadow: 0 0 3px #91ff00;
   }
+
   50% {
     transform: translateY(-6px) scale(1.05);
     opacity: 1;
-    text-shadow: 0 0 10px #82b440, 0 0 20px #82b440;
+    text-shadow: 0 0 10px #8ef803, 0 0 20px #8df901;
   }
+
   100% {
     transform: translateY(0px) scale(1);
     opacity: 0.6;
-    text-shadow: 0 0 3px #82b440;
+    text-shadow: 0 0 3px #8ffc01;
   }
 }
 
@@ -126,3 +130,20 @@ body {
   }
 }
 
+@keyframes dropIn {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.svg-part {
+  opacity: 0;
+  transform: translateY(-40px);
+  animation: dropIn 0.5s ease-out forwards;
+}

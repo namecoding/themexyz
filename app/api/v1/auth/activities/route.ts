@@ -16,6 +16,8 @@ export async function GET(request: Request) {
         const decoded: any = verifyTokenFromHeader(request);
         const userId = decoded.userId;
 
+        console.log("Decoded token:", decoded);
+
         const client = await clientPromise;
         const db = client.db();
 
