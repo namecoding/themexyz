@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
 import { verifyTokenFromHeader } from '@/lib/jwt'
 import { ObjectId } from 'mongodb'
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function GET(request: Request) {
   try {
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     if (!userId) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized: Invalid or missing token.' },
-        { status: 401 }
+        { status: 401, headers: corsHeaders }
       )
     }
 
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
     const user = await usersCollection.findOne({ _id: new ObjectId(userId) })
 
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found.' }, { status: 404 })
+      return NextResponse.json({ success: false, message: 'User not found.' }, { status: 404, headers: corsHeaders })
     }
 
     const permissions = user?.admin?.permission || []
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     if (!permissions.includes('author_admin')) {
       return NextResponse.json(
         { success: false, message: 'Access denied: Author admin only.' },
-        { status: 403 }
+        { status: 403, headers: corsHeaders }
       )
     }
 
@@ -81,14 +81,14 @@ export async function GET(request: Request) {
         userAvatar:
           userDoc.profile?.avatar || userDoc.avatar || null,
         applicationDate: userDoc.authorSince || userDoc.createdAt || null,
-       status: userDoc.authorityToSell === true,
+        status: userDoc.authorityToSell === true,
         portfolio: userDoc.profile?.portfolio || userDoc.profile?.website || "",
         experience: userDoc.profile?.bio || "No bio provided.",
         specialties: userDoc?.specialties || [],
         reviewNotes: userDoc?.authorReviewNotes || '',
         reviewedAt: userDoc?.reviewedAt,
         reviewedBy: reviewersMap[reviewedById] || null,
-        authorReviewStatus:userDoc?.authorReviewStatus,
+        authorReviewStatus: userDoc?.authorReviewStatus,
         socialLinks: [
           ...(userDoc.profile?.website
             ? [{ platform: "Website", url: userDoc.profile.website }]
@@ -123,9 +123,9 @@ export async function GET(request: Request) {
         approvedByAdmin,
         rejectedByAdmin,
       },
-    })
+    }, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.error('Error fetching author applications:', error)
-    return NextResponse.json({ success: false, message: 'Internal server error.' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Internal server error.' }, { status: 500, headers: corsHeaders })
   }
 }

@@ -4,14 +4,14 @@ import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import { allowEmailSending, sendEmail } from "@/lib/mailer";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function PATCH(request: Request) {
   try {
@@ -21,11 +21,11 @@ export async function PATCH(request: Request) {
     const { currentCode, newCode, confirmCode } = await request.json();
 
     if (!newCode || !confirmCode) {
-      return NextResponse.json({ success: false, message: "New and confirmation code are required" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "New and confirmation code are required" }, { status: 400, headers: corsHeaders });
     }
 
     if (newCode !== confirmCode) {
-      return NextResponse.json({ success: false, message: "Codes do not match" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Codes do not match" }, { status: 400, headers: corsHeaders });
     }
 
     const client = await clientPromise;
@@ -33,13 +33,13 @@ export async function PATCH(request: Request) {
     const user = await db.collection("users").findOne({ _id: new ObjectId(userId) });
 
     if (!user || !user?.admin?.accessCode) {
-      return NextResponse.json({ success: false, message: "User not found or not an admin" }, { status: 404 });
+      return NextResponse.json({ success: false, message: "User not found or not an admin" }, { status: 404, headers: corsHeaders });
     }
 
     // Compare current code
     const isValid = await bcrypt.compare(currentCode, user.admin.accessCode);
     if (!isValid) {
-      return NextResponse.json({ success: false, message: "Current access code is incorrect" }, { status: 401 });
+      return NextResponse.json({ success: false, message: "Current access code is incorrect" }, { status: 401, headers: corsHeaders });
     }
 
     const hashedAccessCode = await bcrypt.hash(newCode, 10);
@@ -68,10 +68,10 @@ export async function PATCH(request: Request) {
     }
 
 
-    return NextResponse.json({ success: true, message: "Access code updated successfully" });
+    return NextResponse.json({ success: true, message: "Access code updated successfully" }, { status: 200, headers: corsHeaders });
 
   } catch (error) {
     console.error("Access code change error:", error);
-    return NextResponse.json({ success: false, message: error.message || "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ success: false, message: error.message || "Unauthorized" }, { status: 401, headers: corsHeaders });
   }
 }

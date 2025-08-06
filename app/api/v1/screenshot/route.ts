@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(req: NextRequest) {
     try {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
         // Basic validation
         if (!url || !/^https?:\/\/.+/i.test(url)) {
-            return NextResponse.json({ success: false, message: 'Invalid URL' }, { status: 400 });
+            return NextResponse.json({ success: false, message: 'Invalid URL' }, { status: 400, headers: corsHeaders });
         }
 
         const browser = await puppeteer.launch({
@@ -37,9 +37,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             success: true,
             image: `data:image/png;base64,${base64}`,
-        });
+        }, { status: 200, headers: corsHeaders });
     } catch (err) {
         console.error('Screenshot error:', err);
-        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+        return NextResponse.json({ success: false, message: 'Server error' }, { status: 500, headers: corsHeaders });
     }
 }

@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function GET(request: Request) {
     try {
@@ -39,12 +39,12 @@ export async function GET(request: Request) {
         return NextResponse.json({
             success: true,
             purchases: purchasesWithId,
-        });
+        }, { status: 200, headers: corsHeaders });
     } catch (error) {
         console.error("Fetch purchases error:", error);
         return NextResponse.json(
             { success: false, message: "Unauthorized or failed to fetch purchases." },
-            { status: 401 }
+            { status: 401, headers: corsHeaders }
         );
     }
 }

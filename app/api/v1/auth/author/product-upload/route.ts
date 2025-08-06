@@ -2,15 +2,15 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
-import {metaData, generateSlug} from "@/lib/utils";
-// import { corsHeaders } from '@/lib/cors';
+import { metaData, generateSlug } from "@/lib/utils";
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(request: Request) {
     try {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         if (!body.title || !body.isCategory || !body.priceNGN || !body.priceUSD) {
             return NextResponse.json(
                 { success: false, message: "Missing required fields" },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -35,14 +35,14 @@ export async function POST(request: Request) {
         if (!user) {
             return NextResponse.json(
                 { success: false, message: "User not found" },
-                { status: 404 }
+                { status: 404, headers: corsHeaders }
             );
         }
 
         if (!user.authorityToSell) {
             return NextResponse.json(
                 { success: false, message: "You are not authorized to sell, please contact support team" },
-                { status: 409 }
+                { status: 409, headers: corsHeaders }
             );
         }
 
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
             downloadUrl: body.downloadUrl,
             downloadInstructions: body.downloadInstructions,
             loginDetails: body.loginDetails || [],
-            author: user?.profile?.displayName || user?.name || metaData.name+' Author',
+            author: user?.profile?.displayName || user?.name || metaData.name + ' Author',
             authorId: userId,
             authorImage: user?.profile?.avatar || null,
             helpDurationSettings: body.helpDurationSettings || {},
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
             compatibleBrowsers: body.compatibleBrowsers,
             builtWith: body.builtWith || [],
             layout: body.layout,
-            sellType:body.sellType,
+            sellType: body.sellType,
             license: body.license,
             responseTime: body.responseTime,
             overview: body.overview,
@@ -79,20 +79,20 @@ export async function POST(request: Request) {
             releaseDate: new Date(),
             lastUpdate: new Date(),
             isPublished: body.isPublished || false,
-            isPublic:false,
-            slug:generateSlug(body.title)
+            isPublic: false,
+            slug: generateSlug(body.title)
         };
 
         // ✅ Insert theme
         await db.collection("themes").insertOne(themeDoc);
 
-        return NextResponse.json({ success: true, message: "Theme created successfully" });
+        return NextResponse.json({ success: true, message: "Theme created successfully" }, { status: 200, headers: corsHeaders });
 
     } catch (error: any) {
         console.error("upload error:", error);
         return NextResponse.json(
             { success: false, message: error.message || "Internal server error" },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

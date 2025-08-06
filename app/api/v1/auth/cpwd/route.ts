@@ -4,14 +4,14 @@ import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import { allowEmailSending, sendEmail } from "@/lib/mailer";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function PATCH(request: Request) {
   try {
@@ -21,11 +21,11 @@ export async function PATCH(request: Request) {
     const { currentPassword, newPassword, confirmPassword } = await request.json();
 
     if (!newPassword || !confirmPassword) {
-      return NextResponse.json({ success: false, message: "New password and confirmation are required" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "New password and confirmation are required" }, { status: 400, headers: corsHeaders });
     }
 
     if (newPassword !== confirmPassword) {
-      return NextResponse.json({ success: false, message: "Passwords do not match" }, { status: 400 });
+      return NextResponse.json({ success: false, message: "Passwords do not match" }, { status: 400, headers: corsHeaders });
     }
 
     const client = await clientPromise;
@@ -33,17 +33,17 @@ export async function PATCH(request: Request) {
     const user = await db.collection("users").findOne({ _id: new ObjectId(userId) });
 
     if (!user) {
-      return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
+      return NextResponse.json({ success: false, message: "User not found" }, { status: 404, headers: corsHeaders });
     }
 
     if (!user.isSocial) {
       if (!currentPassword) {
-        return NextResponse.json({ success: false, message: "Current password is required" }, { status: 400 });
+        return NextResponse.json({ success: false, message: "Current password is required" }, { status: 400, headers: corsHeaders });
       }
 
       const isValid = await bcrypt.compare(currentPassword, user.password);
       if (!isValid) {
-        return NextResponse.json({ success: false, message: "Current password is incorrect" }, { status: 401 });
+        return NextResponse.json({ success: false, message: "Current password is incorrect" }, { status: 401, headers: corsHeaders });
       }
     }
 
@@ -77,10 +77,10 @@ export async function PATCH(request: Request) {
         id: _id.toString(),
         ...safeUser,
       },
-    });
+    }, { status: 200, headers: corsHeaders });
 
   } catch (error) {
     console.error("Password change error:", error);
-    return NextResponse.json({ success: false, message: error.message || "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ success: false, message: error.message || "Unauthorized" }, { status: 401, headers: corsHeaders });
   }
 }

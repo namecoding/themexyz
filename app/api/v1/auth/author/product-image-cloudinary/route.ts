@@ -1,4 +1,13 @@
+import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -7,7 +16,7 @@ export async function POST(request: NextRequest) {
         if (!files || !Array.isArray(files) || files.length === 0) {
             return Response.json(
                 { success: false, message: "Invalid upload request" },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -18,7 +27,7 @@ export async function POST(request: NextRequest) {
             console.error("Cloudinary config missing");
             return Response.json(
                 { success: false, message: "An internal error occurred. Please try again." },
-                { status: 500 }
+                { status: 500, headers: corsHeaders }
             );
         }
 
@@ -61,7 +70,7 @@ export async function POST(request: NextRequest) {
         if (urls.length === 0) {
             return Response.json(
                 { success: false, message: "We couldn't process your upload. Please try again." },
-                { status: 500 }
+                { status: 500, headers: corsHeaders }
             );
         }
 
@@ -69,12 +78,12 @@ export async function POST(request: NextRequest) {
             success: true,
             message: "Upload successful",
             urls,
-        });
+        }, { status: 200, headers: corsHeaders });
     } catch (err) {
         console.error("Unexpected upload error:", err);
         return Response.json(
             { success: false, message: "An unexpected error occurred. Please try again later." },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

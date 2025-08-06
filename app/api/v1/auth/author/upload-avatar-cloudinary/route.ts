@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         if (!file) {
             return NextResponse.json(
                 { success: false, message: "No file uploaded" },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
             console.error("Cloudinary config missing");
             return NextResponse.json(
                 { success: false, message: "An internal error occurred. Please try again." },
-                { status: 500 }
+                { status: 500, headers: corsHeaders }
             );
         }
 
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
             console.error("Cloudinary upload error:", errData);
             return NextResponse.json(
                 { success: false, message: "Upload failed. Please try again." },
-                { status: 500 }
+                { status: 500, headers: corsHeaders }
             );
         }
 
@@ -58,12 +58,12 @@ export async function POST(req: NextRequest) {
             success: true,
             message: "Upload successful",
             url: data.secure_url,
-        });
+        }, { status: 200, headers: corsHeaders });
     } catch (err) {
         console.error("Upload error:", err);
         return NextResponse.json(
             { success: false, message: "An unexpected error occurred. Please try again." },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

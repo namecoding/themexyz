@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server'
 import clientPromise from '@/lib/mongodb'
 import { verifyTokenFromHeader } from '@/lib/jwt'
 import { ObjectId } from 'mongodb'
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -27,14 +27,14 @@ export async function POST(request: Request) {
     const admin = await db.collection('users').findOne({ _id: new ObjectId(adminId) })
 
     if (!admin || !admin?.admin?.permission?.includes('author_admin')) {
-      return NextResponse.json({ success: false, message: 'Access denied.' }, { status: 403 })
+      return NextResponse.json({ success: false, message: 'Access denied.' }, { status: 403, headers: corsHeaders })
     }
 
     const body = await request.json()
     const { userId, decision, notes } = body
 
     if (!userId || !['approved', 'rejected'].includes(decision)) {
-      return NextResponse.json({ success: false, message: 'Invalid input.' }, { status: 400 })
+      return NextResponse.json({ success: false, message: 'Invalid input.' }, { status: 400, headers: corsHeaders })
     }
 
     // ✅ Build update fields
@@ -52,15 +52,15 @@ export async function POST(request: Request) {
     )
 
     if (result.matchedCount === 0) {
-      return NextResponse.json({ success: false, message: 'User not found or already approved.' }, { status: 404 })
+      return NextResponse.json({ success: false, message: 'User not found or already approved.' }, { status: 404, headers: corsHeaders })
     }
 
     return NextResponse.json({
       success: true,
       message: `Author application ${decision} successfully.`,
-    })
+    }, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.error('Error processing author decision:', error)
-    return NextResponse.json({ success: false, message: 'Internal server error.' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Internal server error.' }, { status: 500, headers: corsHeaders })
   }
 }

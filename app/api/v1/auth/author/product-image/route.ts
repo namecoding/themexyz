@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { initializeApp, getApps } from 'firebase/app';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { metaData } from "@/lib/utils";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_KEY,
@@ -48,9 +48,9 @@ export async function POST(req: NextRequest) {
             urls.push(url);
         }
 
-        return NextResponse.json({ urls });
+        return NextResponse.json({ urls }, { status: 200, headers: corsHeaders });
     } catch (err) {
         console.error('Upload error:', err);
-        return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+        return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: corsHeaders });
     }
 }

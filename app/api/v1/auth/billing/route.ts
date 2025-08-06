@@ -3,14 +3,14 @@ import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 const JWT_SECRET = process.env.JWT_SECRET!; // Ensure this is defined in your env
 
@@ -24,7 +24,7 @@ export async function PATCH(request: Request) {
         if (!name || !address || !country || !phone) {
             return NextResponse.json(
                 { success: false, message: "Required fields are missing." },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -41,7 +41,7 @@ export async function PATCH(request: Request) {
         if (result.modifiedCount === 0) {
             return NextResponse.json(
                 { success: false, message: "No changes were made." },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -66,12 +66,12 @@ export async function PATCH(request: Request) {
             message: "Billing details updated successfully.",
             user: updatedUser,
             token, // ⬅️ return the new token
-        });
+        }, { status: 200, headers: corsHeaders });
     } catch (error) {
         console.error("Billing update error:", error);
         return NextResponse.json(
             { success: false, message: "Unauthorized" },
-            { status: 401 }
+            { status: 401, headers: corsHeaders }
         );
     }
 }

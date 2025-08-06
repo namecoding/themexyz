@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 // http://localhost:3000/api/v1/cron/process-splits // keep this line, i am using it
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function GET() {
     try {
@@ -22,14 +22,14 @@ export async function GET() {
         // 1. Find all due and not on-hold split payments
         const dueSplits = await splitPayments.find({
             status: "pending",
-           releaseDate: { $lte: now },
+            releaseDate: { $lte: now },
         }).toArray();
 
         if (dueSplits.length === 0) {
             return new NextResponse(JSON.stringify({ success: true, message: "No split payments to process" }), {
                 status: 401,
-                // headers: corsHeaders,
-              });
+                headers: corsHeaders,
+            });
         }
 
         let processedCount = 0;
@@ -101,25 +101,25 @@ export async function GET() {
         }
 
         return new NextResponse(
-              JSON.stringify({
+            JSON.stringify({
                 success: true,
-                 message: `${processedCount} split payments processed successfully`,
-              }),
-              {
+                message: `${processedCount} split payments processed successfully`,
+            }),
+            {
                 status: 200,
-                // headers: corsHeaders,
-              }
-            );
+                headers: corsHeaders,
+            }
+        );
 
     } catch (error: any) {
         console.log("Split processing error:", error);
-    
+
         return new NextResponse(
-              JSON.stringify({ success: false, message: 'Internal Server error' }),
-              {
+            JSON.stringify({ success: false, message: 'Internal Server error' }),
+            {
                 status: 500,
-                // headers: corsHeaders,
-              }
-            );
+                headers: corsHeaders,
+            }
+        );
     }
 }

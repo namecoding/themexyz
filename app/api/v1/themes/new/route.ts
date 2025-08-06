@@ -1,5 +1,13 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(request: Request) {
     try {
@@ -42,7 +50,7 @@ export async function POST(request: Request) {
             priceNGN == null ||
             priceUSD == null ||
             !author ||
-            !authorId  ||
+            !authorId ||
             rating == null ||
             reviews == null ||
             sales == null ||
@@ -59,7 +67,7 @@ export async function POST(request: Request) {
         ) {
             return NextResponse.json(
                 { success: false, message: 'Missing required fields' },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -68,7 +76,7 @@ export async function POST(request: Request) {
 
         const newTheme = {
             title,
-            featured : featured || false,
+            featured: featured || false,
             isCategory,
             image,
             priceNGN: Number(priceNGN),
@@ -100,7 +108,7 @@ export async function POST(request: Request) {
                 isActive: false,
                 startDate: null,
                 endDate: null,
-                boostedBy:authorId,
+                boostedBy: authorId,
                 priority: 1, // for ranking boosted products
                 lastPaymentRef: null
             }
@@ -117,13 +125,13 @@ export async function POST(request: Request) {
                     ...newTheme,
                 },
             },
-            { status: 201 }
+            { status: 201, headers: corsHeaders }
         );
     } catch (error) {
         console.error('Insert theme error:', error);
         return NextResponse.json(
             { success: false, message: 'Internal Server Error' },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

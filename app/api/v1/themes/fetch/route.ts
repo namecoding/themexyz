@@ -1,7 +1,17 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
+import { corsHeaders } from '@/lib/cors'
 
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+export function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 export async function GET(req: Request) {
   // const origin = getOrigin(req);
 
@@ -34,7 +44,7 @@ export async function GET(req: Request) {
       data: { featured, newest, bestSelling },
     }), {
       status: 200,
-      // headers: getCorsHeaders(origin),
+      headers: corsHeaders,
     });
   } catch (error) {
     console.error('[THEME API ERROR]', error);
@@ -43,7 +53,7 @@ export async function GET(req: Request) {
       message: 'Server error',
     }), {
       status: 500,
-      // headers: getCorsHeaders(origin),
+      headers: corsHeaders,
     });
   }
 }

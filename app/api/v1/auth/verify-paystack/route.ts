@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
-import {ObjectId} from "mongodb";
-import {commissions} from "@/lib/utils";
-// import { corsHeaders } from '@/lib/cors';
+import { ObjectId } from "mongodb";
+import { commissions } from "@/lib/utils";
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(req: NextRequest) {
     try {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         const { reference } = await req.json();
 
         if (!reference) {
-            return NextResponse.json({ success: false, message: "Reference is required" }, { status: 400 });
+            return NextResponse.json({ success: false, message: "Reference is required" }, { status: 400, headers: corsHeaders });
         }
 
         const db = await clientPromise;
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (!existing) {
-            return NextResponse.json({ success: false, message: "Pending payment not found" }, { status: 404 });
+            return NextResponse.json({ success: false, message: "Pending payment not found" }, { status: 404, headers: corsHeaders });
         }
 
         // 🌐 2. Verify with Paystack
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
                 success: false,
                 message: "Transaction verification failed",
                 data: result.data || null,
-            }, { status: 400 });
+            }, { status: 400, headers: corsHeaders });
         }
 
         const paystackData = result.data;
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
                     expected: { amount: expectedAmount, currency: expectedCurrency },
                     received: { amount: paystackData.amount, currency: paystackData.currency },
                 },
-            }, { status: 400 });
+            }, { status: 400, headers: corsHeaders });
         }
 
         // ✅ 4. Update payment to success
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
         const priceKey = currency === "NGN" ? "priceNGN" : "priceUSD";
         const supportFeeKey = currency === "NGN" ? "extendHelpFeeNGN" : "extendHelpFeeUSD";
 
-// Group cartItems by authorId
+        // Group cartItems by authorId
         const authorGroups = new Map();
 
         for (const item of existing.cartItems) {
@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
             authorGroups.get(authorId).push(item);
         }
 
-            // For each author group
+        // For each author group
         for (const [authorId, items] of authorGroups.entries()) {
             let totalPrice = 0;
             let supportFee = 0;
@@ -187,7 +187,7 @@ export async function POST(req: NextRequest) {
         });
 
 
-        
+
 
         return NextResponse.json({
             success: true,
@@ -198,11 +198,11 @@ export async function POST(req: NextRequest) {
                 currency: paystackData.currency,
                 status: "success",
             },
-        });
+        }, { status: 200, headers: corsHeaders });
 
 
     } catch (error: any) {
         console.error("Verification error:", error);
-        return NextResponse.json({ success: false, message: error.message || "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ success: false, message: error.message || "Internal Server Error" }, { status: 500, headers: corsHeaders });
     }
 }

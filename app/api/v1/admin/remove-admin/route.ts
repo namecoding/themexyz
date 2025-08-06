@@ -4,14 +4,14 @@ import { ObjectId } from 'mongodb';
 import { sendEmail, allowEmailSending } from '@/lib/mailer';
 import { metaData } from '@/lib/utils';
 import { verifyTokenFromHeader } from "@/lib/jwt";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     if (!userId) {
       return NextResponse.json(
         { success: false, message: 'Missing userId in request body.' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     if (!requesterId) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized. Token invalid or missing.' },
-        { status: 401 }
+        { status: 401, headers: corsHeaders }
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     if (!requesterPermissions.includes('super_admin')) {
       return NextResponse.json(
         { success: false, message: 'Access denied. Super admin only.' },
-        { status: 403 }
+        { status: 403, headers: corsHeaders }
       );
     }
 
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: false,
         message: 'User has no admin roles to remove.',
-      }, { status: 200 });
+      }, { status: 200, headers: corsHeaders });
     }
 
     // 🔥 Remove the permission field (only the array, not the whole admin object)
@@ -93,10 +93,10 @@ export async function POST(request: Request) {
       success: true,
       message: 'Admin permissions removed successfully.',
       removedRoles: currentPermissions,
-    });
+    }, { status: 200, headers: corsHeaders });
 
   } catch (error) {
     console.error('Remove admin error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500, headers: corsHeaders });
   }
 }

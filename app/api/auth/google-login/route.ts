@@ -4,8 +4,19 @@ import jwt from 'jsonwebtoken';
 import { sendEmail, allowEmailSending } from '@/lib/mailer';
 import { metaData } from '@/lib/utils';
 
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
+
 
 const JWT_SECRET = process.env.JWT_SECRET!;
+
+
 
 export async function POST(request: Request) {
     try {
@@ -50,7 +61,7 @@ export async function POST(request: Request) {
                     supportMessages: true,
                 },
                 isSocial: true,
-                socialType:'Google',
+                socialType: 'Google',
                 premiumMembership: {
                     isActive: false,
                     startDate: null,
@@ -109,9 +120,9 @@ export async function POST(request: Request) {
                 id: _id.toString(),
                 ...safeUser,
             },
-        });
+        }, { status: 403, headers: corsHeaders });
     } catch (error) {
         console.error('Google login error:', error);
-        return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+        return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500, headers: corsHeaders });
     }
 }

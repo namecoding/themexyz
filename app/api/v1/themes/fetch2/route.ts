@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
+
 
 export async function GET() {
   try {
@@ -31,7 +32,7 @@ export async function GET() {
       }),
       {
         status: 200,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   } catch (error) {
@@ -40,7 +41,7 @@ export async function GET() {
       JSON.stringify({ success: false, message: 'Server error' }),
       {
         status: 500,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   }

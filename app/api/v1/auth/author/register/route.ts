@@ -4,14 +4,14 @@ import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import { sendEmail, allowEmailSending } from '@/lib/mailer';
 import { metaData } from '@/lib/utils';
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(request: Request) {
     try {
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         if (!platforms || !specialties || !profile) {
             return NextResponse.json(
                 { success: false, message: "Missing required fields" },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -43,14 +43,14 @@ export async function POST(request: Request) {
         if (!user) {
             return NextResponse.json(
                 { success: false, message: "User not found" },
-                { status: 404 }
+                { status: 404, headers: corsHeaders }
             );
         }
 
         if (user.isAuthor === 1) {
             return NextResponse.json(
                 { success: false, message: "User is already an author" },
-                { status: 409 }
+                { status: 409, headers: corsHeaders }
             );
         }
         const now = new Date();
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
         console.error("Author registration error:", error);
         return NextResponse.json(
             { success: false, message: error.message || "Internal server error" },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

@@ -4,14 +4,14 @@ export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         JSON.stringify({ success: false, message: 'Invalid product IDs provided.' }),
         {
           status: 400,
-          // headers: corsHeaders,
+          headers: corsHeaders,
         }
       );
     }
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       JSON.stringify({ success: true, data: enrichedThemes }),
       {
         status: 200,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   } catch (error) {
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       JSON.stringify({ success: false, message: 'Server error' }),
       {
         status: 500,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   }

@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function POST(request: Request) {
     try {
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         if (!rating || !type || !currency || !point) {
             return NextResponse.json(
                 { success: false, message: "Missing required fields" },
-                { status: 400 }
+                { status: 400, headers: corsHeaders }
             );
         }
 
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         if (!user) {
             return NextResponse.json(
                 { success: false, message: "User not found" },
-                { status: 404 }
+                { status: 404, headers: corsHeaders }
             );
         }
 
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
         await db.collection("users").updateOne(
             { _id: new ObjectId(userId) },
             {
-                $inc: { loyaltyPoint: rewardPoints, reviews:1 }
+                $inc: { loyaltyPoint: rewardPoints, reviews: 1 }
 
             }
         );
@@ -80,13 +80,13 @@ export async function POST(request: Request) {
             message: "Feedback submitted and points rewarded",
             pointsEarned: rewardPoints,
             user: updatedUser
-        });
+        }, { status: 200, headers: corsHeaders });
 
     } catch (error) {
         console.error("Feedback submission error:", error);
         return NextResponse.json(
             { success: false, message: error.message || "Internal server error" },
-            { status: 500 }
+            { status: 500, headers: corsHeaders }
         );
     }
 }

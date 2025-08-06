@@ -1,10 +1,20 @@
 // app/api/auth/[...nextauth]/route.ts
+import { NextResponse } from "next/server";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { NextAuthOptions } from "next-auth";
 import clientPromise from "@/lib/mongodb";
 import { sendEmail, allowEmailSending } from '@/lib/mailer';
 import { metaData } from '@/lib/utils';
+
+import { corsHeaders } from '@/lib/cors';
+
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -52,7 +62,7 @@ export const authOptions: NextAuthOptions = {
                             supportMessages: true,
                         },
                         isSocial: true,
-                        socialType:'Google',
+                        socialType: 'Google',
                         premiumMembership: {
                             isActive: false,
                             startDate: null,

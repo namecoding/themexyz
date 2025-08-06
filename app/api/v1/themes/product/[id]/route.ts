@@ -5,18 +5,18 @@ import { ObjectId } from 'mongodb';
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import Theme from '@/components/models/Theme';
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
 interface Params {
   params: { id: string };
 }
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function GET(req: Request, { params }: Params) {
   try {
@@ -29,7 +29,7 @@ export async function GET(req: Request, { params }: Params) {
         JSON.stringify({ success: false, message: 'Product not found' }),
         {
           status: 404,
-          // headers: corsHeaders,
+          headers: corsHeaders,
         }
       );
     }
@@ -51,7 +51,7 @@ export async function GET(req: Request, { params }: Params) {
       }),
       {
         status: 200,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   } catch (error) {
@@ -60,7 +60,7 @@ export async function GET(req: Request, { params }: Params) {
       JSON.stringify({ success: false, message: 'Server error' }),
       {
         status: 500,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   }

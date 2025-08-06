@@ -5,14 +5,14 @@ import { sendEmail, allowEmailSending } from '@/lib/mailer'
 import { metaData } from '@/lib/utils'
 import { verifyTokenFromHeader } from '@/lib/jwt'
 import bcrypt from 'bcryptjs'
-// import { corsHeaders } from '@/lib/cors';
+import { corsHeaders } from '@/lib/cors';
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 function generateAccessCode(): string {
   return Math.floor(1000 + Math.random() * 9000).toString()
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     if (!userId || !Array.isArray(roles) || roles.length === 0) {
       return NextResponse.json(
         { success: false, message: 'Invalid payload: userId and roles[] required' },
-        { status: 400 }
+        { status: 400, headers: corsHeaders }
       )
     }
 
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     if (!requesterId) {
       return NextResponse.json(
         { success: false, message: 'Unauthorized. Token invalid or missing.' },
-        { status: 401 }
+        { status: 401, headers: corsHeaders }
       )
     }
 
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     if (!requesterPermissions.includes('super_admin')) {
       return NextResponse.json(
         { success: false, message: 'Access denied. Super admin only.' },
-        { status: 403 }
+        { status: 403, headers: corsHeaders }
       )
     }
 
@@ -102,22 +102,19 @@ export async function POST(req: Request) {
           <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
             <h2>Admin Role Update</h2>
             <p>Hello ${user.name},</p>
-            ${
-              addedRoles.length > 0
-                ? `<p><strong>Added:</strong> ${addedRoles.join(', ')}</p>`
-                : ''
-            }
-            ${
-              removedRoles.length > 0
-                ? `<p><strong>Removed:</strong> ${removedRoles.join(', ')}</p>`
-                : ''
-            }
+            ${addedRoles.length > 0
+            ? `<p><strong>Added:</strong> ${addedRoles.join(', ')}</p>`
+            : ''
+          }
+            ${removedRoles.length > 0
+            ? `<p><strong>Removed:</strong> ${removedRoles.join(', ')}</p>`
+            : ''
+          }
             <p><strong>Your updated roles:</strong> ${updatedPermissions.join(', ')}</p>
-            ${
-              accessCode
-                ? `<p>Your access code is: <strong>${accessCode}</strong></p>`
-                : ''
-            }
+            ${accessCode
+            ? `<p>Your access code is: <strong>${accessCode}</strong></p>`
+            : ''
+          }
             <p>You can now log in and access admin tools accordingly.</p>
             <br/>
             <p>Best regards,<br/>${metaData.name} Team</p>
@@ -133,9 +130,9 @@ export async function POST(req: Request) {
       removedRoles,
       allRoles: updatedPermissions,
       // ...(accessCode && { accessCode }), // only include if generated
-    })
+    }, { status: 200, headers: corsHeaders })
   } catch (error) {
     console.error('Admin role toggle error:', error)
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500, headers: corsHeaders })
   }
 }

@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
-// import { corsHeaders } from "@/lib/cors";
+import { corsHeaders } from "@/lib/cors";
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function GET(request: Request) {
   try {
@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         }),
         {
           status: 404,
-          // headers: corsHeaders,
+          headers: corsHeaders,
         }
       );
     }
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
       }),
       {
         status: 200,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   } catch (error) {
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
       }),
       {
         status: 401,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   }

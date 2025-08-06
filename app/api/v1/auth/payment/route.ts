@@ -3,16 +3,16 @@ import clientPromise from "@/lib/mongodb";
 import { verifyTokenFromHeader } from "@/lib/jwt";
 import { ObjectId } from "mongodb";
 import { randomUUID } from "crypto";
-// import { corsHeaders } from "@/lib/cors"; // ✅ Import your CORS headers
+import { corsHeaders } from "@/lib/cors"; // ✅ Import your CORS headers
 
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY!;
 
-// export async function OPTIONS() {
-//   return new NextResponse(null, {
-//     status: 204,
-//     headers: corsHeaders,
-//   });
-// }
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 
 export async function POST(request: Request) {
   try {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         }),
         {
           status: 400,
-          // headers: corsHeaders,
+          headers: corsHeaders,
         }
       );
     }
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
         }),
         {
           status: 500,
-          // headers: corsHeaders,
+          headers: corsHeaders,
         }
       );
     }
@@ -107,7 +107,7 @@ export async function POST(request: Request) {
       }),
       {
         status: 200,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   } catch (error) {
@@ -119,7 +119,7 @@ export async function POST(request: Request) {
       }),
       {
         status: 500,
-        // headers: corsHeaders,
+        headers: corsHeaders,
       }
     );
   }
