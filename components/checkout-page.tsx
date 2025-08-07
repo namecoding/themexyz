@@ -175,17 +175,17 @@ export default function CheckoutPage({
 
 
   useEffect(() => {
-  setScreenLoading(true);
-  const timer = setTimeout(() => setScreenLoading(false), 1000); // Faster test
-  return () => clearTimeout(timer);
-}, [pathname, userData, cartItems]);
+    setScreenLoading(true);
+    const timer = setTimeout(() => setScreenLoading(false), 1000); // Faster test
+    return () => clearTimeout(timer);
+  }, [pathname, userData, cartItems]);
 
 
 
 
   useEffect(() => {
     if (userData) {
-    
+
       setBillingDetails((prev) => ({
         ...prev,
         name: userData.name || "",
@@ -674,773 +674,773 @@ export default function CheckoutPage({
         </div>
 
         {
-          screenLoading ? 
-           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
-            <div className="lg:col-span-2 space-y-6">
-              {[...Array(1)].map((_, i) => (
-                <div key={i} className="bg-white rounded-md shadow-sm p-4 space-y-4">
-                  <div className="flex justify-between items-center border-b pb-2">
-                    <div className="h-4 w-32 bg-gray-200 rounded" />
-                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                  </div>
-                  {[...Array(1)].map((_, j) => (
-                    <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
-                      <div className="w-20 h-20 bg-gray-200 rounded-md" />
-                      <div className="flex flex-col gap-2 flex-grow">
-                        <div className="h-4 w-3/4 bg-gray-200 rounded" />
-                        <div className="h-3 w-1/2 bg-gray-200 rounded" />
-                        <div className="h-3 w-2/3 bg-gray-200 rounded" />
-                        <div className="h-4 w-1/3 bg-gray-200 rounded" />
+          screenLoading ?
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+              <div className="lg:col-span-2 space-y-6">
+                {[...Array(1)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-md shadow-sm p-4 space-y-4">
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <div className="h-4 w-32 bg-gray-200 rounded" />
+                      <div className="h-4 w-16 bg-gray-200 rounded" />
+                    </div>
+                    {[...Array(1)].map((_, j) => (
+                      <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
+                        <div className="w-20 h-20 bg-gray-200 rounded-md" />
+                        <div className="flex flex-col gap-2 flex-grow">
+                          <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                          <div className="h-3 w-1/2 bg-gray-200 rounded" />
+                          <div className="h-3 w-2/3 bg-gray-200 rounded" />
+                          <div className="h-4 w-1/3 bg-gray-200 rounded" />
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="h-4 w-12 bg-gray-200 rounded mb-2" />
+                          <div className="h-3 w-24 bg-gray-200 rounded" />
+                        </div>
                       </div>
-                      <div className="flex-shrink-0">
-                        <div className="h-4 w-12 bg-gray-200 rounded mb-2" />
-                        <div className="h-3 w-24 bg-gray-200 rounded" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-md shadow-sm p-4 space-y-4 sticky top-4">
-                <div className="h-5 w-40 bg-gray-200 rounded" />
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <div className="h-3 w-16 bg-gray-200 rounded" />
-                    <div className="h-3 w-10 bg-gray-200 rounded" />
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="h-3 w-24 bg-gray-200 rounded" />
-                    <div className="h-3 w-12 bg-gray-200 rounded" />
-                  </div>
-                  <div className="border-t pt-2 mt-2 flex justify-between">
-                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                    <div className="h-4 w-12 bg-gray-200 rounded" />
-                  </div>
-                </div>
-                <div className="h-10 w-full bg-gray-200 rounded" />
-                <div className="h-3 w-2/3 bg-gray-200 rounded mx-auto" />
-              </div>
-            </div>
-          </div>
-
-          :
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            {!isLoggedIn ? (
-              <div className="bg-white rounded-md shadow-sm mb-6">
-                <div className="p-4 border-b border-gray-200">
-                  <h2 className="font-semibold">Account</h2>
-                </div>
-
-                {signInStage === 'signup' ? (
-                  <div className="p-6">
-                    <div className="mb-6">
-                      <h3 className="text-lg font-medium mb-2">Sign up for a free account</h3>
-                      <p className="text-gray-600 text-sm mb-4">
-                        Sign in to speed up the checkout process and manage your orders.
-                      </p>
-
-                      <form onSubmit={handleFormSignUp} className="space-y-4 mb-6">
-                        <div>
-                          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                            Full Name
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                            Password
-                          </label>
-                          <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
-                            Confirm Password
-                          </label>
-                          <input
-                            type="password"
-                            id="confirm-password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className={`w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-gray-300"
-                              } rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]`}
-                            required
-                          />
-                          {passwordError && <p className="text-xs text-red-500 mt-1">{passwordError}</p>}
-                        </div>
-
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id="agree-terms"
-                            checked={agreeTerms}
-                            onChange={(e) => setAgreeTerms(e.target.checked)}
-                            className="h-4 w-4 text-[#82b440] bg-green-500 focus:ring-[#82b440] border-gray-300 rounded"
-                            required
-                          />
-                          <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-700">
-                            I agree to the{" "}
-                            <a href="#" className="text-green-500 hover:underline">
-                              Terms of Service
-                            </a>{" "}
-                            and{" "}
-                            <a href="#" className="text-green-500 hover:underline">
-                              Privacy Policy
-                            </a>
-                          </label>
-                        </div>
-
-                        <Button type="submit" className="w-full bg-green-500 hover:bg-[#7aa93c] text-white">
-                          {
-                            pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Create Free Account'
-                          }
-
-                        </Button>
-                      </form>
-
-                      <div className="relative flex items-center justify-center mb-6">
-                        <div className="border-t border-gray-300 absolute w-full"></div>
-                        <div className="bg-white px-4 relative text-sm text-gray-500">or</div>
-                      </div>
-
-
-                    </div>
-
-                    <div className="border-t border-gray-200 pt-4">
-                      <Button
-                        onClick={handleGoogleLogin}
-                        variant="outline"
-                        className="w-full mb-4 flex items-center justify-center"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width="24"
-                          height="24"
-                          className="mr-2"
-                        >
-                          <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          />
-                          <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          />
-                          <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                          />
-                          <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                          />
-                        </svg>
-                        Continue with Google
-                      </Button>
-                    </div>
-
-                    <div className="border-gray-200 pt-2">
-                      <Button onClick={() => switchStage('signup')} variant="outline" className="w-full">
-                        Continue as Guest
-                      </Button>
-                    </div>
-                  </div>
-                ) : signInStage === 'guest' ? (
-                  <div className="p-6">
-                    <div className="mb-6">
-                      <h3 className="text-lg font-medium mb-2">Continue as a Guest</h3>
-                      <p className="text-gray-600 text-sm mb-4">
-                        Enter your email to continue without creating an account. You'll receive your order confirmation and updates by email.
-                      </p>
-
-                      <form onSubmit={handleLogin} className="space-y-4 mb-6">
-                        <div>
-                          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                            Email Address
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-                        <Button type="submit" className="w-full bg-[#82b440] hover:bg-[#7aa93c] text-white">
-                          {pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Continue as Guest'}
-                        </Button>
-                      </form>
-
-                      <div className="relative flex items-center justify-center mb-6">
-                        <div className="border-t border-gray-300 absolute w-full"></div>
-                        <div className="bg-white px-4 relative text-sm text-gray-500">or</div>
-                      </div>
-
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600">
-                          Want to save your orders?{" "}
-                          <button onClick={() => switchStage('signup')} className="text-[#82b440] hover:underline font-medium">
-                            Create an account
-                          </button>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-gray-200 pt-4">
-                      <Button
-                        onClick={handleGoogleLogin}
-                        variant="outline"
-                        className="w-full mb-4 flex items-center justify-center"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width="24"
-                          height="24"
-                          className="mr-2"
-                        >
-                          <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          />
-                          <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          />
-                          <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                          />
-                          <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                          />
-                        </svg>
-                        Continue with Google
-                      </Button>
-                    </div>
-
-                    <div className="border-gray-200 pt-2">
-                      <Button onClick={() => switchStage('login')} variant="outline" className="w-full">
-                        Back to Login
-                      </Button>
-                    </div>
-                  </div>
-
-                ) : (
-                  <div className="p-6">
-                    <div className="mb-6">
-                      <h3 className="text-lg font-medium mb-2">Sign in to your account</h3>
-                      <p className="text-gray-600 text-sm mb-4">
-                        Sign in to speed up the checkout process and manage your orders.
-                      </p>
-
-                      <form onSubmit={handleLogin} className="space-y-4 mb-6">
-                        <div>
-                          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                            Email
-                          </label>
-                          <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                            Password
-                          </label>
-                          <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-                        <Button type="submit" className="w-full bg-green-500 hover:bg-[#7aa93c] text-white">
-                          {
-                            pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Sign In'
-                          }
-
-                        </Button>
-                      </form>
-
-                      <div className="relative flex items-center justify-center mb-6">
-                        <div className="border-t border-gray-300 absolute w-full"></div>
-                        <div className="bg-white px-4 relative text-sm text-gray-500">or</div>
-                      </div>
-
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600">
-                          Don't have an account?{" "}
-                          <button onClick={() => switchStage('signup')} className="text-green-500 hover:underline font-medium">
-                            Sign up
-                          </button>
-                        </p>
-                      </div>
-
-
-
-                    </div>
-
-                    <div className="border-t border-gray-200 pt-4">
-                      <Button
-                        onClick={handleGoogleLogin}
-                        variant="outline"
-                        className="w-full mb-4 flex items-center justify-center"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width="24"
-                          height="24"
-                          className="mr-2"
-                        >
-                          <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          />
-                          <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          />
-                          <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                          />
-                          <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                          />
-                        </svg>
-                        Continue with Google
-                      </Button>
-                    </div>
-
-                    <div className="border-gray-200 pt-2">
-                      <Button onClick={() => switchStage('guest')} variant="outline" className="w-full">
-                        Continue as Guest
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-            ) : (
-              <>
-                {/* Billing Details Section */}
-                <div className="bg-white rounded-md shadow-sm mb-6">
-                  <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-                    <h2 className="font-semibold">Billing Details</h2>
-                    {hasBillingDetails && (
-                      <>
-                        {
-                          showBillingForm ?
-                            <Button variant="outline" size="sm" onClick={() => setShowBillingForm(false)} className="text-xs">
-                              Cancel
-                            </Button>
-                            :
-                            <Button variant="outline" size="sm" onClick={() => setShowBillingForm(true)} className="text-xs">
-                              Edit
-                            </Button>
-                        }
-                      </>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    {!hasBillingDetails || showBillingForm ? (
-                      <form onSubmit={handleBillingSubmit} className="space-y-4">
-                        <div>
-                          <div>
-                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-                              Your Name *
-                            </label>
-                            <input
-                              type="text"
-                              id="name"
-                              value={billingDetails.name}
-                              onChange={(e) => setBillingDetails({ ...billingDetails, name: e.target.value })}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                              required
-                              //readOnly={true}
-                              disabled={true}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                            Company (Optional)
-                          </label>
-                          <input
-                            type="text"
-                            id="company"
-                            value={billingDetails.company}
-                            onChange={(e) => setBillingDetails({ ...billingDetails, company: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                            Address *
-                          </label>
-                          <input
-                            type="text"
-                            id="address"
-                            value={billingDetails.address}
-                            onChange={(e) => setBillingDetails({ ...billingDetails, address: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-
-
-                        <div>
-                          <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
-                            Country *
-                          </label>
-                          <select
-                            id="country"
-                            value={billingDetails.country}
-                            onChange={(e) =>
-                              setBillingDetails({ ...billingDetails, country: e.target.value, state: '' })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          >
-                            <option value="">Select Country</option>
-                            {countriesWithStates.map((item) => (
-                              <option key={item.country} value={item.country}>
-                                {item.country}
-                              </option>
-                            ))}
-                          </select>
-
-                          {selectedCountry && (
-                            <select
-                              id="state"
-                              value={billingDetails.state}
-                              onChange={(e) => setBillingDetails({ ...billingDetails, state: e.target.value })}
-                              className="mt-4 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            >
-                              <option value="">Select State/Province</option>
-                              {selectedCountry.states.map((state) => (
-                                <option key={state} value={state}>
-                                  {state}
-                                </option>
-                              ))}
-                            </select>
-                          )}
-
-                        </div>
-
-                        <div>
-                          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                            Phone *
-                          </label>
-                          <input
-                            type="tel"
-                            id="phone"
-                            value={billingDetails.phone}
-                            onChange={(e) => setBillingDetails({ ...billingDetails, phone: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
-                            required
-                          />
-                        </div>
-                        <Button disabled={pleaseWaitWhileYourTransactionIsProcessing} type="submit" className="w-full bg-green-500 hover:bg-[#7aa93c] text-white">
-                          {
-                            pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : <>{hasBillingDetails ? "Update Billing Details" : "Save Billing Details"}</>
-                          }
-
-                        </Button>
-                      </form>
-                    ) : (
-                      <div className="space-y-2">
-                        <p className="text-sm">
-                          <span className="font-medium">Name:</span> {billingDetails.name}
-                        </p>
-                        {billingDetails.company && (
-                          <p className="text-sm">
-                            <span className="font-medium">Company:</span> {billingDetails.company}
-                          </p>
-                        )}
-                        <p className="text-sm">
-                          <span className="font-medium">Address:</span> {billingDetails.address}
-                        </p>
-
-                        <p className="text-sm">
-                          <span className="font-medium">Country:</span> {billingDetails.country}
-                        </p>
-                        {
-                          billingDetails.state && <p className="text-sm">
-                            <span className="font-medium">City/State:</span>
-                            {billingDetails.state}
-                          </p>
-                        }
-                        <p className="text-sm">
-                          <span className="font-medium">Phone:</span> {billingDetails.phone}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Payment Method Section */}
-
-                {
-                  !showBillingForm &&
-                  <div className="bg-white rounded-md shadow-sm mb-6">
-                    <div className="p-4 border-b border-gray-200">
-                      <h2 className="font-semibold">Payment Method</h2>
-                      <div className="text-xs text-gray-500 text-left mb-2">
-                        Your local currency is <span className="text-green-600 font-medium">{currency}</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      {paymentOptions
-                        .filter((method) => method.available || method.comingSoon)
-                        .map((method) => (
-                          <div
-                            key={method.key}
-                            className={`border rounded-md p-4 ${method.comingSoon ? "cursor-not-allowed opacity-60" : "cursor-pointer"
-                              } ${paymentMethod === method.key
-                                ? "border-[#82b440] bg-green-50"
-                                : "border-gray-200 hover:border-gray-300"
-                              }`}
-                            onClick={() =>
-                              method.available && !method.comingSoon && method.onClick()
-                            }
-                          >
-                            <div className="flex items-center">
-                              <div className="mr-3">
-                                <div
-                                  className={`w-5 h-5 rounded-full border ${paymentMethod === method.key
-                                    ? "border-[#82b440]"
-                                    : "border-gray-300"
-                                    } flex items-center justify-center`}
-                                >
-                                  {paymentMethod === method.key && (
-                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                  )}
-                                </div>
-                              </div>
-
-                              <div className="flex-grow">
-                                <span className="font-medium">
-                                  {method.label}{" "}
-                                  {method.comingSoon && (
-                                    <small className="text-sm text-red-600">(coming soon!)</small>
-                                  )}
-                                </span>
-                                <p className="text-xs text-gray-500 mt-1">{method.note}</p>
-                                {method.key === "wallet" &&
-                                  (currency === "NGN"
-                                    ? user?.wallet?.NGN?.balance ?? 0
-                                    : user?.wallet?.USD?.balance ?? 0) < total && (
-                                    <small className="text-red-600">insufficient</small>
-                                  )}
-                              </div>
-
-                              <div>
-                                <Image
-                                  src={method.logo}
-                                  alt={method.label}
-                                  width={60}
-                                  height={24}
-                                  className="rounded"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                }
-
-              </>
-            )}
-
-            <p className="text-xs text-left text-gray-500 mb-4">
-              By continuing with your purchase, you agree to our{" "}
-              <a href="#" onClick={() => setShowTerms(true)} className="text-green-500 hover:underline">
-                Terms of Purchase
-              </a>.
-            </p>
-
-
-            <Button
-              className="bg-green-500 hover:bg-[#7aa93c] text-white mb-3"
-              disabled={!isLoggedIn || !hasBillingDetails || !paymentMethod || processingPayment}
-              onClick={handlePayment}
-            >
-              {isLoggedIn && hasBillingDetails && paymentMethod ? (
-                <>
-                  {
-                    processingPayment ? <Loader className="mr-2 h-5 w-5 animate-spin text-white" /> : <Check className="h-4 w-4 mr-2" />
-                  }
-
-                  {
-                    processingPayment ? 'Please wait...' : 'Complete Payment'
-                  }
-
-                </>
-              ) : (
-                "Complete Checkout"
-              )}
-            </Button>
-
-            <p className="text-xs text-left text-gray-500 mb-4">Price is in {currency === 'NGN' ? 'Naira' : 'US dollars'} and excludes tax</p>
-
-
-          </div>
-
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-md shadow-sm p-4 sticky top-4">
-              <h2 className="font-semibold mb-4">Order Summary</h2>
-
-              <div className="max-h-60 overflow-y-auto mb-4">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center py-2 border-b border-gray-100 last:border-b-0">
-                    <div className="w-10 h-10 bg-gray-100 rounded-md overflow-hidden mr-3 flex-shrink-0">
-                      <Image
-                        src={item?.galleryImages[0] || "/placeholder.svg?height=40&width=40"}
-                        alt={item.title}
-                        width={40}
-                        height={40}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-grow">
-                      <h3 className="text-xs font-medium truncate capitalize">{shortenText(item.title, 18)}</h3>
-                      <p className="text-xs text-gray-500">Qty: {item.quantity || 1}</p>
-                    </div>
-                    <div className="flex-shrink-0 text-xs font-medium">{currency === 'NGN' ? symbol + item.priceNGN.toLocaleString() : symbol + item.priceUSD.toLocaleString()}</div>
+                    ))}
                   </div>
                 ))}
               </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between text-sm">
-                  <span>Subtotal</span>
-                  <span>{symbol}{subtotal.toLocaleString()}</span>
-                </div>
-
-                {supportExtensionTotal > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span>Support Extension</span>
-                    <span>{symbol}{supportExtensionTotal.toLocaleString()}</span>
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-md shadow-sm p-4 space-y-4 sticky top-4">
+                  <div className="h-5 w-40 bg-gray-200 rounded" />
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <div className="h-3 w-16 bg-gray-200 rounded" />
+                      <div className="h-3 w-10 bg-gray-200 rounded" />
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="h-3 w-24 bg-gray-200 rounded" />
+                      <div className="h-3 w-12 bg-gray-200 rounded" />
+                    </div>
+                    <div className="border-t pt-2 mt-2 flex justify-between">
+                      <div className="h-4 w-16 bg-gray-200 rounded" />
+                      <div className="h-4 w-12 bg-gray-200 rounded" />
+                    </div>
                   </div>
-                )}
-
-                <div className="border-t border-gray-200 pt-2 mt-2">
-                  <div className="flex justify-between font-bold">
-                    <span>Total</span>
-                    <span>{symbol}{total.toLocaleString()}</span>
-                  </div>
+                  <div className="h-10 w-full bg-gray-200 rounded" />
+                  <div className="h-3 w-2/3 bg-gray-200 rounded mx-auto" />
                 </div>
               </div>
+            </div>
+
+            :
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                {!isLoggedIn ? (
+                  <div className="bg-white rounded-md shadow-sm mb-6">
+                    <div className="p-4 border-b border-gray-200">
+                      <h2 className="font-semibold">Account</h2>
+                    </div>
+
+                    {signInStage === 'signup' ? (
+                      <div className="p-6">
+                        <div className="mb-6">
+                          <h3 className="text-lg font-medium mb-2">Sign up for a free account</h3>
+                          <p className="text-gray-600 text-sm mb-4">
+                            Sign in to speed up the checkout process and manage your orders.
+                          </p>
+
+                          <form onSubmit={handleFormSignUp} className="space-y-4 mb-6">
+                            <div>
+                              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                                Full Name
+                              </label>
+                              <input
+                                type="text"
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+
+                            <div>
+                              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                Email
+                              </label>
+                              <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+
+                            <div>
+                              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                                Password
+                              </label>
+                              <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+
+                            <div>
+                              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
+                                Confirm Password
+                              </label>
+                              <input
+                                type="password"
+                                id="confirm-password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                className={`w-full px-3 py-2 border ${passwordError ? "border-red-500" : "border-gray-300"
+                                  } rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]`}
+                                required
+                              />
+                              {passwordError && <p className="text-xs text-red-500 mt-1">{passwordError}</p>}
+                            </div>
+
+                            <div className="flex items-center">
+                              <input
+                                type="checkbox"
+                                id="agree-terms"
+                                checked={agreeTerms}
+                                onChange={(e) => setAgreeTerms(e.target.checked)}
+                                className="h-4 w-4 text-[#82b440] bg-green-500 focus:ring-[#82b440] border-gray-300 rounded"
+                                required
+                              />
+                              <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-700">
+                                I agree to the{" "}
+                                <a href="#" className="text-green-500 hover:underline">
+                                  Terms of Service
+                                </a>{" "}
+                                and{" "}
+                                <a href="#" className="text-green-500 hover:underline">
+                                  Privacy Policy
+                                </a>
+                              </label>
+                            </div>
+
+                            <Button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white">
+                              {
+                                pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Create Free Account'
+                              }
+
+                            </Button>
+                          </form>
+
+                          <div className="relative flex items-center justify-center mb-6">
+                            <div className="border-t border-gray-300 absolute w-full"></div>
+                            <div className="bg-white px-4 relative text-sm text-gray-500">or</div>
+                          </div>
 
 
-              <p className="text-xs text-left text-gray-500 mb-4">
-                By continuing with your purchase, you agree to our{" "}
-                <a href="#" onClick={() => setShowTerms(true)} className="text-green-500 hover:underline">
-                  Terms of Purchase
-                </a>.
-              </p>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-4">
+                          <Button
+                            onClick={handleGoogleLogin}
+                            variant="outline"
+                            className="w-full mb-4 flex items-center justify-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              height="24"
+                              className="mr-2"
+                            >
+                              <path
+                                fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                              />
+                              <path
+                                fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                              />
+                              <path
+                                fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                              />
+                              <path
+                                fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                              />
+                            </svg>
+                            Continue with Google
+                          </Button>
+                        </div>
+
+                        <div className="border-gray-200 pt-2">
+                          <Button onClick={() => switchStage('signup')} variant="outline" className="w-full">
+                            Continue as Guest
+                          </Button>
+                        </div>
+                      </div>
+                    ) : signInStage === 'guest' ? (
+                      <div className="p-6">
+                        <div className="mb-6">
+                          <h3 className="text-lg font-medium mb-2">Continue as a Guest</h3>
+                          <p className="text-gray-600 text-sm mb-4">
+                            Enter your email to continue without creating an account. You'll receive your order confirmation and updates by email.
+                          </p>
+
+                          <form onSubmit={handleLogin} className="space-y-4 mb-6">
+                            <div>
+                              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                Email Address
+                              </label>
+                              <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+                            <Button type="submit" className="w-full bg-[#82b440] hover:bg-green-600 text-white">
+                              {pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Continue as Guest'}
+                            </Button>
+                          </form>
+
+                          <div className="relative flex items-center justify-center mb-6">
+                            <div className="border-t border-gray-300 absolute w-full"></div>
+                            <div className="bg-white px-4 relative text-sm text-gray-500">or</div>
+                          </div>
+
+                          <div className="text-center">
+                            <p className="text-sm text-gray-600">
+                              Want to save your orders?{" "}
+                              <button onClick={() => switchStage('signup')} className="text-[#82b440] hover:underline font-medium">
+                                Create an account
+                              </button>
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-4">
+                          <Button
+                            onClick={handleGoogleLogin}
+                            variant="outline"
+                            className="w-full mb-4 flex items-center justify-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              height="24"
+                              className="mr-2"
+                            >
+                              <path
+                                fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                              />
+                              <path
+                                fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                              />
+                              <path
+                                fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                              />
+                              <path
+                                fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                              />
+                            </svg>
+                            Continue with Google
+                          </Button>
+                        </div>
+
+                        <div className="border-gray-200 pt-2">
+                          <Button onClick={() => switchStage('login')} variant="outline" className="w-full">
+                            Back to Login
+                          </Button>
+                        </div>
+                      </div>
+
+                    ) : (
+                      <div className="p-6">
+                        <div className="mb-6">
+                          <h3 className="text-lg font-medium mb-2">Sign in to your account</h3>
+                          <p className="text-gray-600 text-sm mb-4">
+                            Sign in to speed up the checkout process and manage your orders.
+                          </p>
+
+                          <form onSubmit={handleLogin} className="space-y-4 mb-6">
+                            <div>
+                              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                Email
+                              </label>
+                              <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                                Password
+                              </label>
+                              <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+                            <Button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white">
+                              {
+                                pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : 'Sign In'
+                              }
+
+                            </Button>
+                          </form>
+
+                          <div className="relative flex items-center justify-center mb-6">
+                            <div className="border-t border-gray-300 absolute w-full"></div>
+                            <div className="bg-white px-4 relative text-sm text-gray-500">or</div>
+                          </div>
+
+                          <div className="text-center">
+                            <p className="text-sm text-gray-600">
+                              Don't have an account?{" "}
+                              <button onClick={() => switchStage('signup')} className="text-green-500 hover:underline font-medium">
+                                Sign up
+                              </button>
+                            </p>
+                          </div>
 
 
-              <Button
-                className="w-full bg-green-500 hover:bg-[#7aa93c] text-white mb-3"
-                disabled={!isLoggedIn || !hasBillingDetails || !paymentMethod || processingPayment}
-                onClick={handlePayment}
-              >
-                {isLoggedIn && hasBillingDetails && paymentMethod ? (
+
+                        </div>
+
+                        <div className="border-t border-gray-200 pt-4">
+                          <Button
+                            onClick={handleGoogleLogin}
+                            variant="outline"
+                            className="w-full mb-4 flex items-center justify-center"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              width="24"
+                              height="24"
+                              className="mr-2"
+                            >
+                              <path
+                                fill="#4285F4"
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                              />
+                              <path
+                                fill="#34A853"
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                              />
+                              <path
+                                fill="#FBBC05"
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                              />
+                              <path
+                                fill="#EA4335"
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                              />
+                            </svg>
+                            Continue with Google
+                          </Button>
+                        </div>
+
+                        <div className="border-gray-200 pt-2">
+                          <Button onClick={() => switchStage('guest')} variant="outline" className="w-full">
+                            Continue as Guest
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                  </div>
+                ) : (
                   <>
+                    {/* Billing Details Section */}
+                    <div className="bg-white rounded-md shadow-sm mb-6">
+                      <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+                        <h2 className="font-semibold">Billing Details</h2>
+                        {hasBillingDetails && (
+                          <>
+                            {
+                              showBillingForm ?
+                                <Button variant="outline" size="sm" onClick={() => setShowBillingForm(false)} className="text-xs">
+                                  Cancel
+                                </Button>
+                                :
+                                <Button variant="outline" size="sm" onClick={() => setShowBillingForm(true)} className="text-xs">
+                                  Edit
+                                </Button>
+                            }
+                          </>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        {!hasBillingDetails || showBillingForm ? (
+                          <form onSubmit={handleBillingSubmit} className="space-y-4">
+                            <div>
+                              <div>
+                                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                                  Your Name *
+                                </label>
+                                <input
+                                  type="text"
+                                  id="name"
+                                  value={billingDetails.name}
+                                  onChange={(e) => setBillingDetails({ ...billingDetails, name: e.target.value })}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                  required
+                                  //readOnly={true}
+                                  disabled={true}
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                                Company (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                id="company"
+                                value={billingDetails.company}
+                                onChange={(e) => setBillingDetails({ ...billingDetails, company: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                              />
+                            </div>
+                            <div>
+                              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                                Address *
+                              </label>
+                              <input
+                                type="text"
+                                id="address"
+                                value={billingDetails.address}
+                                onChange={(e) => setBillingDetails({ ...billingDetails, address: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+
+
+                            <div>
+                              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                                Country *
+                              </label>
+                              <select
+                                id="country"
+                                value={billingDetails.country}
+                                onChange={(e) =>
+                                  setBillingDetails({ ...billingDetails, country: e.target.value, state: '' })
+                                }
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              >
+                                <option value="">Select Country</option>
+                                {countriesWithStates.map((item) => (
+                                  <option key={item.country} value={item.country}>
+                                    {item.country}
+                                  </option>
+                                ))}
+                              </select>
+
+                              {selectedCountry && (
+                                <select
+                                  id="state"
+                                  value={billingDetails.state}
+                                  onChange={(e) => setBillingDetails({ ...billingDetails, state: e.target.value })}
+                                  className="mt-4 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                >
+                                  <option value="">Select State/Province</option>
+                                  {selectedCountry.states.map((state) => (
+                                    <option key={state} value={state}>
+                                      {state}
+                                    </option>
+                                  ))}
+                                </select>
+                              )}
+
+                            </div>
+
+                            <div>
+                              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                                Phone *
+                              </label>
+                              <input
+                                type="tel"
+                                id="phone"
+                                value={billingDetails.phone}
+                                onChange={(e) => setBillingDetails({ ...billingDetails, phone: e.target.value })}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                                required
+                              />
+                            </div>
+                            <Button disabled={pleaseWaitWhileYourTransactionIsProcessing} type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white">
+                              {
+                                pleaseWaitWhileYourTransactionIsProcessing ? 'Please wait...' : <>{hasBillingDetails ? "Update Billing Details" : "Save Billing Details"}</>
+                              }
+
+                            </Button>
+                          </form>
+                        ) : (
+                          <div className="space-y-2">
+                            <p className="text-sm">
+                              <span className="font-medium">Name:</span> {billingDetails.name}
+                            </p>
+                            {billingDetails.company && (
+                              <p className="text-sm">
+                                <span className="font-medium">Company:</span> {billingDetails.company}
+                              </p>
+                            )}
+                            <p className="text-sm">
+                              <span className="font-medium">Address:</span> {billingDetails.address}
+                            </p>
+
+                            <p className="text-sm">
+                              <span className="font-medium">Country:</span> {billingDetails.country}
+                            </p>
+                            {
+                              billingDetails.state && <p className="text-sm">
+                                <span className="font-medium">City/State:</span>
+                                {billingDetails.state}
+                              </p>
+                            }
+                            <p className="text-sm">
+                              <span className="font-medium">Phone:</span> {billingDetails.phone}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Payment Method Section */}
+
                     {
-                      processingPayment ? <Loader className="mr-2 h-5 w-5 animate-spin text-white" /> : <Check className="h-4 w-4 mr-2" />
-                    }
-                    {
-                      processingPayment ? 'Please wait...' : 'Complete Payment'
+                      !showBillingForm &&
+                      <div className="bg-white rounded-md shadow-sm mb-6">
+                        <div className="p-4 border-b border-gray-200">
+                          <h2 className="font-semibold">Payment Method</h2>
+                          <div className="text-xs text-gray-500 text-left mb-2">
+                            Your local currency is <span className="text-green-600 font-medium">{currency}</span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          {paymentOptions
+                            .filter((method) => method.available || method.comingSoon)
+                            .map((method) => (
+                              <div
+                                key={method.key}
+                                className={`border rounded-md p-4 ${method.comingSoon ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+                                  } ${paymentMethod === method.key
+                                    ? "border-[#82b440] bg-green-50"
+                                    : "border-gray-200 hover:border-gray-300"
+                                  }`}
+                                onClick={() =>
+                                  method.available && !method.comingSoon && method.onClick()
+                                }
+                              >
+                                <div className="flex items-center">
+                                  <div className="mr-3">
+                                    <div
+                                      className={`w-5 h-5 rounded-full border ${paymentMethod === method.key
+                                        ? "border-[#82b440]"
+                                        : "border-gray-300"
+                                        } flex items-center justify-center`}
+                                    >
+                                      {paymentMethod === method.key && (
+                                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="flex-grow">
+                                    <span className="font-medium">
+                                      {method.label}{" "}
+                                      {method.comingSoon && (
+                                        <small className="text-sm text-red-600">(coming soon!)</small>
+                                      )}
+                                    </span>
+                                    <p className="text-xs text-gray-500 mt-1">{method.note}</p>
+                                    {method.key === "wallet" &&
+                                      (currency === "NGN"
+                                        ? user?.wallet?.NGN?.balance ?? 0
+                                        : user?.wallet?.USD?.balance ?? 0) < total && (
+                                        <small className="text-red-600">insufficient</small>
+                                      )}
+                                  </div>
+
+                                  <div>
+                                    <Image
+                                      src={method.logo}
+                                      alt={method.label}
+                                      width={60}
+                                      height={24}
+                                      className="rounded"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
                     }
 
                   </>
-                ) : (
-                  "Complete Checkout"
                 )}
-              </Button>
 
-              <p className="text-xs text-center text-gray-500 mb-4">Price is in {currency === 'NGN' ? 'Naira' : 'US dollars'} and excludes tax</p>
-
-              <TermsOfPurchaseModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
-
-
-              <FeedbackModal
-                isOpen={isPurchaseFeedbackOpen}
-                onClose={() => {
-                  onClose()
-                  setIsPurchaseFeedbackOpen(false)
-                }}
-                type="purchase"
-                data={sampleFeedbackData}
-                onSubmit={handleFeedbackSubmit}
-                userData={userData}
-              />
+                <p className="text-xs text-left text-gray-500 mb-4">
+                  By continuing with your purchase, you agree to our{" "}
+                  <a href="#" onClick={() => setShowTerms(true)} className="text-green-500 hover:underline">
+                    Terms of Purchase
+                  </a>.
+                </p>
 
 
-              {(!isLoggedIn || !hasBillingDetails || !paymentMethod) && (
-                <div className="text-xs text-center text-red-600">
-                  {!isLoggedIn && <p>Please sign in or continue as guest</p>}
-                  {isLoggedIn && !hasBillingDetails && <p>Please complete billing details</p>}
-                  {isLoggedIn && hasBillingDetails && !paymentMethod && <p>Please select a payment method</p>}
+                <Button
+                  className="bg-green-500 hover:bg-green-600 text-white mb-3"
+                  disabled={!isLoggedIn || !hasBillingDetails || !paymentMethod || processingPayment}
+                  onClick={handlePayment}
+                >
+                  {isLoggedIn && hasBillingDetails && paymentMethod ? (
+                    <>
+                      {
+                        processingPayment ? <Loader className="mr-2 h-5 w-5 animate-spin text-white" /> : <Check className="h-4 w-4 mr-2" />
+                      }
+
+                      {
+                        processingPayment ? 'Please wait...' : 'Complete Payment'
+                      }
+
+                    </>
+                  ) : (
+                    "Complete Checkout"
+                  )}
+                </Button>
+
+                <p className="text-xs text-left text-gray-500 mb-4">Price is in {currency === 'NGN' ? 'Naira' : 'US dollars'} and excludes tax</p>
+
+
+              </div>
+
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-md shadow-sm p-4 sticky top-4">
+                  <h2 className="font-semibold mb-4">Order Summary</h2>
+
+                  <div className="max-h-60 overflow-y-auto mb-4">
+                    {cartItems.map((item) => (
+                      <div key={item.id} className="flex items-center py-2 border-b border-gray-100 last:border-b-0">
+                        <div className="w-10 h-10 bg-gray-100 rounded-md overflow-hidden mr-3 flex-shrink-0">
+                          <Image
+                            src={item?.galleryImages[0] || "/placeholder.svg?height=40&width=40"}
+                            alt={item.title}
+                            width={40}
+                            height={40}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-grow">
+                          <h3 className="text-xs font-medium truncate capitalize">{shortenText(item.title, 18)}</h3>
+                          <p className="text-xs text-gray-500">Qty: {item.quantity || 1}</p>
+                        </div>
+                        <div className="flex-shrink-0 text-xs font-medium">{currency === 'NGN' ? symbol + item.priceNGN.toLocaleString() : symbol + item.priceUSD.toLocaleString()}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Subtotal</span>
+                      <span>{symbol}{subtotal.toLocaleString()}</span>
+                    </div>
+
+                    {supportExtensionTotal > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span>Support Extension</span>
+                        <span>{symbol}{supportExtensionTotal.toLocaleString()}</span>
+                      </div>
+                    )}
+
+                    <div className="border-t border-gray-200 pt-2 mt-2">
+                      <div className="flex justify-between font-bold">
+                        <span>Total</span>
+                        <span>{symbol}{total.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <p className="text-xs text-left text-gray-500 mb-4">
+                    By continuing with your purchase, you agree to our{" "}
+                    <a href="#" onClick={() => setShowTerms(true)} className="text-green-500 hover:underline">
+                      Terms of Purchase
+                    </a>.
+                  </p>
+
+
+                  <Button
+                    className="w-full bg-green-500 hover:bg-green-600 text-white mb-3"
+                    disabled={!isLoggedIn || !hasBillingDetails || !paymentMethod || processingPayment}
+                    onClick={handlePayment}
+                  >
+                    {isLoggedIn && hasBillingDetails && paymentMethod ? (
+                      <>
+                        {
+                          processingPayment ? <Loader className="mr-2 h-5 w-5 animate-spin text-white" /> : <Check className="h-4 w-4 mr-2" />
+                        }
+                        {
+                          processingPayment ? 'Please wait...' : 'Complete Payment'
+                        }
+
+                      </>
+                    ) : (
+                      "Complete Checkout"
+                    )}
+                  </Button>
+
+                  <p className="text-xs text-center text-gray-500 mb-4">Price is in {currency === 'NGN' ? 'Naira' : 'US dollars'} and excludes tax</p>
+
+                  <TermsOfPurchaseModal isOpen={showTerms} onClose={() => setShowTerms(false)} />
+
+
+                  <FeedbackModal
+                    isOpen={isPurchaseFeedbackOpen}
+                    onClose={() => {
+                      onClose()
+                      setIsPurchaseFeedbackOpen(false)
+                    }}
+                    type="purchase"
+                    data={sampleFeedbackData}
+                    onSubmit={handleFeedbackSubmit}
+                    userData={userData}
+                  />
+
+
+                  {(!isLoggedIn || !hasBillingDetails || !paymentMethod) && (
+                    <div className="text-xs text-center text-red-600">
+                      {!isLoggedIn && <p>Please sign in or continue as guest</p>}
+                      {isLoggedIn && !hasBillingDetails && <p>Please complete billing details</p>}
+                      {isLoggedIn && hasBillingDetails && !paymentMethod && <p>Please select a payment method</p>}
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
 
         }
 
-        
+
 
 
       </div>

@@ -56,10 +56,10 @@ export default function DashboardLayout({
     setIsMounted(true)
   }, [])
 
-  useEffect(()=>{
-     const savedWishlistItems = localStorage.getItem("wishlistItems");
+  useEffect(() => {
+    const savedWishlistItems = localStorage.getItem("wishlistItems");
 
-     if (savedWishlistItems) {
+    if (savedWishlistItems) {
       try {
         setWishlistItems(JSON.parse(savedWishlistItems));
       } catch (e) {
@@ -67,7 +67,7 @@ export default function DashboardLayout({
       }
     }
 
-  },[])
+  }, [])
 
   if (!isMounted) return null
 
@@ -125,7 +125,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-[#333333] text-white py-3 px-4 sticky top-0 z-10">
+      <header className="bg-[#000] text-white py-3 px-4 sticky top-0 z-10">
         <div className="container mx-auto max-w-6xl flex items-center justify-between">
           <div className="flex items-center space-x-6">
             <Leaf small="s" />
@@ -139,7 +139,7 @@ export default function DashboardLayout({
               <Heart className="h-4 w-4 mr-1" />
               <span>Wishlist</span>
               <span className="ml-1 bg-green-500 text-white text-xs rounded-full px-1.5">
-                 {wishlistItems.length}
+                {wishlistItems.length}
               </span>
             </Link>
             <Link href="#" className="text-white hover:text-gray-300 relative">
@@ -181,7 +181,7 @@ export default function DashboardLayout({
           {/* Sidebar */}
           {/* <aside className="w-full md:w-64 hidden md:block flex-shrink-0 sticky top-20 self-start"></aside> */}
           <aside className="w-full md:w-64 hidden md:block flex-shrink-0 sticky top-20 self-start">
-          {/* <aside className="w-full md:w-64 hidden md:block flex-shrink-0"> */}
+            {/* <aside className="w-full md:w-64 hidden md:block flex-shrink-0"> */}
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center space-x-3">

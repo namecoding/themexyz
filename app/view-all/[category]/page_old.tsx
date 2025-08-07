@@ -14,7 +14,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import Loading from "@/app/loading";
 import CartConsent from "@/components/cart-consent";
 import CartPage from "@/components/cart-page";
-import {SERVER_PUBLIC} from "@/lib/utils";
+import { SERVER_PUBLIC } from "@/lib/utils";
 import PreviewModal from "@/components/preview-modal";
 
 
@@ -53,20 +53,20 @@ export default function ViewAllPage() {
       setPleaseWaitWhileYourTransactionIsProcessing(true)
 
       fetch(`${SERVER_PUBLIC}/themes/fetch2`, requestOptions)
-          .then(response => response.json())
-          .then(result => {
-            console.log(result?.data, 'theme result');
-            const data = result?.data || [];
-            setPleaseWaitWhileYourTransactionIsProcessing(false)
-            setItems(data);           // Populate with fetched items
-            setFilteredItems(data);   // Initially show all
-            setIsLoaded(true);
-          })
-          .catch(error => {
-            setPleaseWaitWhileYourTransactionIsProcessing(false)
-            console.log('Fetch error', error);
-            setIsLoaded(true); // Prevent loading state hanging
-          });
+        .then(response => response.json())
+        .then(result => {
+          console.log(result?.data, 'theme result');
+          const data = result?.data || [];
+          setPleaseWaitWhileYourTransactionIsProcessing(false)
+          setItems(data);           // Populate with fetched items
+          setFilteredItems(data);   // Initially show all
+          setIsLoaded(true);
+        })
+        .catch(error => {
+          setPleaseWaitWhileYourTransactionIsProcessing(false)
+          console.log('Fetch error', error);
+          setIsLoaded(true); // Prevent loading state hanging
+        });
     };
 
     const savedCartItems = localStorage.getItem("cartItems");
@@ -98,9 +98,9 @@ export default function ViewAllPage() {
     // Apply search filter
     if (searchQuery) {
       result = result.filter(
-          (item) =>
-              item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              item.author?.toLowerCase().includes(searchQuery.toLowerCase())
+        (item) =>
+          item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.author?.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }
 
@@ -131,12 +131,12 @@ export default function ViewAllPage() {
         result = result.filter((item) => new Date(item.date) > thirtyDaysAgo)
       } else if (category !== "items" && category !== "categories") {
         result = result.filter(
-            (item) =>
-                typeof item.isCategory === "string" &&
-                (
-                    item.isCategory.toLowerCase() === categoryTitle ||
-                    item.isCategory.toLowerCase().includes(categoryTitle)
-                )
+          (item) =>
+            typeof item.isCategory === "string" &&
+            (
+              item.isCategory.toLowerCase() === categoryTitle ||
+              item.isCategory.toLowerCase().includes(categoryTitle)
+            )
         )
       }
     }
@@ -378,9 +378,8 @@ export default function ViewAllPage() {
                                   {Array.from({ length: 5 }).map((_, i) => (
                                     <svg
                                       key={i}
-                                      className={`h-4 w-4 ${
-                                        i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                                      }`}
+                                      className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                                        }`}
                                       xmlns="http://www.w3.org/2000/svg"
                                       viewBox="0 0 24 24"
                                     >
@@ -561,63 +560,63 @@ export default function ViewAllPage() {
             </div>
 
             {pleaseWaitWhileYourTransactionIsProcessing
-                ? Array.from({ length: 3 }).map((_, index) => (
-                    <div
-                        key={index}
-                        className="h-64 rounded-lg dark:bg-gray-800 animate-pulse"
-                    >
-                      <div className="space-y-2 p-4 border rounded-md bg-white dark:bg-muted animate-pulse">
-                        <div className="h-40 bg-gray-300 dark:bg-gray-700 rounded-md" />
-                        <div className="h-4 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" />
-                        <div className="h-3 w-1/2 bg-gray-300 dark:bg-gray-700 rounded" />
-                      </div>
+              ? Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-64 rounded-lg dark:bg-gray-800 animate-pulse"
+                >
+                  <div className="space-y-2 p-4 border rounded-md bg-white dark:bg-muted animate-pulse">
+                    <div className="h-40 bg-gray-300 dark:bg-gray-700 rounded-md" />
+                    <div className="h-4 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" />
+                    <div className="h-3 w-1/2 bg-gray-300 dark:bg-gray-700 rounded" />
+                  </div>
 
+                </div>
+              ))
+              :
+              <>
+                {/* Items grid/list */}
+                {filteredItems.length === 0 ? (
+                  <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+                    <div className="mb-4">
+                      <Search className="h-12 w-12 mx-auto text-gray-400" />
                     </div>
-                ))
-                :
-                <>
-                  {/* Items grid/list */}
-                  {filteredItems.length === 0 ? (
-                      <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                        <div className="mb-4">
-                          <Search className="h-12 w-12 mx-auto text-gray-400" />
-                        </div>
-                        <h3 className="text-lg font-medium mb-2">No items found</h3>
-                        <p className="text-gray-500 mb-4">
-                          We couldn't find any items matching your criteria. Try adjusting your filters.
-                        </p>
-                        <Button className="bg-green-600" onClick={resetFilters}>Reset Filters</Button>
-                      </div>
-                  ) : viewMode === "grid" ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredItems.map((item) => (
-                            <ThemeCard
-                                key={item.id}
-                                openPreview={openPreview}
-                                item={item}
-                                addToCart={addToCart}
-                                isInCart={isItemInCart(item.id)}
-                                toggleWishlist={toggleWishlist}
-                                isInWishlist={isItemInWishlist}
-                            />
-                        ))}
-                      </div>
-                  ) : (
-                      <div className="space-y-4">
-                        {filteredItems.map((item) => (
-                            <ThemeListItem
-                                key={item.id}
-                                openPreview={openPreview}
-                                item={item}
-                                addToCart={addToCart}
-                                isInCart={isItemInCart(item.id)}
-                                toggleWishlist={toggleWishlist}
-                                isInWishlist={isItemInWishlist}
-                            />
-                        ))}
-                      </div>
-                  )}
-                </>
+                    <h3 className="text-lg font-medium mb-2">No items found</h3>
+                    <p className="text-gray-500 mb-4">
+                      We couldn't find any items matching your criteria. Try adjusting your filters.
+                    </p>
+                    <Button className="bg-green-600" onClick={resetFilters}>Reset Filters</Button>
+                  </div>
+                ) : viewMode === "grid" ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredItems.map((item) => (
+                      <ThemeCard
+                        key={item.id}
+                        openPreview={openPreview}
+                        item={item}
+                        addToCart={addToCart}
+                        isInCart={isItemInCart(item.id)}
+                        toggleWishlist={toggleWishlist}
+                        isInWishlist={isItemInWishlist}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {filteredItems.map((item) => (
+                      <ThemeListItem
+                        key={item.id}
+                        openPreview={openPreview}
+                        item={item}
+                        addToCart={addToCart}
+                        isInCart={isItemInCart(item.id)}
+                        toggleWishlist={toggleWishlist}
+                        isInWishlist={isItemInWishlist}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             }
 
 
@@ -626,28 +625,28 @@ export default function ViewAllPage() {
           {showCartPage && <CartPage cartItems={cartItems} setCartItems={setCartItems} onClose={closeCartPage} />}
 
           {
-              cartItems.length > 0 && !showCartPage &&
-              <CartConsent
-                  onCheckout={() => {
-                    viewCart()
-                  }}
-                  onViewCart={() => viewCart()}
-                  itemCount={cartItems.length}
-                  subtotal={cartItems.reduce((sum, item) => sum + item.price, 0)}
-              />
+            cartItems.length > 0 && !showCartPage &&
+            <CartConsent
+              onCheckout={() => {
+                viewCart()
+              }}
+              onViewCart={() => viewCart()}
+              itemCount={cartItems.length}
+              subtotal={cartItems.reduce((sum, item) => sum + item.price, 0)}
+            />
           }
 
 
           {/* Preview Modal */}
           {showPreview && (
-              <PreviewModal
+            <PreviewModal
 
-                  onClose={closePreview}
-                  addToCart={addToCart}
-                  isInCart={previewItem && isItemInCart(previewItem.id)}
-                  item={previewItem}
-                  cartCount={getCartCount()}
-              />
+              onClose={closePreview}
+              addToCart={addToCart}
+              isInCart={previewItem && isItemInCart(previewItem.id)}
+              item={previewItem}
+              cartCount={getCartCount()}
+            />
           )}
 
         </div>
@@ -722,9 +721,8 @@ function ThemeCard({ item, addToCart, isInCart, toggleWishlist, isInWishlist, op
           </Button>
           <Button
             size="sm"
-            className={`text-xs flex-1 flex items-center justify-center ${
-              isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-600 hover:bg-[#7aa93c] text-white"
-            }`}
+            className={`text-xs flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-600 hover:bg-green-600 text-white"
+              }`}
             onClick={() => !isInCart && addToCart(item)}
             disabled={isInCart}
           >
@@ -819,11 +817,10 @@ function ThemeListItem({ item, addToCart, isInCart, toggleWishlist, isInWishlist
                 </Button>
                 <Button
                   size="sm"
-                  className={`text-xs flex items-center justify-center ${
-                    isInCart
+                  className={`text-xs flex items-center justify-center ${isInCart
                       ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                      : "bg-green-600 hover:bg-[#7aa93c] text-white"
-                  }`}
+                      : "bg-green-600 hover:bg-green-600 text-white"
+                    }`}
                   onClick={() => !isInCart && addToCart(item)}
                   disabled={isInCart}
                 >

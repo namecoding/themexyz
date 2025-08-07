@@ -520,9 +520,9 @@ export default function Home() {
     let requestOptions = {
       method: 'GET',
       headers: {
-    'Content-Type': 'application/json',
-    // 'Authorization': 'Bearer token' if needed
-  },
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer token' if needed
+      },
     };
     setPleaseWaitWhileYourTransactionIsProcessing(true)
 
@@ -589,7 +589,7 @@ export default function Home() {
                         <div className="md:w-1/2">
                           <h1 className="text-2xl md:text-3xl font-bold mb-2">{slide.title}</h1>
                           <p className="text-gray-600 mb-4 text-sm">{slide.description}</p>
-                          <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                          <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
                             <Link href="/view-all/categories">Browse Items</Link>
                           </Button>
                         </div>
@@ -676,7 +676,7 @@ export default function Home() {
               />
             </div>
             <div className="text-center mt-8">
-              <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
+              <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
                 <Link href="/view-all/categories">View All Categories</Link>
               </Button>
             </div>
@@ -691,7 +691,7 @@ export default function Home() {
                 <h2 className="text-xl font-bold mb-2">
                   Unique themes and templates for every budget and every project
                 </h2>
-                <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white mt-4">
+                <Button asChild className="bg-green-500 hover:bg-green-600 text-white mt-4">
                   <Link href="/view-all/items">View All Items</Link>
                 </Button>
               </div>
@@ -750,7 +750,7 @@ export default function Home() {
 
             {!pleaseWaitWhileYourTransactionIsProcessing && (
               <div className="text-center mt-8">
-                <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
                   <Link href="/view-all/featured">View All Featured</Link>
                 </Button>
               </div>
@@ -771,7 +771,7 @@ export default function Home() {
                 <p className="text-gray-600 mb-4 text-sm">
                   Access thousands of creative assets with a single subscription. Download themes, plugins, and more.
                 </p>
-                <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white text-xs">
+                <Button asChild className="bg-green-500 hover:bg-green-600 text-white text-xs">
                   <Link href="#">Learn More About {metaData.name}</Link>
                 </Button>
               </div>
@@ -821,7 +821,7 @@ export default function Home() {
 
             {!pleaseWaitWhileYourTransactionIsProcessing && (
               <div className="text-center mt-8">
-                <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
                   <Link href="/view-all/new">View All New Items</Link>
                 </Button>
               </div>
@@ -866,7 +866,7 @@ export default function Home() {
 
             {!pleaseWaitWhileYourTransactionIsProcessing && (
               <div className="text-center mt-8">
-                <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
                   <Link href="/view-all/bestsellers">View All Best Sellers</Link>
                 </Button>
               </div>
@@ -903,7 +903,7 @@ export default function Home() {
                   </li>
 
                 </ul>
-                <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white text-xs">
+                <Button asChild className="bg-green-500 hover:bg-green-600 text-white text-xs">
                   <Link href="./become-author">Become an Author on {metaData.name}</Link>
                 </Button>
                 <p className="text-foreground text-sm mt-4">No setup fees • No monthly charges • Start earning immediately</p>
@@ -1145,7 +1145,7 @@ function ThemeCard({ id, openPreview, openTestDemo, addToCart, isInCart, toggleW
           </Button>
           <Button
             size="sm"
-            className={`text-xs flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-[#7aa93c] text-white"
+            className={`text-xs flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-green-600 text-white"
               }`}
             onClick={() => !isInCart && addToCart(featuredTheme)}
             disabled={isInCart}
@@ -1229,7 +1229,7 @@ function NewestThemeCard({ id, openPreview, openTestDemo, addToCart, isInCart, t
           </Button>
           <Button
             size="sm"
-            className={`text-xs h-7 px-2 flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-[#7aa93c] text-white"
+            className={`text-xs h-7 px-2 flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-green-600 text-white"
               }`}
             onClick={() => !isInCart && addToCart(newestThemes)}
             disabled={isInCart}
@@ -1314,7 +1314,7 @@ function BestSellingCard({ id, openPreview, openTestDemo, addToCart, isInCart, t
           </Button>
           <Button
             size="sm"
-            className={`text-xs h-7 px-2 flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-[#7aa93c] text-white"
+            className={`text-xs h-7 px-2 flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-green-600 text-white"
               }`}
             onClick={() => !isInCart && addToCart(bestSelling)}
             disabled={isInCart}

@@ -9,9 +9,9 @@ export type TermsOfPurchaseModalProps = {
 }
 
 export default function TermsOfPurchaseModal({
-                                                 isOpen,
-                                                 onClose,
-                                             }: TermsOfPurchaseModalProps) {
+    isOpen,
+    onClose,
+}: TermsOfPurchaseModalProps) {
     return (
         <Dialog
             open={isOpen}
@@ -82,7 +82,7 @@ export default function TermsOfPurchaseModal({
                 <div className="mt-10 text-center">
                     <button
                         onClick={onClose}
-                        className="inline-flex items-center px-6 py-2 bg-green-600 hover:bg-[#7aa93c] text-white text-sm font-medium rounded-lg"
+                        className="inline-flex items-center px-6 py-2 bg-green-600 hover:bg-green-600 text-white text-sm font-medium rounded-lg"
                     >
                         I Understand & Accept
                     </button>

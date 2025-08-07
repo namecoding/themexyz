@@ -26,7 +26,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <g fill="#00C853">
+                <g fill="#6D28D9">
                     <path className="svg-part" style={{ animationDelay: '0s' }} d="M32 4L4 16L32 28L60 16L32 4Z" />
                     <path className="svg-part" style={{ animationDelay: '0.25s' }} d="M4 24L32 36L60 24V30L32 42L4 30V24Z" />
                     <path className="svg-part" style={{ animationDelay: '0.10s' }} d="M4 38L32 50L60 38V44L32 56L4 44V38Z" />
@@ -37,7 +37,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             {text.split('').map((char, index) => (
                 <span
                     key={index}
-                    className={`inline-block text-transparent bg-gradient-to-r from-white via-[#82b440] to-white bg-clip-text ${animationClass}`}
+                    className={`inline-block text-transparent bg-gradient-to-r from-white via-[#6D28D9] to-white bg-clip-text ${animationClass}`}
                     style={{
                         animationDelay: `${index * delayStep}s`,
                         animationDuration: '1.5s',

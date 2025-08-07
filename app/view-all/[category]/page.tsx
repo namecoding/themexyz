@@ -884,7 +884,7 @@ function ThemeCard({ item, addToCart, isInCart, toggleWishlist, isInWishlist, op
           </Button>
           <Button
             size="sm"
-            className={`text-xs flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-[#7aa93c] text-white"
+            className={`text-xs flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-green-600 text-white"
               }`}
             onClick={() => !isInCart && addToCart(item)}
             disabled={isInCart}
@@ -988,7 +988,7 @@ function ThemeListItem({ item, addToCart, isInCart, toggleWishlist, isInWishlist
                   size="sm"
                   className={`text-xs flex items-center justify-center ${isInCart
                     ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                    : "bg-green-500 hover:bg-[#7aa93c] text-white"
+                    : "bg-green-500 hover:bg-green-600 text-white"
                     }`}
                   onClick={() => !isInCart && addToCart(item)}
                   disabled={isInCart}

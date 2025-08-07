@@ -6,8 +6,8 @@ import Link from "next/link"
 import { X, ShoppingCart, Heart, Monitor, Search, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import {useActiveCurrency} from "@/lib/currencyTag";
-import {defaultCurrency} from "@/lib/utils";
+import { useActiveCurrency } from "@/lib/currencyTag";
+import { defaultCurrency } from "@/lib/utils";
 
 interface WishlistPageProps {
   wishlistItems: any[]
@@ -93,7 +93,7 @@ export default function WishlistPage({
                   Clear Wishlist
                 </Button>
               )}
-              <Button asChild className="bg-[#82b440] hover:bg-[#7aa93c] text-white text-xs">
+              <Button asChild className="bg-[#82b440] hover:bg-green-600 text-white text-xs">
                 <Link href="/">Continue Shopping</Link>
               </Button>
             </div>
@@ -116,25 +116,22 @@ export default function WishlistPage({
               </div>
               <div className="flex bg-gray-100 rounded-md p-0.5">
                 <button
-                  className={`px-3 py-1.5 text-sm rounded-md ${
-                    activeFilter === "all" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-md ${activeFilter === "all" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    }`}
                   onClick={() => setActiveFilter("all")}
                 >
                   All
                 </button>
                 <button
-                  className={`px-3 py-1.5 text-sm rounded-md ${
-                    activeFilter === "themes" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-md ${activeFilter === "themes" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    }`}
                   onClick={() => setActiveFilter("themes")}
                 >
                   Themes
                 </button>
                 <button
-                  className={`px-3 py-1.5 text-sm rounded-md ${
-                    activeFilter === "plugins" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-                  }`}
+                  className={`px-3 py-1.5 text-sm rounded-md ${activeFilter === "plugins" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+                    }`}
                   onClick={() => setActiveFilter("plugins")}
                 >
                   Plugins
@@ -189,11 +186,10 @@ export default function WishlistPage({
                     </Button>
                     <Button
                       size="sm"
-                      className={`text-xs flex-1 flex items-center justify-center ${
-                        isItemInCart(item.id)
+                      className={`text-xs flex-1 flex items-center justify-center ${isItemInCart(item.id)
                           ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                          : "bg-[#82b440] hover:bg-[#7aa93c] text-white"
-                      }`}
+                          : "bg-[#82b440] hover:bg-green-600 text-white"
+                        }`}
                       onClick={() => !isItemInCart(item.id) && addToCart(item)}
                       disabled={isItemInCart(item.id)}
                     >
@@ -221,7 +217,7 @@ export default function WishlistPage({
             </div>
             <h2 className="text-xl font-semibold mb-2">Your wishlist is empty</h2>
             <p className="text-gray-500 mb-6">Save items you like to your wishlist and they'll appear here.</p>
-            <Button asChild className="bg-[#82b440] hover:bg-[#7aa93c] text-white">
+            <Button asChild className="bg-[#82b440] hover:bg-green-600 text-white">
               <Link href="/">Browse Marketplace</Link>
             </Button>
           </div>

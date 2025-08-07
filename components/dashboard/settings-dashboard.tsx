@@ -25,9 +25,9 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
     bio: user?.profile?.bio || "",
     website: user?.profile?.website || "",
     location: user?.state || "",
-    country:user?.country || "",
-    phone:user?.phone || "",
-    company:user?.company || ""
+    country: user?.country || "",
+    phone: user?.phone || "",
+    company: user?.company || ""
   })
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
@@ -391,7 +391,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                         id="name"
                         value={profileForm.name}
                         onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
                     <div>
@@ -404,7 +404,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                         disabled={!user.isSocial}
                         value={profileForm.email}
                         onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       />
                     </div>
                   </div>
@@ -422,7 +422,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                           id="username"
                           value={profileForm.username}
                           onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
                       </div>
 
@@ -435,7 +435,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                           rows={3}
                           value={profileForm.bio}
                           onChange={(e) => setProfileForm({ ...profileForm, bio: e.target.value })}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                           placeholder="Tell us a little about yourself"
                         ></textarea>
                       </div>
@@ -450,7 +450,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                             id="phone"
                             value={profileForm.phone}
                             onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="phone number"
                           />
                         </div>
@@ -463,7 +463,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                             id="company"
                             value={profileForm.company}
                             onChange={(e) => setProfileForm({ ...profileForm, company: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="company"
                           />
                         </div>
@@ -479,7 +479,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                             id="website"
                             value={profileForm.website}
                             onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="https://example.com"
                           />
                         </div>
@@ -492,7 +492,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                             id="location"
                             value={profileForm.location}
                             onChange={(e) => setProfileForm({ ...profileForm, location: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                             placeholder="City, Country"
                           />
                         </div>
@@ -502,7 +502,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                   }
 
                   <div className="pt-4">
-                    <Button type="submit" disabled className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                    <Button type="submit" disabled className="bg-green-500 hover:bg-green-600 text-white">
                       Coming soon
                     </Button>
                   </div>
@@ -613,7 +613,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <span
                                     className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full capitalize ${item.status === "successful" || item.status === "funded" || item.status === "completed" || item.status === "release" || item.status === "success"
-                                      ? "bg-green-100 text-green-800"
+                                      ? "bg-green-50 text-green-500"
                                       : item.status === "pending"
                                         ? "bg-yellow-100 text-yellow-800"
                                         : item.status === "failed" || item.status === "cancelled"
@@ -760,7 +760,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                   </div>
 
                   <div className="pt-4">
-                    <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                    <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
                       Save Preferences
                     </Button>
                   </div>
@@ -786,7 +786,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                         id="current-password"
                         value={passwordForm.currentPassword}
                         onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                         required
                       />
                     </div>
@@ -801,7 +801,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                       id="new-password"
                       value={passwordForm.newPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                     <p className="text-xs text-gray-500 mt-1">
@@ -818,13 +818,13 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                       id="confirm-password"
                       value={passwordForm.confirmPassword}
                       onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                   </div>
 
                   <div className="pt-4">
-                    <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                    <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
                       Update Password
                     </Button>
                   </div>
@@ -862,7 +862,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                       id="current-access-code"
                       value={accessCodeForm.currentCode}
                       onChange={(e) => setAccessCodeForm({ ...accessCodeForm, currentCode: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                   </div>
@@ -876,7 +876,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                       id="new-access-code"
                       value={accessCodeForm.newCode}
                       onChange={(e) => setAccessCodeForm({ ...accessCodeForm, newCode: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                     <p className="text-xs text-gray-500 mt-1">
@@ -893,13 +893,13 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
                       id="confirm-access-code"
                       value={accessCodeForm.confirmCode}
                       onChange={(e) => setAccessCodeForm({ ...accessCodeForm, confirmCode: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#82b440]"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                       required
                     />
                   </div>
 
                   <div className="pt-4">
-                    <Button type="submit" className="bg-green-500 hover:bg-[#7aa93c] text-white flex items-center gap-2">
+                    <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white flex items-center gap-2">
                       {isProcessingAccessCode && (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       )}

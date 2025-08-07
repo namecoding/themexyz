@@ -7,7 +7,7 @@ import { Download, ExternalLink, Search, Calendar, Clock, FileText, Filter } fro
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import TestDemoScreen from "@/components/test-demo-screen";
-import {SERVER_PUBLIC, isExpired, formatReadableDate} from "@/lib/utils";
+import { SERVER_PUBLIC, isExpired, formatReadableDate } from "@/lib/utils";
 import toast from 'react-hot-toast';
 import PurchasePopover from "@/components/togglePopover"
 import ProjectPlaceholder from "../projcet-placeholder"
@@ -22,7 +22,7 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
   const [sortBy, setSortBy] = useState<"recent" | "oldest" | "name" | "price">("recent")
   const [showFilters, setShowFilters] = useState(false)
   const [isLoadingPurchase, setIsLoadingPurchase] = useState(true);
-const [showMore, setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   // Mock data for purchases
   // const [allPurchases, setAllPurchases] = useState([
   //   {
@@ -98,22 +98,22 @@ const [showMore, setShowMore] = useState(false);
   // ]);
 
 
-  const x ={
+  const x = {
     title: "Shopify - eCommerce WordPress Theme",
     image: "/placeholder.svg?height=60&width=80",
     purchaseDate: "2025-04-15T00:00:00.000Z",
-    expiryDate:"2025-07-15T00:00:00.000Z",
-    price:59,
-    type:"project",
+    expiryDate: "2025-07-15T00:00:00.000Z",
+    price: 59,
+    type: "project",
     supportDuration: "2025-04-15T00:00:00.000Z",
-    supportExpiryDate:"2025-07-15T00:00:00.000Z",
-    downloads:5,
-    lastDownload:"3 days ago",
-    authorId:"6842c5705df72c7ddac0633",
-    userId:"685aea9d3abdf17351e0467b",
-    downloadInstructions:"just download and unzip",
-    loginDetails:[],
-    license:''
+    supportExpiryDate: "2025-07-15T00:00:00.000Z",
+    downloads: 5,
+    lastDownload: "3 days ago",
+    authorId: "6842c5705df72c7ddac0633",
+    userId: "685aea9d3abdf17351e0467b",
+    downloadInstructions: "just download and unzip",
+    loginDetails: [],
+    license: ''
   }
 
 
@@ -169,13 +169,13 @@ const [showMore, setShowMore] = useState(false);
   }, []);
 
 
-  const handleDownload = (purchase: any)=>{
-    if(isExpired(purchase)){
+  const handleDownload = (purchase: any) => {
+    if (isExpired(purchase)) {
       console.log("This item has expired.");
-    }else{
+    } else {
       console.log(purchase)
     }
-    
+
   }
 
 
@@ -218,7 +218,7 @@ const [showMore, setShowMore] = useState(false);
               <Filter className="h-3 w-3 mr-1" />
               Filters
             </Button>
-            <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white text-xs">
+            <Button asChild className="bg-green-500 hover:bg-green-600 text-white text-xs">
               <Link href="/">Browse More Items</Link>
             </Button>
           </div>
@@ -253,41 +253,36 @@ const [showMore, setShowMore] = useState(false);
         </div>
         <div className="mt-4 flex bg-gray-100 rounded-md p-0.5 w-fit">
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "all" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "all" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("all")}
           >
             All Items
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "project" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "project" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("project")}
           >
             Projects
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "template" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "template" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("template")}
           >
             Templates
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "design" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "design" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("design")}
           >
             UI/UX Designs
           </button>
           <button
-            className={`px-4 py-1.5 text-sm rounded-md ${
-              activeTab === "component" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
-            }`}
+            className={`px-4 py-1.5 text-sm rounded-md ${activeTab === "component" ? "bg-white shadow-sm" : "text-gray-600 hover:text-gray-900"
+              }`}
             onClick={() => setActiveTab("component")}
           >
             Components
@@ -309,110 +304,109 @@ const [showMore, setShowMore] = useState(false);
 
         {
           isLoadingPurchase ?
-              <ProjectPlaceholder i={3}/>
-              :
-              <>
-                {filteredPurchases.length > 0 ? (
-                    <div className="divide-y divide-gray-200">
-                      {filteredPurchases.map((purchase) => (
-                          <div key={purchase.id} className="p-4 hover:bg-gray-50">
-                            <div className="flex flex-col sm:flex-row sm:items-center">
-                              <div className="flex items-center flex-grow mb-4 sm:mb-0">
-                                <div className="flex-shrink-0 mr-4">
-                                  <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
-                                    <Image
-                                        src={purchase.image || "/placeholder.svg?height=60&width=80"}
-                                        alt={purchase.title}
-                                        width={80}
-                                        height={60}
-                                        className="w-full h-full object-cover"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="flex-grow min-w-0">
-                                  <h3 className="font-medium text-sm truncate">{purchase.title}</h3>
-                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
-                                    <div className="flex items-center">
-                                      <Calendar className="h-3 w-3 mr-1" />
-                                      <span>Purchased: {formatReadableDate(purchase.purchaseDate)}</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <Clock className="h-3 w-3 mr-1" />
-                                      
-                                      <span>
-                                     Download expiring date: <span className={`${isExpired(purchase) ? "text-red-500" : "text-green-500"}`}> {formatReadableDate(purchase.expiryDate)}</span>
-                                    </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex flex-wrap items-center gap-2 sm:ml-4">
-                                <Badge
-                                    variant="outline"
-                                    className={`text-xs ${
-                                        purchase.supportStatus === "active"
-                                            ? "bg-green-50 text-green-700 border-green-200"
-                                            : "bg-red-50 text-red-700 border-red-200"
-                                    }`}
-                                >
-                                  {purchase.supportStatus === "active" ? "Support Active" : "Support Expired"}
-                                </Badge>
-                                <Badge variant="outline" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize">
-                                  {purchase.type}
-                                </Badge>
-                              </div>
+            <ProjectPlaceholder i={3} />
+            :
+            <>
+              {filteredPurchases.length > 0 ? (
+                <div className="divide-y divide-gray-200">
+                  {filteredPurchases.map((purchase) => (
+                    <div key={purchase.id} className="p-4 hover:bg-gray-50">
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="flex items-center flex-grow mb-4 sm:mb-0">
+                          <div className="flex-shrink-0 mr-4">
+                            <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
+                              <Image
+                                src={purchase.image || "/placeholder.svg?height=60&width=80"}
+                                alt={purchase.title}
+                                width={80}
+                                height={60}
+                                className="w-full h-full object-cover"
+                              />
                             </div>
-
-                            <div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
-                              <div className="text-xs text-gray-500">
-                                <span className="font-medium">{purchase.downloads}</span> downloads (last download:{" "}
-                                {purchase.lastDownload})
+                          </div>
+                          <div className="flex-grow min-w-0">
+                            <h3 className="font-medium text-sm truncate">{purchase.title}</h3>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
+                              <div className="flex items-center">
+                                <Calendar className="h-3 w-3 mr-1" />
+                                <span>Purchased: {formatReadableDate(purchase.purchaseDate)}</span>
                               </div>
-                              <div className="flex flex-wrap gap-2 overflow-visible relative">
-                                
-                                {
-                                !isExpired(purchase) ? (
-                                <Button onClick={()=>handleDownload(purchase)} variant="outline" size="sm" className="text-xs">
-                                  <Download className="h-3 w-3 mr-1" />
-                                  Download
-                                </Button>
-                                )
-                                :
-                                <Button disabled variant="outline" size="sm" className="text-xs">
-                                  <Download className="h-3 w-3 mr-1" />
-                                  <span className="text-xs text-red-500">Download Expired</span>
-                                </Button>
-                                
-                              }
+                              <div className="flex items-center">
+                                <Clock className="h-3 w-3 mr-1" />
 
-
-                                <PurchasePopover purchase={purchase}/>
-                                
-                              <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Extend Support</Button>
-                                
+                                <span>
+                                  Download expiring date: <span className={`${isExpired(purchase) ? "text-red-500" : "text-green-500"}`}> {formatReadableDate(purchase.expiryDate)}</span>
+                                </span>
                               </div>
                             </div>
                           </div>
-                      ))}
-
-                    </div>
-                ) : (
-                    <div className="p-8 text-center">
-                      <div className="inline-block p-3 bg-gray-100 rounded-full mb-4">
-                        <Download className="h-6 w-6 text-gray-400" />
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 sm:ml-4">
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${purchase.supportStatus === "active"
+                              ? "bg-green-50 text-green-500 border-green-500"
+                              : "bg-red-50 text-red-700 border-red-200"
+                              }`}
+                          >
+                            {purchase.supportStatus === "active" ? "Support Active" : "Support Expired"}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize">
+                            {purchase.type}
+                          </Badge>
+                        </div>
                       </div>
-                      <h3 className="text-lg font-medium mb-2">No purchases found</h3>
-                      <p className="text-gray-500 mb-4">
-                        {searchQuery
-                            ? "No items match your search criteria."
-                            : "You haven't made any purchases in this category yet."}
-                      </p>
-                      <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
-                        <Link href="/">Browse Marketplace</Link>
-                      </Button>
+
+                      <div className="mt-4 flex flex-wrap gap-2 justify-between items-center">
+                        <div className="text-xs text-gray-500">
+                          <span className="font-medium">{purchase.downloads}</span> downloads (last download:{" "}
+                          {purchase.lastDownload})
+                        </div>
+                        <div className="flex flex-wrap gap-2 overflow-visible relative">
+
+                          {
+                            !isExpired(purchase) ? (
+                              <Button onClick={() => handleDownload(purchase)} variant="outline" size="sm" className="text-xs">
+                                <Download className="h-3 w-3 mr-1" />
+                                Download
+                              </Button>
+                            )
+                              :
+                              <Button disabled variant="outline" size="sm" className="text-xs">
+                                <Download className="h-3 w-3 mr-1" />
+                                <span className="text-xs text-red-500">Download Expired</span>
+                              </Button>
+
+                          }
+
+
+                          <PurchasePopover purchase={purchase} />
+
+                          <Button className="text-xs bg-green-500 hover:bg-green-600 text-white">Extend Support</Button>
+
+                        </div>
+                      </div>
                     </div>
-                )}
-              </>
+                  ))}
+
+                </div>
+              ) : (
+                <div className="p-8 text-center">
+                  <div className="inline-block p-3 bg-gray-100 rounded-full mb-4">
+                    <Download className="h-6 w-6 text-gray-400" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">No purchases found</h3>
+                  <p className="text-gray-500 mb-4">
+                    {searchQuery
+                      ? "No items match your search criteria."
+                      : "You haven't made any purchases in this category yet."}
+                  </p>
+                  <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
+                    <Link href="/">Browse Marketplace</Link>
+                  </Button>
+                </div>
+              )}
+            </>
         }
 
 

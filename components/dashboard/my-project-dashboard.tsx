@@ -289,15 +289,15 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
                         <div className="flex flex-wrap items-center gap-2 sm:ml-4">
                           <Badge
                             variant="outline"
-                            className={`text-xs ${ theme?.isPublic  && theme?.isPublished
+                            className={`text-xs ${theme?.isPublic && theme?.isPublished
                               ? "bg-green-50 text-green-700 border-green-200"
                               : "bg-red-50 text-red-700 border-red-200"
                               }`}
                           >
-                        
-                           {
-                            theme?.isPublic  && theme?.isPublished ? "Acive" : "Inactive"
-                           }
+
+                            {
+                              theme?.isPublic && theme?.isPublished ? "Acive" : "Inactive"
+                            }
                           </Badge>
 
                           <Badge variant="outline" className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize">
@@ -316,66 +316,66 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
                             Edit
                           </Button>
 
-                          
-                              <Button onClick={() => setToggleCondition(theme.id)} variant="outline" size="sm" className={`text-xs ${theme?.isPublic  && theme?.isPublished? "text-red-500" : "text-green-500"} `}>
+
+                          <Button onClick={() => setToggleCondition(theme.id)} variant="outline" size="sm" className={`text-xs ${theme?.isPublic && theme?.isPublished ? "text-red-500" : "text-green-500"} `}>
                             <ExternalLink className="h-3 w-3 mr-1" />
-                             {
-                              theme?.isPublic  && theme?.isPublished? 
-                              "Unpublish"
-                              :
-                              "Publish"
+                            {
+                              theme?.isPublic && theme?.isPublished ?
+                                "Unpublish"
+                                :
+                                "Publish"
                             }
                           </Button>
-                          
+
                           {
-                            toggleCondition === theme?.id && 
-                            
+                            toggleCondition === theme?.id &&
+
                             <div className="fixed z-100 max-w-xs w-full bg-white border border-gray-200 rounded-lg shadow-lg animate-slide-in">
                               <div className="flex justify-between items-center px-4 py-2 border-b bg-gray-50 rounded-t-lg">
-                                  <span className="text-sm font-medium">
-                                    {theme.title}
-                                  </span>
-                                
-                                </div>
-                        
-                                <div className="p-4 text-sm text-gray-700">
+                                <span className="text-sm font-medium">
+                                  {theme.title}
+                                </span>
 
-                                  <p> Are you sure, you want to {
-                                      theme?.isPublic  && theme?.isPublished? 
-                                      "Unpublish"
-                                      :
-                                      "Publish"
-                                    } this project
-                                  </p>
-                                  
-                                  <div className="flex flex-wrap gap-2 pt-3">
-                                    <Button onClick={() => setToggleCondition(null)} variant="outline" size="sm" className="text-xs">
-                                  <X className="h-4 w-4" />
-                                  Close
-                                </Button>
+                              </div>
 
-                                <Button onClick={() => handlePublish(theme.id)} variant="outline" size="sm" className={`${!theme?.isPublic  && !theme?.isPublished? "text-green-500 hover:text-green-600" : "text-red-500 hover:text-red-600"} text-xs`}>
-                                  <CheckCircle className="h-3 w-3 mr-1" />
-                                  {
-                                    !theme?.isPublic  && !theme?.isPublished? 
-                                    "Publish"
-                                    :
+                              <div className="p-4 text-sm text-gray-700">
+
+                                <p> Are you sure, you want to {
+                                  theme?.isPublic && theme?.isPublished ?
                                     "Unpublish"
-                                  }
-                                </Button>
-                                  </div>
+                                    :
+                                    "Publish"
+                                } this project
+                                </p>
+
+                                <div className="flex flex-wrap gap-2 pt-3">
+                                  <Button onClick={() => setToggleCondition(null)} variant="outline" size="sm" className="text-xs">
+                                    <X className="h-4 w-4" />
+                                    Close
+                                  </Button>
+
+                                  <Button onClick={() => handlePublish(theme.id)} variant="outline" size="sm" className={`${!theme?.isPublic && !theme?.isPublished ? "text-green-500 hover:text-green-600" : "text-red-500 hover:text-red-600"} text-xs`}>
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    {
+                                      !theme?.isPublic && !theme?.isPublished ?
+                                        "Publish"
+                                        :
+                                        "Unpublish"
+                                    }
+                                  </Button>
                                 </div>
                               </div>
+                            </div>
                           }
-                          
 
 
-                          
+
+
                           <Button onClick={() => handleView(theme)} variant="outline" size="sm" className="text-xs">
                             <FileText className="h-3 w-3 mr-1" />
                             View
                           </Button>
-                          <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Boost AD</Button>
+                          <Button className="text-xs bg-green-500 hover:bg-green-600 text-white">Boost AD</Button>
                         </div>
                       </div>
                     </div>
@@ -396,7 +396,7 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
                   <Button onClick={() => {
                     user.authorityToSell ?
                       setOpenWizard(true) : setShowUnderReview(true)
-                  }} className="bg-green-500 hover:bg-[#7aa93c] text-white">
+                  }} className="bg-green-500 hover:bg-green-600 text-white">
                     Sell Product
                   </Button>
                 </div>

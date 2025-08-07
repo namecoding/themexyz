@@ -45,7 +45,7 @@ export default function ConfirmationModal({
             </Button>
             <Button
               className={
-                isDestructive ? "bg-red-600 hover:bg-red-700 text-white" : "bg-[#82b440] hover:bg-[#7aa93c] text-white"
+                isDestructive ? "bg-red-600 hover:bg-red-700 text-white" : "bg-[#82b440] hover:bg-green-600 text-white"
               }
               onClick={onConfirm}
             >

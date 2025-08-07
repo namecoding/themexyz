@@ -1,26 +1,26 @@
 'use client'
 import React from "react";
 import Link from "next/link";
-import {defaultCurrency, metaData} from "@/lib/utils";
+import { defaultCurrency, metaData } from "@/lib/utils";
 import Trademarks from "@/components/trademarks";
-import {useActiveCurrency} from "@/lib/currencyTag";
+import { useActiveCurrency } from "@/lib/currencyTag";
 
 interface FooterProps {
 
 }
-const SiteFooter: React.FC<FooterProps> =({})=>{
-    const {currency, symbol, country, countryCode, ip} = useActiveCurrency(defaultCurrency)
-    return(
-        <footer className="bg-[#262626] text-white py-10 px-4 mt-auto">
+const SiteFooter: React.FC<FooterProps> = ({ }) => {
+    const { currency, symbol, country, countryCode, ip } = useActiveCurrency(defaultCurrency)
+    return (
+        <footer className="bg-[#000] text-white py-10 px-4 mt-auto">
             <div className="container mx-auto max-w-5xl">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
                     <div>
                         <Link href="/" className="font-bold text-3xl flex items-center gap-0.5 mb-4">
                             <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g fill="#00C853">
-                                    <path d="M32 4L4 16L32 28L60 16L32 4Z"/>
-                                    <path d="M4 24L32 36L60 24V30L32 42L4 30V24Z"/>
-                                    <path d="M4 38L32 50L60 38V44L32 56L4 44V38Z"/>
+                                <g className="fill-green-500">
+                                    <path d="M32 4L4 16L32 28L60 16L32 4Z" />
+                                    <path d="M4 24L32 36L60 24V30L32 42L4 30V24Z" />
+                                    <path d="M4 38L32 50L60 38V44L32 56L4 44V38Z" />
                                 </g>
                             </svg>
                             <h3 className="font-bold text-sm gap-1">{metaData.name} Market</h3>
@@ -222,7 +222,7 @@ const SiteFooter: React.FC<FooterProps> =({})=>{
                     Your local currency is <span className="text-white font-medium">{currency}</span>
                 </div>
 
-                <Trademarks/>
+                <Trademarks />
             </div>
         </footer>
     )

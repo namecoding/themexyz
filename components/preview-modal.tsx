@@ -225,14 +225,14 @@ export default function PreviewModal({
     <div className="fixed inset-0 bg-black bg-opacity-75 z-50 overflow-y-auto">
       <div className="min-h-screen flex flex-col">
         {/* Header */}
-        <div className="bg-[#262626] text-white py-3 px-4">
+        <div className="bg-[#000] text-white py-3 px-4">
           <div className="container mx-auto max-w-6xl flex items-center justify-between">
             <Leaf small="s" />
             <div className="flex items-center space-x-4">
               <Link href="#" className="text-white hover:text-gray-300 relative">
                 <ShoppingCart size={20} />
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[#82b440] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}
@@ -270,16 +270,16 @@ export default function PreviewModal({
                   <span>{item.marketData?.sales || 0} sales</span>
                 </div>
 
-                <div className="mb-6 rounded-md overflow-hidden border border-gray-200 relative group max-w-2xl mx-auto">
+                <div className="w-[600px] h-[400px] mx-auto border rounded-md overflow-hidden relative group">
                   <Image
                     src={item.galleryImages?.[0] || "/placeholder.svg"}
                     alt={item.title}
                     width={600}
-                    height={300}
-                    className="w-full h-auto"
+                    height={200}
+                    className="w-full h-full object-cover"
                   />
-                  {
-                    item.sellType && item.sellType !== 'complete projects' &&
+
+                  {item.sellType && item.sellType !== 'complete projects' && (
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <Button
                         variant="outline"
@@ -291,9 +291,9 @@ export default function PreviewModal({
                         Test Demo
                       </Button>
                     </div>
-                  }
-
+                  )}
                 </div>
+
 
                 {
                   item.sellType && item.sellType !== 'complete projects' &&
@@ -317,8 +317,8 @@ export default function PreviewModal({
                         key={section.key}
                         onClick={() => setActiveTab(section.key)}
                         className={`py-4 px-1 text-sm font-medium border-b-2 ${activeTab === section.key
-                            ? "border-[#82b440] text-green-600"
-                            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                          ? "border-[#82b440] text-green-600"
+                          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                           }`}
                       >
                         {section.label}
@@ -405,8 +405,8 @@ export default function PreviewModal({
                   </span>
                   <Button
                     className={`w-full mb-3 py-6 ${isInCart
-                        ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                        : "bg-green-500 hover:bg-[#7aa93c] text-white"
+                      ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                      : "bg-green-500 hover:bg-green-600 text-white"
                       }`}
                     onClick={() => {
                       if (!isInCart) addToCart(item)

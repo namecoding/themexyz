@@ -181,223 +181,223 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
     const [tempHelpFeeNGN, setTempHelpFeeNGN] = useState<number | "">(0)
     const [tempLoginDetails, setTempLoginDetails] = useState({ username: "", password: "", description: "" })
     const [loginUrlType, setLoginUrlType] = useState<"demo" | "admin">("demo")
-    
+
     //mic recording
-    const [interimTranscript, setInterimTranscript] = useState(""); 
+    const [interimTranscript, setInterimTranscript] = useState("");
     const [recording, setRecording] = useState(false);
     const recognitionRef = useRef(null);
 
-    const [interimTranscript2, setInterimTranscript2] = useState(""); 
+    const [interimTranscript2, setInterimTranscript2] = useState("");
     const [recording2, setRecording2] = useState(false);
     const recognitionRef2 = useRef(null);
 
 
     //update when done
     const handleMicClick_2 = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-        alert("Your browser does not support speech recognition.");
-        return;
-    }
-
-    // Stop recording if already active
-    if (recording) {
-        recognitionRef.current?.stop();
-        setRecording(false);
-        return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
-
-    let lastTranscript = ""; // Prevent repeated appending
-
-    recognition.onresult = (event) => {
-        let finalTranscript = "";
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            const result = event.results[i];
-            if (result.isFinal) {
-                finalTranscript += result[0].transcript;
-            }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support speech recognition.");
+            return;
         }
 
-        // Clean and append only if new
-        finalTranscript = finalTranscript.trim();
-        if (
-            finalTranscript &&
-            finalTranscript !== lastTranscript
-        ) {
-            lastTranscript = finalTranscript;
-
-            // Add punctuation if missing
-            if (!/[.!?]$/.test(finalTranscript)) {
-                finalTranscript += ".";
-            }
-
-            setFormData((prev) => ({
-                ...prev,
-                overview: prev.overview + " " + finalTranscript,
-            }));
-        }
-    };
-
-    recognition.onerror = (event) => {
-        console.error("Speech recognition error:", event.error);
-        setRecording(false);
-    };
-
-    recognition.onend = () => {
-        setRecording(false);
-    };
-
-    recognition.start();
-    setRecording(true);
-};
-
-//update in real-time
-const handleMicClick = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-        alert("Your browser does not support speech recognition.");
-        return;
-    }
-
-    if (recording) {
-        recognitionRef.current?.stop();
-        setRecording(false);
-        return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
-
-    let finalContent = ""; // Final transcript cache
-
-    recognition.onresult = (event) => {
-        let interim = "";
-        let newlyFinal = "";
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            const result = event.results[i];
-            const transcript = result[0].transcript;
-
-            if (result.isFinal) {
-                newlyFinal += transcript;
-            } else {
-                interim += transcript;
-            }
+        // Stop recording if already active
+        if (recording) {
+            recognitionRef.current?.stop();
+            setRecording(false);
+            return;
         }
 
-        // Update interim view
-        setInterimTranscript(interim);
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
 
-        // If new final content, add it to the formData
-        if (newlyFinal) {
-            finalContent += newlyFinal;
+        let lastTranscript = ""; // Prevent repeated appending
 
-            let cleaned = newlyFinal.trim();
-            if (!/[.!?]$/.test(cleaned)) {
-                cleaned += ".";
+        recognition.onresult = (event) => {
+            let finalTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                    finalTranscript += result[0].transcript;
+                }
             }
 
-            setFormData((prev) => ({
-                ...prev,
-                overview: prev.overview + " " + cleaned,
-            }));
-        }
-    };
+            // Clean and append only if new
+            finalTranscript = finalTranscript.trim();
+            if (
+                finalTranscript &&
+                finalTranscript !== lastTranscript
+            ) {
+                lastTranscript = finalTranscript;
 
-    recognition.onerror = (event) => {
-        console.log("Speech recognition error:", event.error);
-        setRecording(false);
-        setInterimTranscript("");
-    };
+                // Add punctuation if missing
+                if (!/[.!?]$/.test(finalTranscript)) {
+                    finalTranscript += ".";
+                }
 
-    recognition.onend = () => {
-        setRecording(false);
-        setInterimTranscript("");
-    };
-
-    recognition.start();
-    setRecording(true);
-};
-
-const handleMicClick2 = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-        alert("Your browser does not support speech recognition.");
-        return;
-    }
-
-    if (recording) {
-        recognitionRef2.current?.stop();
-        setRecording2(false);
-        return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognitionRef2.current = recognition;
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
-
-    let finalContent = ""; // Final transcript cache
-
-    recognition.onresult = (event) => {
-        let interim = "";
-        let newlyFinal = "";
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            const result = event.results[i];
-            const transcript = result[0].transcript;
-
-            if (result.isFinal) {
-                newlyFinal += transcript;
-            } else {
-                interim += transcript;
+                setFormData((prev) => ({
+                    ...prev,
+                    overview: prev.overview + " " + finalTranscript,
+                }));
             }
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            setRecording(false);
+        };
+
+        recognition.onend = () => {
+            setRecording(false);
+        };
+
+        recognition.start();
+        setRecording(true);
+    };
+
+    //update in real-time
+    const handleMicClick = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support speech recognition.");
+            return;
         }
 
-        // Update interim view
-        setInterimTranscript2(interim);
+        if (recording) {
+            recognitionRef.current?.stop();
+            setRecording(false);
+            return;
+        }
 
-        // If new final content, add it to the formData
-        if (newlyFinal) {
-            finalContent += newlyFinal;
+        const recognition = new SpeechRecognition();
+        recognitionRef.current = recognition;
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
 
-            let cleaned = newlyFinal.trim();
-            if (!/[.!?]$/.test(cleaned)) {
-                cleaned += ".";
+        let finalContent = ""; // Final transcript cache
+
+        recognition.onresult = (event) => {
+            let interim = "";
+            let newlyFinal = "";
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const result = event.results[i];
+                const transcript = result[0].transcript;
+
+                if (result.isFinal) {
+                    newlyFinal += transcript;
+                } else {
+                    interim += transcript;
+                }
             }
 
-            setFormData((prev) => ({
-                ...prev,
-                downloadInstructions: prev.downloadInstructions + " " + cleaned,
-            }));
+            // Update interim view
+            setInterimTranscript(interim);
+
+            // If new final content, add it to the formData
+            if (newlyFinal) {
+                finalContent += newlyFinal;
+
+                let cleaned = newlyFinal.trim();
+                if (!/[.!?]$/.test(cleaned)) {
+                    cleaned += ".";
+                }
+
+                setFormData((prev) => ({
+                    ...prev,
+                    overview: prev.overview + " " + cleaned,
+                }));
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.log("Speech recognition error:", event.error);
+            setRecording(false);
+            setInterimTranscript("");
+        };
+
+        recognition.onend = () => {
+            setRecording(false);
+            setInterimTranscript("");
+        };
+
+        recognition.start();
+        setRecording(true);
+    };
+
+    const handleMicClick2 = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support speech recognition.");
+            return;
         }
-    };
 
-    recognition.onerror = (event) => {
-        console.log("Speech recognition error:", event.error);
-        setRecording2(false);
-        setInterimTranscript2("");
-    };
+        if (recording) {
+            recognitionRef2.current?.stop();
+            setRecording2(false);
+            return;
+        }
 
-    recognition.onend = () => {
-        setRecording2(false);
-        setInterimTranscript2("");
-    };
+        const recognition = new SpeechRecognition();
+        recognitionRef2.current = recognition;
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
 
-    recognition.start();
-    setRecording2(true);
-};
+        let finalContent = ""; // Final transcript cache
+
+        recognition.onresult = (event) => {
+            let interim = "";
+            let newlyFinal = "";
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const result = event.results[i];
+                const transcript = result[0].transcript;
+
+                if (result.isFinal) {
+                    newlyFinal += transcript;
+                } else {
+                    interim += transcript;
+                }
+            }
+
+            // Update interim view
+            setInterimTranscript2(interim);
+
+            // If new final content, add it to the formData
+            if (newlyFinal) {
+                finalContent += newlyFinal;
+
+                let cleaned = newlyFinal.trim();
+                if (!/[.!?]$/.test(cleaned)) {
+                    cleaned += ".";
+                }
+
+                setFormData((prev) => ({
+                    ...prev,
+                    downloadInstructions: prev.downloadInstructions + " " + cleaned,
+                }));
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.log("Speech recognition error:", event.error);
+            setRecording2(false);
+            setInterimTranscript2("");
+        };
+
+        recognition.onend = () => {
+            setRecording2(false);
+            setInterimTranscript2("");
+        };
+
+        recognition.start();
+        setRecording2(true);
+    };
 
 
 
@@ -889,7 +889,7 @@ const handleMicClick2 = () => {
                                     key={card.key}
                                     onClick={() => handleChange("sellType", card.key as FormData["sellType"])}
                                     className={`border rounded-lg p-4 text-left hover:border-green-500
-                        ${formData.sellType === card.key ? "border-green-600 ring-2 ring-green-300" : "border-gray-300"}`}
+                        ${formData.sellType === card.key ? "ring-2 ring-green-500" : "border-gray-300"}`}
                                 >
                                     <h3 className="font-semibold mb-1">{card.label}</h3>
                                     <p className="text-xs text-gray-500">{card.desc}</p>
@@ -899,7 +899,7 @@ const handleMicClick2 = () => {
                         {errors.sellType && <p className="text-red-500 text-xs mt-1">{errors.sellType}</p>}
 
                         <div className="flex justify-end pt-4">
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-6">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-6">
                                 Continue
                             </Button>
                         </div>
@@ -960,7 +960,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -991,7 +991,7 @@ const handleMicClick2 = () => {
                                         multiple
                                         onChange={handleFileUpload}
                                         disabled={formData.uploadedImages.length >= 5}
-                                        className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-500 file:text-white hover:file:bg-green-700 file:cursor-pointer cursor-pointer disabled:opacity-50"
+                                        className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-green-500 file:text-white hover:file:bg-green-600 file:cursor-pointer cursor-pointer disabled:opacity-50"
                                     />
                                 </div>
                                 {errors.uploadedImages && <p className="text-red-500 text-xs mt-1">{errors.uploadedImages}</p>}
@@ -1014,7 +1014,7 @@ const handleMicClick2 = () => {
                                                 className="w-full h-48 object-cover rounded-lg"
                                             />
                                             <div className="absolute top-2 right-2 flex gap-2">
-                                                <label className="bg-green-600 text-white rounded-full p-2 hover:bg-green-700 cursor-pointer">
+                                                <label className="bg-green-600 text-white rounded-full p-2 hover:bg-green-600 cursor-pointer">
                                                     <input type="file" accept="image/*" onChange={(e) => replaceImage(0, e)} className="hidden" />
                                                     <RefreshCw className="h-3 w-3" />
                                                 </label>
@@ -1042,7 +1042,7 @@ const handleMicClick2 = () => {
                                                             className="w-full h-16 object-cover rounded"
                                                         />
                                                         <div className="absolute -top-1 -right-1 flex gap-1">
-                                                            <label className="bg-green-600 text-white rounded-full p-1 cursor-pointer hover:bg-green-700">
+                                                            <label className="bg-green-600 text-white rounded-full p-1 cursor-pointer hover:bg-green-600">
                                                                 <input
                                                                     type="file"
                                                                     accept="image/*"
@@ -1077,7 +1077,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1141,7 +1141,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1255,7 +1255,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1279,7 +1279,7 @@ const handleMicClick2 = () => {
                                 >
                                     Back
                                 </Button>
-                                <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                                <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                     Continue
                                 </Button>
                             </div>
@@ -1453,7 +1453,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1502,8 +1502,8 @@ const handleMicClick2 = () => {
                                 /> */}
 
                                 {/* Wrapper for positioning */}
-                            <div className="relative">
-                                {/* <Textarea
+                                <div className="relative">
+                                    {/* <Textarea
                                     id="downloadInstructions"
                                     placeholder="Describe your product, its key benefits, unique features, and what problems it solves..."
                                     value={formData.downloadInstructions}
@@ -1511,36 +1511,36 @@ const handleMicClick2 = () => {
                                     className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500 pr-10" // extra padding for icon
                                 /> */}
 
-                                <Textarea
-                                    id="downloadInstructions"
-                                    placeholder="Describe your product..."
-                                    value={`${formData.downloadInstructions}${interimTranscript2 ? ' ' + interimTranscript2 : ''}`}
-                                    onChange={(e) => handleChange("downloadInstructions", e.target.value)}
-                                    className="..."
+                                    <Textarea
+                                        id="downloadInstructions"
+                                        placeholder="Describe your product..."
+                                        value={`${formData.downloadInstructions}${interimTranscript2 ? ' ' + interimTranscript2 : ''}`}
+                                        onChange={(e) => handleChange("downloadInstructions", e.target.value)}
+                                        className="..."
                                     />
 
 
-                                {/* Mic icon button */}
-                                <button
-                                    type="button"
-                                    onClick={handleMicClick2} // You can define this function
-                                    className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
-                                    title="Record voice"
-                                >
+                                    {/* Mic icon button */}
+                                    <button
+                                        type="button"
+                                        onClick={handleMicClick2} // You can define this function
+                                        className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
+                                        title="Record voice"
+                                    >
 
-                                    {/* Recording indicator */}
-                                    {recording2 && (
-                                    <div className="absolute bottom-0 right-10 flex items-center space-x-1 animate-pulse text-red-600 text-xs">
-                                        <span className="w-2 h-2 bg-red-600 rounded-full" />
-                                        <span>Recording…</span>
-                                    </div>
-                                    )}
+                                        {/* Recording indicator */}
+                                        {recording2 && (
+                                            <div className="absolute bottom-0 right-10 flex items-center space-x-1 animate-pulse text-red-600 text-xs">
+                                                <span className="w-2 h-2 bg-red-600 rounded-full" />
+                                                <span>Recording…</span>
+                                            </div>
+                                        )}
 
-                                    {
-                                        !recording2 ? <Mic className="h-4 w-4 text-gray-600" /> : <StopCircle className="h-4 w-4 text-red-600" />
-                                    }
-                                </button>
-                            </div>
+                                        {
+                                            !recording2 ? <Mic className="h-4 w-4 text-gray-600" /> : <StopCircle className="h-4 w-4 text-red-600" />
+                                        }
+                                    </button>
+                                </div>
 
 
                                 {errors.downloadInstructions && (
@@ -1559,7 +1559,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1704,7 +1704,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1848,7 +1848,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -1917,17 +1917,17 @@ const handleMicClick2 = () => {
                                 </Select>
                             </div>
 
-                        <div>
-                            <Label htmlFor="overview" className="text-sm text-gray-700">
-                                Product Overview
-                            </Label>
-                            <p className="text-xs text-gray-500 mb-2">
-                                Write a detailed description of your product, its benefits, and what makes it unique
-                            </p>
+                            <div>
+                                <Label htmlFor="overview" className="text-sm text-gray-700">
+                                    Product Overview
+                                </Label>
+                                <p className="text-xs text-gray-500 mb-2">
+                                    Write a detailed description of your product, its benefits, and what makes it unique
+                                </p>
 
-                            {/* Wrapper for positioning */}
-                            <div className="relative">
-                                {/* <Textarea
+                                {/* Wrapper for positioning */}
+                                <div className="relative">
+                                    {/* <Textarea
                                     id="overview"
                                     placeholder="Describe your product, its key benefits, unique features, and what problems it solves..."
                                     value={formData.overview}
@@ -1935,39 +1935,39 @@ const handleMicClick2 = () => {
                                     className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500 pr-10" // extra padding for icon
                                 /> */}
 
-                                <Textarea
-                                    id="overview"
-                                    placeholder="Describe your product..."
-                                    value={`${formData.overview}${interimTranscript ? ' ' + interimTranscript : ''}`}
-                                    onChange={(e) => handleChange("overview", e.target.value)}
-                                    className="..."
+                                    <Textarea
+                                        id="overview"
+                                        placeholder="Describe your product..."
+                                        value={`${formData.overview}${interimTranscript ? ' ' + interimTranscript : ''}`}
+                                        onChange={(e) => handleChange("overview", e.target.value)}
+                                        className="..."
                                     />
 
 
-                                {/* Mic icon button */}
-                                <button
-                                    type="button"
-                                    onClick={handleMicClick} // You can define this function
-                                    className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
-                                    title="Record voice"
-                                >
+                                    {/* Mic icon button */}
+                                    <button
+                                        type="button"
+                                        onClick={handleMicClick} // You can define this function
+                                        className="absolute bottom-2 right-2 bg-white p-1.5 rounded-full shadow-md hover:bg-gray-100 focus:outline-none"
+                                        title="Record voice"
+                                    >
 
-                                    {/* Recording indicator */}
-                                    {recording && (
-                                    <div className="absolute bottom-0 right-10 flex items-center space-x-1 animate-pulse text-red-600 text-xs">
-                                        <span className="w-2 h-2 bg-red-600 rounded-full" />
-                                        <span>Recording…</span>
-                                    </div>
-                                    )}
+                                        {/* Recording indicator */}
+                                        {recording && (
+                                            <div className="absolute bottom-0 right-10 flex items-center space-x-1 animate-pulse text-red-600 text-xs">
+                                                <span className="w-2 h-2 bg-red-600 rounded-full" />
+                                                <span>Recording…</span>
+                                            </div>
+                                        )}
 
-                                    {
-                                        !recording ? <Mic className="h-4 w-4 text-gray-600" /> : <StopCircle className="h-4 w-4 text-red-600" />
-                                    }
-                                </button>
+                                        {
+                                            !recording ? <Mic className="h-4 w-4 text-gray-600" /> : <StopCircle className="h-4 w-4 text-red-600" />
+                                        }
+                                    </button>
+                                </div>
+
+                                {errors.overview && <p className="text-red-500 text-xs mt-1">{errors.overview}</p>}
                             </div>
-
-                            {errors.overview && <p className="text-red-500 text-xs mt-1">{errors.overview}</p>}
-                        </div>
 
 
                             {/* Is Published */}
@@ -2011,7 +2011,7 @@ const handleMicClick2 = () => {
                             >
                                 Back
                             </Button>
-                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-700 text-white px-4 sm:px-8">
+                            <Button onClick={nextStep} className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8">
                                 Continue
                             </Button>
                         </div>
@@ -2132,7 +2132,7 @@ const handleMicClick2 = () => {
                             </Button>
                             <Button
                                 onClick={handleSubmit}
-                                className="bg-green-600 hover:bg-green-700 text-white px-6"
+                                className="bg-green-600 hover:bg-green-600 text-white px-6"
                             >
                                 {formData.isPublished ? 'Submit' : 'Save'} Listing
                             </Button>
@@ -2169,21 +2169,21 @@ const handleMicClick2 = () => {
                     </VisuallyHidden>
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
-                    <div className="flex items-center gap-4">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={handleCloseClick}
-                            className="text-gray-600 hover:text-gray-900"
-                        >
-                            <X className="h-6 w-6 text-red-500" />
-                        </Button>
-                        <h2 className="text-lg font-semibold text-gray-900">Create a product</h2>
+                        <div className="flex items-center gap-4">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleCloseClick}
+                                className="text-gray-600 hover:text-gray-900"
+                            >
+                                <X className="h-6 w-6 text-red-500" />
+                            </Button>
+                            <h2 className="text-lg font-semibold text-gray-900">Create a product</h2>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                            Step {step} of {totalSteps}
+                        </div>
                     </div>
-                    <div className="text-sm text-gray-600">
-                        Step {step} of {totalSteps}
-                    </div>
-                </div>
 
 
                     {/* Progress Bar */}
@@ -2328,7 +2328,7 @@ const handleMicClick2 = () => {
                                             : !(user.phone || currentContactValue.trim())
                                     )
                                 }
-                                className="bg-green-600 hover:bg-green-700 text-white"
+                                className="bg-green-600 hover:bg-green-600 text-white"
                             >
                                 Add Contact Method
                             </Button>
@@ -2451,7 +2451,7 @@ const handleMicClick2 = () => {
                             <Button
                                 onClick={addHelpDuration}
                                 disabled={formData.helpDurationSettings.some((s) => s.type === currentHelpType)}
-                                className="bg-green-600 hover:bg-green-700 text-white"
+                                className="bg-green-600 hover:bg-green-600 text-white"
                             >
                                 Add Help Setting
                             </Button>
@@ -2498,7 +2498,7 @@ const handleMicClick2 = () => {
                             <Button
                                 onClick={addLoginDetail}
                                 disabled={!tempLoginDetails.username || !tempLoginDetails.password}
-                                className="bg-green-600 hover:bg-green-700 text-white"
+                                className="bg-green-600 hover:bg-green-600 text-white"
                             >
                                 Add Login Details
                             </Button>

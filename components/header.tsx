@@ -76,7 +76,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
 
 
     return (
-        <header className="bg-[#333333] text-white py-3 px-4">
+        <header className="bg-[#000] text-white py-3 px-4">
             <div className="container mx-auto flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                     <Leaf small='s' />
@@ -184,7 +184,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
                     >
                         <ShoppingCart className="h-5 w-5" />
                         {cartItems.length > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                                 {getCartCount()}
                             </span>
                         )}
@@ -197,7 +197,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
                         <Heart className="h-4 w-4 mr-1" />
                         <span>Wishlist</span>
                         {wishlistItems.length > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                                 {getWishlistCount()}
                             </span>
                         )}
@@ -206,7 +206,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
                     {!isLoggedIn && (
                         <Button
                             asChild
-                            className="bg-green-600 hover:bg-[#7aa93c] text-white text-xs rounded hidden md:flex"
+                            className="bg-green-500 hover:bg-green-600 text-white text-xs rounded hidden md:flex"
                             onClick={(e) => {
                                 e.preventDefault()
                                 openSignupModal()
@@ -276,7 +276,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({
                         {!isLoggedIn && (
                             <Button
                                 asChild
-                                className="bg-green-500 hover:bg-[#7aa93c] text-white text-xs rounded w-full"
+                                className="bg-green-500 hover:bg-green-600 text-white text-xs rounded w-full"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     openSignupModal()

@@ -757,7 +757,7 @@ export default function BecomeAuthorLanding() {
                 {heroSlides[currentSlide].subtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-green-500 hover:bg-green-700 text-white">
+                <Button asChild size="lg" className="bg-green-500 hover:bg-green-600 text-white">
                   <Link href={href} onClick={handleClick}>
                     Start Earning Today
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -787,7 +787,7 @@ export default function BecomeAuthorLanding() {
                 cx="18"
                 cy="18"
                 r="16"
-                stroke="#16a34a"
+                className="stroke-green-500"
                 strokeWidth="3"
                 fill="none"
                 strokeDasharray="100"
@@ -860,8 +860,8 @@ export default function BecomeAuthorLanding() {
               return (
                 <div key={index} className="text-center">
                   <div className="relative mb-6">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Icon className="h-8 w-8 text-green-600" />
+                    <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Icon className="h-8 w-8 text-green-500" />
                     </div>
                     <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
                       {step.step}
@@ -1011,7 +1011,7 @@ export default function BecomeAuthorLanding() {
                   </div>
                 </div>
                 <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                  <p className="text-sm text-green-800">
+                  <p className="text-sm text-green-500">
                     <strong>Pro Tip:</strong> Authors who upload 10+ high-quality products typically earn 3x more than
                     those with fewer products.
                   </p>
@@ -1044,7 +1044,7 @@ export default function BecomeAuthorLanding() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-black to-green-300">
+      <section className="py-20 bg-gradient-to-r from-black to-green-500">
         <div className="container mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">Ready to Start Your Author Journey?</h2>
           <p className="text-xl text-green-100 mb-8 max-w-2xl mx-auto">

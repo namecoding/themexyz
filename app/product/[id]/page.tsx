@@ -2,7 +2,68 @@
 import ProductDetails from "@/components/ProductDetails";
 import { SERVER_PUBLIC } from "@/lib/utils";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+// export async function generateMetadata({ params }: { params: { id: string } }) {
+//   const id = decodeURIComponent(params.id);
+
+//   try {
+//     const res = await fetch(`${SERVER_PUBLIC}/themes/product/${id}`, {
+//       cache: "no-store",
+//     });
+
+//     if (!res.ok) throw new Error("Product not found");
+
+//     const item = await res.json();
+//     const product = item?.data || item;
+
+//     const fullUrl = `${SERVER_PUBLIC}/product/${id}`;
+//     const image = product.galleryImages?.[0] || `${SERVER_PUBLIC}/default-product-image.jpg`;
+//     const description = product.overview?.slice(0, 150) || "Check out this amazing product on our marketplace.";
+
+//     return {
+//       title: product.title,
+//       description,
+//       openGraph: {
+//         title: product.title,
+//         description,
+//         url: fullUrl,
+//         type: "website",
+//         images: [
+//           {
+//             url: image,
+//             width: 1200,
+//             height: 630,
+//             alt: product.title,
+//           },
+//         ],
+//       },
+//       twitter: {
+//         card: "summary_large_image",
+//         title: product.title,
+//         description,
+//         images: [image],
+//         creator: "@yourbrandhandle", // optional
+//       },
+//       alternates: {
+//         canonical: fullUrl,
+//       },
+//       metadataBase: new URL(SERVER_PUBLIC),
+//     };
+//   } catch (error) {
+//     return {
+//       title: "Product Not Found",
+//       description: "The product you're looking for does not exist.",
+//     };
+//   }
+// }
+
+
+// Get page content
+
+
+export async function generateMetadata(
+  props: Promise<{ params: { id: string } }>
+) {
+  const { params } = await props;
   const id = decodeURIComponent(params.id);
 
   try {
@@ -16,8 +77,11 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     const product = item?.data || item;
 
     const fullUrl = `${SERVER_PUBLIC}/product/${id}`;
-    const image = product.galleryImages?.[0] || `${SERVER_PUBLIC}/default-product-image.jpg`;
-    const description = product.overview?.slice(0, 150) || "Check out this amazing product on our marketplace.";
+    const image =
+      product.galleryImages?.[0] || `${SERVER_PUBLIC}/default-product-image.jpg`;
+    const description =
+      product.overview?.slice(0, 150) ||
+      "Check out this amazing product on our marketplace.";
 
     return {
       title: product.title,
@@ -41,7 +105,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
         title: product.title,
         description,
         images: [image],
-        creator: "@yourbrandhandle", // optional
+        creator: "@yourbrandhandle",
       },
       alternates: {
         canonical: fullUrl,
@@ -57,7 +121,6 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 }
 
 
-// Get page content
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const id = decodeURIComponent(params.id); // explicitly decode
 

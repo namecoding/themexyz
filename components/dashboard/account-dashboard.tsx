@@ -36,9 +36,9 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [openWizard, setOpenWizard] = useState(false);
   const [showUnderReview, setShowUnderReview] = useState(false);
-const [isLoadingPurchase, setIsLoadingPurchase] = useState(true);
-  
-useEffect(() => {
+  const [isLoadingPurchase, setIsLoadingPurchase] = useState(true);
+
+  useEffect(() => {
     const fetchActivities = async () => {
       try {
         const token = localStorage.getItem("token"); // adjust the key if different
@@ -115,7 +115,7 @@ useEffect(() => {
           toast.error("Failed to fetch purchases");
         }
       } catch (error) {
-         setIsLoadingPurchase(false)
+        setIsLoadingPurchase(false)
         console.log("Fetch error:", error);
         toast.error("Fetch error");
       }
@@ -359,73 +359,73 @@ useEffect(() => {
 
         {
           isLoadingPurchase ?
-          <ProjectPlaceholder i={2}/>
-          :
-        <div className="divide-y divide-gray-200">
-          {filteredPurchases.length > 0 ? (
-            filteredPurchases.map((purchase) => (
-              <div key={purchase.id} className="p-4 hover:bg-gray-50">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 mr-4">
-                    <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
-                      <Image
-                        src={purchase?.image || "/placeholder.svg?height=60&width=80"}
-                        alt={purchase?.title}
-                        width={80}
-                        height={60}
-                        className="w-full h-full object-cover"
-                      />
+            <ProjectPlaceholder i={2} />
+            :
+            <div className="divide-y divide-gray-200">
+              {filteredPurchases.length > 0 ? (
+                filteredPurchases.map((purchase) => (
+                  <div key={purchase.id} className="p-4 hover:bg-gray-50">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 mr-4">
+                        <div className="w-16 h-12 bg-gray-100 rounded-md overflow-hidden">
+                          <Image
+                            src={purchase?.image || "/placeholder.svg?height=60&width=80"}
+                            alt={purchase?.title}
+                            width={80}
+                            height={60}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex-grow min-w-0">
+                        <h3 className="font-medium text-sm truncate">{purchase?.title}</h3>
+                        <div className="flex items-center text-xs text-gray-500 mt-1">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          <span>Purchased on {purchase?.purchaseDate}</span>
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0 ml-4 flex flex-col items-end">
+                        <span className="font-bold text-sm">${purchase?.price}</span>
+                        <Badge
+                          variant="outline"
+                          className="mt-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize"
+                        >
+                          {purchase?.type}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex justify-end space-x-2">
+                      <Button variant="outline" size="sm" className="text-xs">
+                        <Download className="h-3 w-3 mr-1" />
+                        Download
+                      </Button>
+
+                      <Button variant="outline" size="sm" className="text-xs">
+                        <FileText className="h-3 w-3 mr-1" />
+                        License
+                      </Button>
+                      {purchase.supportStatus === "expired" && (
+                        <Button className="text-xs bg-green-500 hover:bg-green-600 text-white">Extend Support</Button>
+                      )}
                     </div>
                   </div>
-                  <div className="flex-grow min-w-0">
-                    <h3 className="font-medium text-sm truncate">{purchase?.title}</h3>
-                    <div className="flex items-center text-xs text-gray-500 mt-1">
-                      <Calendar className="h-3 w-3 mr-1" />
-                      <span>Purchased on {purchase?.purchaseDate}</span>
-                    </div>
+                ))
+              ) : (
+                <div className="p-8 text-center">
+                  <div className="inline-block p-3 bg-gray-100 rounded-full mb-4">
+                    <Download className="h-6 w-6 text-gray-400" />
                   </div>
-                  <div className="flex-shrink-0 ml-4 flex flex-col items-end">
-                    <span className="font-bold text-sm">${purchase?.price}</span>
-                    <Badge
-                      variant="outline"
-                      className="mt-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 capitalize"
-                    >
-                      {purchase?.type}
-                    </Badge>
-                  </div>
-                </div>
-                <div className="mt-3 flex justify-end space-x-2">
-                  <Button variant="outline" size="sm" className="text-xs">
-                    <Download className="h-3 w-3 mr-1" />
-                    Download
+                  <h3 className="text-lg font-medium mb-2">No purchases found</h3>
+                  <p className="text-gray-500 mb-4">You haven't made any purchases in this category yet.</p>
+                  <Button asChild className="bg-green-500 hover:bg-green-600 text-white">
+                    <Link href="/">Browse Marketplace</Link>
                   </Button>
-                
-                  <Button variant="outline" size="sm" className="text-xs">
-                   <FileText className="h-3 w-3 mr-1" />
-                    License
-                    </Button>
-                    {purchase.supportStatus === "expired" && (
-                        <Button className="text-xs bg-green-500 hover:bg-[#7aa93c] text-white">Extend Support</Button>
-                    )}
                 </div>
-              </div>
-            ))
-          ) : (
-            <div className="p-8 text-center">
-              <div className="inline-block p-3 bg-gray-100 rounded-full mb-4">
-                <Download className="h-6 w-6 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium mb-2">No purchases found</h3>
-              <p className="text-gray-500 mb-4">You haven't made any purchases in this category yet.</p>
-              <Button asChild className="bg-green-500 hover:bg-[#7aa93c] text-white">
-                <Link href="/">Browse Marketplace</Link>
-              </Button>
+              )}
             </div>
-          )}
-        </div>
         }
 
-       
+
 
         {filteredPurchases.length > 0 && (
           <div className="p-4 border-t border-gray-200 text-center">
@@ -454,16 +454,16 @@ useEffect(() => {
         <div className="divide-y divide-gray-200">
           {loading ? (
             <div className="space-y-4 p-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="animate-pulse flex space-x-4">
-                <div className="rounded-full bg-gray-300 h-8 w-8" />
-                <div className="flex-1 space-y-2 py-1">
-                  <div className="h-3 bg-gray-300 rounded w-3/4" />
-                  <div className="h-2 bg-gray-200 rounded w-1/2" />
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="animate-pulse flex space-x-4">
+                  <div className="rounded-full bg-gray-300 h-8 w-8" />
+                  <div className="flex-1 space-y-2 py-1">
+                    <div className="h-3 bg-gray-300 rounded w-3/4" />
+                    <div className="h-2 bg-gray-200 rounded w-1/2" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           ) : activities.length === 0 ? (
             <div className="flex justify-center items-center py-10">
               <span className="text-gray-500">No activities found.</span>

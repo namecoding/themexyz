@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { X, Smartphone, Tablet, Monitor, ShoppingCart, ArrowLeft, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {metaData} from "@/lib/utils";
+import { metaData } from "@/lib/utils";
 import ScreenLoading from "@/components/screenLoading";
 
 interface TestDemoScreenProps {
@@ -67,9 +67,9 @@ export default function TestDemoScreen({ onClose, item, addToCart, isInCart }: T
               <ArrowLeft size={20} />
             </button>
             {
-              deviceView !=='mobile' && <h1 className="font-medium truncate max-w-md">
-                  {item?.title}
-                </h1>
+              deviceView !== 'mobile' && <h1 className="font-medium truncate max-w-md">
+                {item?.title}
+              </h1>
             }
 
           </div>
@@ -77,34 +77,31 @@ export default function TestDemoScreen({ onClose, item, addToCart, isInCart }: T
             <div className="flex items-center bg-[#444444] rounded-md p-1">
               <button
                 onClick={() => setDeviceView("mobile")}
-                className={`p-2 rounded ${
-                  deviceView === "mobile" ? "bg-[#555555] text-white" : "text-gray-400 hover:text-white"
-                }`}
+                className={`p-2 rounded ${deviceView === "mobile" ? "bg-[#555555] text-white" : "text-gray-400 hover:text-white"
+                  }`}
                 aria-label="Mobile view"
               >
                 <Smartphone size={18} />
               </button>
               <button
                 onClick={() => setDeviceView("tablet")}
-                className={`p-2 rounded ${
-                  deviceView === "tablet" ? "bg-[#555555] text-white" : "text-gray-400 hover:text-white"
-                }`}
+                className={`p-2 rounded ${deviceView === "tablet" ? "bg-[#555555] text-white" : "text-gray-400 hover:text-white"
+                  }`}
                 aria-label="Tablet view"
               >
                 <Tablet size={18} />
               </button>
               <button
                 onClick={() => setDeviceView("desktop")}
-                className={`p-2 rounded ${
-                  deviceView === "desktop" ? "bg-[#555555] text-white" : "text-gray-400 hover:text-white"
-                }`}
+                className={`p-2 rounded ${deviceView === "desktop" ? "bg-[#555555] text-white" : "text-gray-400 hover:text-white"
+                  }`}
                 aria-label="Desktop view"
               >
                 <Monitor size={18} />
               </button>
             </div>
             <Button
-              className={`${isInCart ? "bg-gray-600 hover:bg-gray-700" : "bg-green-500 hover:bg-[#7aa93c]"} text-white`}
+              className={`${isInCart ? "bg-gray-600 hover:bg-gray-700" : "bg-green-500 hover:bg-green-600"} text-white`}
               onClick={() => !isInCart && addToCart(item)}
               disabled={isInCart}
             >
@@ -130,9 +127,8 @@ export default function TestDemoScreen({ onClose, item, addToCart, isInCart }: T
       {/* Demo Content */}
       <div className="flex-grow bg-[#1e1e1e] flex items-center justify-center p-4 overflow-auto">
         <div
-          className={`bg-white rounded-md shadow-lg overflow-hidden transition-all duration-300 ${
-            deviceView !== "desktop" ? "border-8 border-[#333333] rounded-xl" : ""
-          }`}
+          className={`bg-white rounded-md shadow-lg overflow-hidden transition-all duration-300 ${deviceView !== "desktop" ? "border-8 border-[#333333] rounded-xl" : ""
+            }`}
           style={{
             width: getDeviceWidth(),
             height: getDeviceHeight(),
@@ -141,7 +137,7 @@ export default function TestDemoScreen({ onClose, item, addToCart, isInCart }: T
           }}
         >
           {isLoading && (
-            <ScreenLoading/>
+            <ScreenLoading />
           )}
           <iframe
             ref={iframeRef}

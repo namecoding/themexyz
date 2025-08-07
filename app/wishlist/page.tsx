@@ -19,8 +19,8 @@ import {
 } from "@/components/ui/alert-dialog"
 import IsThemely from "@/components/isThemely";
 import Loading from "@/app/wishlist/loading";
-import {useActiveCurrency} from "@/lib/currencyTag";
-import {defaultCurrency} from "@/lib/utils";
+import { useActiveCurrency } from "@/lib/currencyTag";
+import { defaultCurrency } from "@/lib/utils";
 
 export default function WishlistPage() {
   const [wishlistItems, setWishlistItems] = useState([])
@@ -28,7 +28,7 @@ export default function WishlistPage() {
   const [cartItems, setCartItems] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoaded, setIsLoaded] = useState(false)
-  const {currency, symbol} = useActiveCurrency(defaultCurrency)
+  const { currency, symbol } = useActiveCurrency(defaultCurrency)
   useEffect(() => {
     const savedWishlistItems = localStorage.getItem("wishlistItems")
     const savedCartItems = localStorage.getItem("cartItems")
@@ -115,8 +115,8 @@ export default function WishlistPage() {
     localStorage.setItem("cartItems", JSON.stringify(newCartItems))
   }
 
-  if(!isLoaded){
-    return <Loading/>
+  if (!isLoaded) {
+    return <Loading />
   }
 
   return (
@@ -236,7 +236,7 @@ export default function WishlistPage() {
   )
 }
 
-function WishlistCard({ item, removeFromWishlist, addToCart, isInCart,currency, symbol }) {
+function WishlistCard({ item, removeFromWishlist, addToCart, isInCart, currency, symbol }) {
   return (
     <div className="bg-white rounded-md shadow-sm overflow-hidden h-full product-card">
       <div className="relative overflow-hidden group">
@@ -289,7 +289,7 @@ function WishlistCard({ item, removeFromWishlist, addToCart, isInCart,currency, 
             </div>
             <span className="text-xs text-gray-500 ml-1">({item.marketData?.reviews || 0})</span>
           </div>
-          <span className="font-bold text-sm">{symbol}{currency === 'NGN' ? item.priceNGN.toLocaleString() : item.priceUSD.toLocaleString() }</span>
+          <span className="font-bold text-sm">{symbol}{currency === 'NGN' ? item.priceNGN.toLocaleString() : item.priceUSD.toLocaleString()}</span>
         </div>
         <div className="flex gap-2">
           {/*<Button variant="outline" size="sm" className="text-xs flex-1 flex items-center justify-center">*/}
@@ -298,9 +298,8 @@ function WishlistCard({ item, removeFromWishlist, addToCart, isInCart,currency, 
           {/*</Button>*/}
           <Button
             size="sm"
-            className={`text-xs flex-1 flex items-center justify-center ${
-              isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-[#7aa93c] text-white"
-            }`}
+            className={`text-xs flex-1 flex items-center justify-center ${isInCart ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-green-500 hover:bg-green-600 text-white"
+              }`}
             onClick={() => !isInCart && addToCart(item)}
             disabled={isInCart}
           >

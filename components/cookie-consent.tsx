@@ -24,7 +24,7 @@ export default function CookieConsent({ onAccept, onDecline }: CookieConsentProp
             <Button variant="outline" size="sm" onClick={onDecline} className="text-xs">
               Decline
             </Button>
-            <Button size="sm" onClick={onAccept} className="bg-[#82b440] hover:bg-[#7aa93c] text-white text-xs">
+            <Button size="sm" onClick={onAccept} className="bg-[#82b440] hover:bg-green-600 text-white text-xs">
               Accept All
             </Button>
           </div>

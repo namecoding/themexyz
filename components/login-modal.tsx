@@ -92,7 +92,7 @@ export default function LoginModal({ onClose, onLogin, onSwitchToSignup }: Login
               </label>
             </div>
 
-            <Button type="submit" className="w-full bg-[#82b440] hover:bg-[#7aa93c] text-white">
+            <Button type="submit" className="w-full bg-[#82b440] hover:bg-green-600 text-white">
               Sign In
             </Button>
           </form>

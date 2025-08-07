@@ -41,67 +41,67 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
     setCartItems(itemsWithQuantity)
   }, [])
 
-useEffect(() => {
-  const verifyCartItems = async () => {
-    const productIds = cartItems.map(item => item.id);
-    if (productIds.length === 0) return;
+  useEffect(() => {
+    const verifyCartItems = async () => {
+      const productIds = cartItems.map(item => item.id);
+      if (productIds.length === 0) return;
 
-    setReupdatingCart(true);
+      setReupdatingCart(true);
 
-    try {
-      const res = await fetch(`${SERVER_PUBLIC}/themes/verify-cart-items`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ productIds })
-      });
+      try {
+        const res = await fetch(`${SERVER_PUBLIC}/themes/verify-cart-items`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ productIds })
+        });
 
-      if (!res.ok) throw new Error('Failed to fetch updated cart data');
+        if (!res.ok) throw new Error('Failed to fetch updated cart data');
 
-      const result = await res.json();
-      setReupdatingCart(false);
+        const result = await res.json();
+        setReupdatingCart(false);
 
-      if (!result.success || !Array.isArray(result.data)) {
-        throw new Error('Invalid data from server');
+        if (!result.success || !Array.isArray(result.data)) {
+          throw new Error('Invalid data from server');
+        }
+
+        const updatedProducts = result.data;
+
+        const verifiedCartItems = cartItems
+          .map(cartItem => {
+            const updatedProduct = updatedProducts.find(p => p.id === cartItem.id);
+            if (!updatedProduct || !updatedProduct.isPublished) return null;
+            return {
+              ...cartItem,
+              priceNGN: updatedProduct.priceNGN,
+              priceUSD: updatedProduct.priceUSD,
+              isPublished: updatedProduct.isPublished,
+              license: updatedProduct.license,
+              helpDurationSettings: updatedProduct.helpDurationSettings
+            };
+          })
+          .filter(Boolean); // Remove nulls (unavailable products)
+
+        // Only update cart if it actually changed
+        const isChanged = JSON.stringify(cartItems) !== JSON.stringify(verifiedCartItems);
+
+        if (isChanged) {
+          setCartItems(verifiedCartItems as any[]);
+          localStorage.setItem('cartItems', JSON.stringify(verifiedCartItems));
+        }
+      } catch (error) {
+        setReupdatingCart(false);
+        console.log('Error verifying cart items:', error);
       }
+    };
 
-      const updatedProducts = result.data;
+    verifyCartItems();
 
-      const verifiedCartItems = cartItems
-        .map(cartItem => {
-          const updatedProduct = updatedProducts.find(p => p.id === cartItem.id);
-          if (!updatedProduct || !updatedProduct.isPublished) return null;
-          return {
-            ...cartItem,
-            priceNGN: updatedProduct.priceNGN,
-            priceUSD: updatedProduct.priceUSD,
-            isPublished: updatedProduct.isPublished,
-            license: updatedProduct.license,
-            helpDurationSettings: updatedProduct.helpDurationSettings
-          };
-        })
-        .filter(Boolean); // Remove nulls (unavailable products)
+    const intervalId = setInterval(verifyCartItems, 5 * 60 * 1000);
 
-      // Only update cart if it actually changed
-      const isChanged = JSON.stringify(cartItems) !== JSON.stringify(verifiedCartItems);
-
-      if (isChanged) {
-        setCartItems(verifiedCartItems as any[]);
-        localStorage.setItem('cartItems', JSON.stringify(verifiedCartItems));
-      }
-    } catch (error) {
-      setReupdatingCart(false);
-      console.log('Error verifying cart items:', error);
-    }
-  };
-
-  verifyCartItems();
-
-  const intervalId = setInterval(verifyCartItems, 5 * 60 * 1000);
-
-  return () => clearInterval(intervalId);
-}, []); // 🔁 Removed `cartItems.length` dependency
+    return () => clearInterval(intervalId);
+  }, []); // 🔁 Removed `cartItems.length` dependency
 
 
   useEffect(() => {
@@ -267,7 +267,7 @@ useEffect(() => {
             </div>
             <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
             <p className="text-gray-500 mb-6">Looks like you haven't added any items to your cart yet.</p>
-            <Button className="bg-green-500 hover:bg-[#7aa93c] text-white" onClick={onClose}>
+            <Button className="bg-green-500 hover:bg-green-600 text-white" onClick={onClose}>
               Continue Shopping
             </Button>
           </div>
@@ -296,184 +296,184 @@ useEffect(() => {
 
         {
           reupdatingCart ?
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
-            <div className="lg:col-span-2 space-y-6">
-              {[...Array(2)].map((_, i) => (
-                <div key={i} className="bg-white rounded-md shadow-sm p-4 space-y-4">
-                  <div className="flex justify-between items-center border-b pb-2">
-                    <div className="h-4 w-32 bg-gray-200 rounded" />
-                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                  </div>
-                  {[...Array(2)].map((_, j) => (
-                    <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
-                      <div className="w-20 h-20 bg-gray-200 rounded-md" />
-                      <div className="flex flex-col gap-2 flex-grow">
-                        <div className="h-4 w-3/4 bg-gray-200 rounded" />
-                        <div className="h-3 w-1/2 bg-gray-200 rounded" />
-                        <div className="h-3 w-2/3 bg-gray-200 rounded" />
-                        <div className="h-4 w-1/3 bg-gray-200 rounded" />
-                      </div>
-                      <div className="flex-shrink-0">
-                        <div className="h-4 w-12 bg-gray-200 rounded mb-2" />
-                        <div className="h-3 w-24 bg-gray-200 rounded" />
-                      </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-pulse">
+              <div className="lg:col-span-2 space-y-6">
+                {[...Array(2)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-md shadow-sm p-4 space-y-4">
+                    <div className="flex justify-between items-center border-b pb-2">
+                      <div className="h-4 w-32 bg-gray-200 rounded" />
+                      <div className="h-4 w-16 bg-gray-200 rounded" />
                     </div>
-                  ))}
-                </div>
-              ))}
-            </div>
+                    {[...Array(2)].map((_, j) => (
+                      <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
+                        <div className="w-20 h-20 bg-gray-200 rounded-md" />
+                        <div className="flex flex-col gap-2 flex-grow">
+                          <div className="h-4 w-3/4 bg-gray-200 rounded" />
+                          <div className="h-3 w-1/2 bg-gray-200 rounded" />
+                          <div className="h-3 w-2/3 bg-gray-200 rounded" />
+                          <div className="h-4 w-1/3 bg-gray-200 rounded" />
+                        </div>
+                        <div className="flex-shrink-0">
+                          <div className="h-4 w-12 bg-gray-200 rounded mb-2" />
+                          <div className="h-3 w-24 bg-gray-200 rounded" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
 
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-md shadow-sm p-4 space-y-4 sticky top-4">
-                <div className="h-5 w-40 bg-gray-200 rounded" />
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <div className="h-3 w-16 bg-gray-200 rounded" />
-                    <div className="h-3 w-10 bg-gray-200 rounded" />
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-md shadow-sm p-4 space-y-4 sticky top-4">
+                  <div className="h-5 w-40 bg-gray-200 rounded" />
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <div className="h-3 w-16 bg-gray-200 rounded" />
+                      <div className="h-3 w-10 bg-gray-200 rounded" />
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="h-3 w-24 bg-gray-200 rounded" />
+                      <div className="h-3 w-12 bg-gray-200 rounded" />
+                    </div>
+                    <div className="border-t pt-2 mt-2 flex justify-between">
+                      <div className="h-4 w-16 bg-gray-200 rounded" />
+                      <div className="h-4 w-12 bg-gray-200 rounded" />
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <div className="h-3 w-24 bg-gray-200 rounded" />
-                    <div className="h-3 w-12 bg-gray-200 rounded" />
-                  </div>
-                  <div className="border-t pt-2 mt-2 flex justify-between">
-                    <div className="h-4 w-16 bg-gray-200 rounded" />
-                    <div className="h-4 w-12 bg-gray-200 rounded" />
-                  </div>
+                  <div className="h-10 w-full bg-gray-200 rounded" />
+                  <div className="h-3 w-2/3 bg-gray-200 rounded mx-auto" />
                 </div>
-                <div className="h-10 w-full bg-gray-200 rounded" />
-                <div className="h-3 w-2/3 bg-gray-200 rounded mx-auto" />
               </div>
             </div>
-          </div>
-          :
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-md shadow-sm mb-6">
-              <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-                <h2 className="font-semibold">
-                  Cart Items (
-                    {
-                      // cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0)
-                       cartItems.length
-                    }
+            :
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <div className="bg-white rounded-md shadow-sm mb-6">
+                  <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+                    <h2 className="font-semibold">
+                      Cart Items (
+                      {
+                        // cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0)
+                        cartItems.length
+                      }
+                      )
+                    </h2>
+                    {cartItems.length > 1 && (
+                      <button onClick={handleClearCart} className="text-red-500 hover:text-red-700 text-sm">
+                        Delete All
+                      </button>
+                    )}
+                  </div>
+
+                  {cartItems.map((item) => {
+                    const extendedData = getHelpDurationByType(item.helpDurationSettings, "extended")[0]
+                    const feeUSD = extendedData?.feeUSD ?? 0
+                    const feeNGN = extendedData?.feeNGN ?? 0
+
+                    return (
+                      <div key={item.id} className="p-4 border-b border-gray-200 last:border-b-0">
+                        <div className="flex flex-col sm:flex-row gap-4">
+                          <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
+                            <Image
+                              src={item?.galleryImages[0] || "/placeholder.svg?height=80&width=80"}
+                              alt={item.title}
+                              width={80}
+                              height={80}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-grow">
+                            <h3 className="font-medium text-sm mb-1 capitalize">{item.title}</h3>
+                            <p className="text-xs text-gray-500 mb-2">by {item.author || metaData.name + ' Author'}</p>
+                            <div className="flex flex-wrap gap-y-2 gap-x-4 text-xs text-gray-600 mb-3">
+                              <div className="capitalize"><span className="font-medium">License:</span> {item.license}</div>
+                              <div><span className="font-medium">Support:</span> {getCombinedHelpDuration(item, 'author')}</div>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-4">
+                              <div className="flex items-center border border-gray-300 rounded-md">
+                                <button className="px-2 py-1 text-gray-500 hover:text-gray-700 disabled:opacity-50"
+                                  onClick={() => decreaseQuantity(item.id)}
+                                  disabled={(item.quantity || 1) <= 1}>
+                                  <Minus size={14} />
+                                </button>
+                                <span className="px-2 py-1 text-sm">{item.quantity || 1}</span>
+                                <button className="px-2 py-1 text-gray-500 hover:text-gray-700"
+                                  onClick={() => increaseQuantity(item.id)}>
+                                  <Plus size={14} />
+                                </button>
+                              </div>
+                              <button onClick={() => confirmRemoveItem(item.id)} className="text-red-500 hover:text-red-700 flex items-center text-xs">
+                                <Trash2 size={14} className="mr-1" /> Remove
+                              </button>
+                            </div>
+                          </div>
+                          <div className="flex-shrink-0 text-right">
+                            {/* Always show the price */}
+                            <div className="font-bold">{symbol + formatPrice(item.priceNGN, item.priceUSD)}</div>
+
+                            {/* Only conditionally show the extend support checkbox */}
+                            {extendedData && (
+                              <div className="mt-4">
+                                <label className="flex items-center text-xs cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    className="mr-2 h-3 w-3 rounded border-gray-300 text-[#82b440] focus:ring-[#82b440]"
+                                    checked={!!extendSupport[item.id]}
+                                    onChange={() => handleExtendSupportChange(item.id)}
+                                  />
+                                  <span>
+                                    Extend support (
+                                    +{currency === 'NGN'
+                                      ? symbol + feeNGN.toLocaleString()
+                                      : symbol + feeUSD.toLocaleString()}
+                                    )
+                                  </span>
+                                </label>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     )
-                </h2>
-                {cartItems.length > 1 && (
-                  <button onClick={handleClearCart} className="text-red-500 hover:text-red-700 text-sm">
-                    Delete All
-                  </button>
-                )}
+                  })}
+                </div>
               </div>
 
-              {cartItems.map((item) => {
-                const extendedData = getHelpDurationByType(item.helpDurationSettings, "extended")[0]
-                const feeUSD = extendedData?.feeUSD ?? 0
-                const feeNGN = extendedData?.feeNGN ?? 0
-
-                return (
-                  <div key={item.id} className="p-4 border-b border-gray-200 last:border-b-0">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden">
-                        <Image
-                          src={item?.galleryImages[0] || "/placeholder.svg?height=80&width=80"}
-                          alt={item.title}
-                          width={80}
-                          height={80}
-                          className="w-full h-full object-cover"
-                        />
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-md shadow-sm p-4 sticky top-4">
+                  <h2 className="font-semibold mb-4">Order Summary</h2>
+                  <div className="space-y-2 mb-4 text-sm">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span>{symbol + formatPrice(subtotal)}</span>
+                    </div>
+                    {supportExtensionTotal > 0 && (
+                      <div className="flex justify-between">
+                        <span>Support Extension</span>
+                        <span>{symbol + formatPrice(supportExtensionTotal)}</span>
                       </div>
-                      <div className="flex-grow">
-                        <h3 className="font-medium text-sm mb-1 capitalize">{item.title}</h3>
-                        <p className="text-xs text-gray-500 mb-2">by {item.author || metaData.name + ' Author'}</p>
-                        <div className="flex flex-wrap gap-y-2 gap-x-4 text-xs text-gray-600 mb-3">
-                          <div className="capitalize"><span className="font-medium">License:</span> {item.license}</div>
-                          <div><span className="font-medium">Support:</span> {getCombinedHelpDuration(item, 'author')}</div>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-4">
-                          <div className="flex items-center border border-gray-300 rounded-md">
-                            <button className="px-2 py-1 text-gray-500 hover:text-gray-700 disabled:opacity-50"
-                              onClick={() => decreaseQuantity(item.id)}
-                              disabled={(item.quantity || 1) <= 1}>
-                              <Minus size={14} />
-                            </button>
-                            <span className="px-2 py-1 text-sm">{item.quantity || 1}</span>
-                            <button className="px-2 py-1 text-gray-500 hover:text-gray-700"
-                              onClick={() => increaseQuantity(item.id)}>
-                              <Plus size={14} />
-                            </button>
-                          </div>
-                          <button onClick={() => confirmRemoveItem(item.id)} className="text-red-500 hover:text-red-700 flex items-center text-xs">
-                            <Trash2 size={14} className="mr-1" /> Remove
-                          </button>
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0 text-right">
-                        {/* Always show the price */}
-                        <div className="font-bold">{symbol + formatPrice(item.priceNGN, item.priceUSD)}</div>
-
-                        {/* Only conditionally show the extend support checkbox */}
-                        {extendedData && (
-                          <div className="mt-4">
-                            <label className="flex items-center text-xs cursor-pointer">
-                              <input
-                                type="checkbox"
-                                className="mr-2 h-3 w-3 rounded border-gray-300 text-[#82b440] focus:ring-[#82b440]"
-                                checked={!!extendSupport[item.id]}
-                                onChange={() => handleExtendSupportChange(item.id)}
-                              />
-                              <span>
-                                Extend support (
-                                +{currency === 'NGN'
-                                  ? symbol + feeNGN.toLocaleString()
-                                  : symbol + feeUSD.toLocaleString()}
-                                )
-                              </span>
-                            </label>
-                          </div>
-                        )}
+                    )}
+                    <div className="border-t border-gray-200 pt-2 mt-2">
+                      <div className="flex justify-between font-bold text-xl">
+                        <span>Total</span>
+                        <span>{symbol + formatPrice(total)}</span>
                       </div>
                     </div>
                   </div>
-                )
-              })}
-            </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-md shadow-sm p-4 sticky top-4">
-              <h2 className="font-semibold mb-4">Order Summary</h2>
-              <div className="space-y-2 mb-4 text-sm">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>{symbol + formatPrice(subtotal)}</span>
-                </div>
-                {supportExtensionTotal > 0 && (
-                  <div className="flex justify-between">
-                    <span>Support Extension</span>
-                    <span>{symbol + formatPrice(supportExtensionTotal)}</span>
-                  </div>
-                )}
-                <div className="border-t border-gray-200 pt-2 mt-2">
-                  <div className="flex justify-between font-bold text-xl">
-                    <span>Total</span>
-                    <span>{symbol + formatPrice(total)}</span>
+                  <Button className="w-full bg-green-500 hover:bg-green-600 text-white mb-3" onClick={proceedToCheckout}>
+                    Proceed to Checkout
+                  </Button>
+                  <p className="text-xs text-center text-gray-500 mb-4">
+                    Price is in {currency === 'NGN' ? 'Naira' : 'US dollars'} and excludes tax
+                  </p>
+                  <div className="flex items-center justify-center text-xs text-gray-500">
+                    <Link href="#" className="flex items-center hover:text-[#82b440]" onClick={(e) => { e.preventDefault(); onClose() }}>
+                      Continue Shopping <ChevronRight size={14} className="ml-1" />
+                    </Link>
                   </div>
                 </div>
               </div>
-              <Button className="w-full bg-green-500 hover:bg-[#7aa93c] text-white mb-3" onClick={proceedToCheckout}>
-                Proceed to Checkout
-              </Button>
-              <p className="text-xs text-center text-gray-500 mb-4">
-                Price is in {currency === 'NGN' ? 'Naira' : 'US dollars'} and excludes tax
-              </p>
-              <div className="flex items-center justify-center text-xs text-gray-500">
-                <Link href="#" className="flex items-center hover:text-[#82b440]" onClick={(e) => { e.preventDefault(); onClose() }}>
-                  Continue Shopping <ChevronRight size={14} className="ml-1" />
-                </Link>
-              </div>
             </div>
-          </div>
-        </div>
         }
 
 
