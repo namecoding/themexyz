@@ -33,7 +33,7 @@ export default function CartConsent({ onCheckout, onViewCart, itemCount, subtota
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-sm md:text-base">
-            <ShoppingCart className="text-green-600" size={20} />
+            <ShoppingCart className="text-green-500" size={20} />
             <div>
               <span className="font-semibold">
                 {itemCount} item{itemCount !== 1 && "s"} in your cart

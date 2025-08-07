@@ -266,7 +266,7 @@ function WishlistCard({ item, removeFromWishlist, addToCart, isInCart, currency,
       </div>
       <div className="p-4">
         <h3 className="font-medium text-sm mb-1">
-          <Link href="#" className="hover:text-[#82b440] transition-colors capitalize">
+          <Link href="#" className="hover:text-green-500 transition-colors capitalize">
             {item.title}
           </Link>
         </h3>
