@@ -72,9 +72,37 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        modalIn: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(20px) scale(0.95)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
+          },
+        },
+        modalOut: {
+          "0%": {
+            opacity: "1",
+            transform: "translateY(0) scale(1)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(20px) scale(0.95)",
+          },
+        },
         fadeScale: {
           '0%': { opacity: '0', transform: 'scale(0.8)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        fadeIn: {
+          "0%": { opacity: "0", transform: "scale(0.95)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        fadeOut: {
+          "0%": { opacity: "1", transform: "scale(1)" },
+          "100%": { opacity: "0", transform: "scale(0.95)" },
         },
         glow: {
           '0%, 100%': {
@@ -144,6 +172,10 @@ const config = {
         'spin-slow': 'spin 2s linear infinite',
         'spin-reverse': 'spinReverse 1s linear infinite',
         spinPulse: 'spinPulse 1.5s linear infinite',
+        fadeIn: "fadeIn 300ms ease-out",
+        fadeOut: "fadeOut 200ms ease-in",
+        modalIn: "modalIn 400ms ease-out forwards",
+        modalOut: "modalOut 300ms ease-in forwards",
       },
       backgroundSize: {
         '200': '200% 200%',

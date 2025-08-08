@@ -77,4 +77,4 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
     }
 };
 
-export const allowEmailSending = 0; // 1, yes send and 0, no don't send
+export const allowEmailSending = 1; // 1, yes send and 0, no don't send

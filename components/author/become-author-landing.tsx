@@ -28,9 +28,12 @@ import toast from "react-hot-toast";
 import { SERVER_PUBLIC, metaData } from "@/lib/utils";
 import { useAuthStore } from "@/lib/store/auth";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+
 
 export default function BecomeAuthorLanding() {
   const { isLoggedIn, setIsLoggedIn, user, setUser, token, hasHydrated } = useAuthStore()
+  const router = useRouter();
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
   const [showCookieConsent, setShowCookieConsent] = useState(false)
@@ -279,9 +282,9 @@ export default function BecomeAuthorLanding() {
     }
   ];
 
-  useEffect(() => {
-    console.log({ isLoggedIn, setIsLoggedIn, user, setUser, token, hasHydrated }, 'zurd 2')
-  }, [hasHydrated, user, isLoggedIn])
+  // useEffect(() => {
+  //   console.log({ isLoggedIn, setIsLoggedIn, user, setUser, token, hasHydrated }, 'zurd 2')
+  // }, [hasHydrated, user, isLoggedIn])
 
   useEffect(() => {
     let progressTimer = null;
@@ -307,103 +310,6 @@ export default function BecomeAuthorLanding() {
     };
   }, [currentSlide, isHovered]);
 
-
-  // useEffect(() => {
-  //   setIsLoaded(true)
-  //
-  //   const hasVisited = localStorage.getItem("hasVisited")
-  //   const cookieConsent = localStorage.getItem("cookieConsent2s")
-  //   const lastVisit = localStorage.getItem("lastVisit")
-  //   const savedCartItems = localStorage.getItem("cartItems")
-  //   const savedWishlistItems = localStorage.getItem("wishlistItems")
-  //   const savedUser = localStorage.getItem("user")
-  //
-  //   if (savedUser) {
-  //     try {
-  //       const parsedUser = JSON.parse(savedUser)
-  //       setUser(parsedUser)
-  //       setIsLoggedIn(true)
-  //     } catch (e) {
-  //       console.log("Error parsing user data", e)
-  //     }
-  //   } else {
-  //     const now = Date.now()
-  //     const lastVisitTime = lastVisit ? parseInt(lastVisit, 10) : null
-  //     const hours24 = 24 * 60 * 60 * 1000
-  //
-  //     if (!lastVisitTime || (now - lastVisitTime > hours24)) {
-  //       //console.log("Calling openLoginModal() — first visit in 24h")
-  //       setTimeout(() => {
-  //         openLoginModal()
-  //       }, 9000) // 6 seconds
-  //     }
-  //
-  //     // Always update lastVisit after check
-  //     localStorage.setItem("lastVisit", now.toString())
-  //   }
-  //
-  //   if (savedCartItems) {
-  //     try {
-  //       setCartItems(JSON.parse(savedCartItems))
-  //     } catch (e) {
-  //       console.log("Error parsing cart items", e)
-  //     }
-  //   }
-  //
-  //   if (savedWishlistItems) {
-  //     try {
-  //       setWishlistItems(JSON.parse(savedWishlistItems))
-  //     } catch (e) {
-  //       console.log("Error parsing wishlist items", e)
-  //     }
-  //   }
-  //
-  //   setCartInitialized(true)
-  //   setWishlistInitialized(true)
-  //
-  //   const now = new Date().getTime()
-  //
-  //   if (!hasVisited || (lastVisit && now - Number.parseInt(lastVisit) > 7 * 24 * 60 * 60 * 1000)) {
-  //     if (!cookieConsent || cookieConsent !== "accepted") {
-  //       setTimeout(() => {
-  //         setShowCookieConsent(true)
-  //       }, 120000)
-  //     }
-  //   }
-  //
-  //   localStorage.setItem("hasVisited", "true")
-  //
-  //  // startSliderInterval()
-  //
-  //   const handleScroll = () => {
-  //     const scrollElements = document.querySelectorAll(".scroll-animation")
-  //     scrollElements.forEach((element) => {
-  //       const elementPosition = element.getBoundingClientRect().top
-  //       const windowHeight = window.innerHeight
-  //       if (elementPosition < windowHeight - 100) {
-  //         element.classList.add("animate-in")
-  //       }
-  //     })
-  //   }
-  //
-  //   const handleClickOutside = (event) => {
-  //     if (moreMenuOpen && !event.target.closest(".more-menu-container")) {
-  //       setMoreMenuOpen(false)
-  //     }
-  //   }
-  //
-  //   window.addEventListener("scroll", handleScroll)
-  //   document.addEventListener("mousedown", handleClickOutside)
-  //   handleScroll()
-  //
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll)
-  //     document.removeEventListener("mousedown", handleClickOutside)
-  //     if (sliderInterval.current) {
-  //       clearInterval(sliderInterval.current)
-  //     }
-  //   }
-  // }, [moreMenuOpen, isLoggedIn])
 
   useEffect(() => {
     setIsLoaded(true)
@@ -632,11 +538,24 @@ export default function BecomeAuthorLanding() {
       // ✅ Save token in localStorage
       localStorage.setItem("token", data.token)
 
-      // ✅ Update user state
       setUser({
         ...data.user,
         avatar: data.user.avatar || "/placeholder.svg?height=40&width=40", // fallback avatar
       })
+
+      // ✅ Update user state
+
+
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("isLoggedIn", "true");
+      useAuthStore.getState().setHasHydrated(true)
+      useAuthStore.getState().setIsLoggedIn(true);
+      useAuthStore.getState().setToken(data.token);
+      useAuthStore.getState().setUser(data.user);
+
+      //navigate to this path ./become-author
+
+      router.push('/dashboard/author/register');
 
       setIsLoggedIn(true)
       closeLoginModal()
@@ -687,8 +606,23 @@ export default function BecomeAuthorLanding() {
         avatar: data.user.avatar || "/placeholder.svg?height=40&width=40", // fallback avatar
       })
 
+      // ✅ Update user state
+
+
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("isLoggedIn", "true");
+      useAuthStore.getState().setHasHydrated(true)
+      useAuthStore.getState().setIsLoggedIn(true);
+      useAuthStore.getState().setToken(data.token);
+      useAuthStore.getState().setUser(data.user);
+
+      //navigate to this path ./become-author
+
+      router.push('/dashboard/author/register');
+
       setIsLoggedIn(true)
       closeSignupModal()
+
     } catch (error) {
       toast.error('Signup request error, if this continue, please contact us', { id: toastId });
       //console.log("Signup request error:", error)

@@ -401,13 +401,13 @@ export default function ViewAllPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center text-sm text-gray-500 mb-2">
-                <Link href="/" className="hover:text-[#82b440]">
+                <Link href="/" className="hover:text-green-500">
                   Home
                 </Link>
                 <ChevronRight className="h-4 w-4 mx-1" />
                 {category !== "items" && category !== "categories" && (
                   <>
-                    <Link href="/view-all/items" className="hover:text-[#82b440]">
+                    <Link href="/view-all/items" className="hover:text-green-500">
                       All Items
                     </Link>
                     <ChevronRight className="h-4 w-4 mx-1" />

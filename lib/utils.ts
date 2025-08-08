@@ -11,6 +11,8 @@ export function cn(...inputs: ClassValue[]) {
 export const SERVER_PUBLIC = process.env.NEXT_PUBLIC_BACKEND_SERVER;
 export const BASE_PUBLIC = process.env.NEXT_PUBLIC_BASE_URL;
 
+export const PROMO_KEY = "authorPromoLastShown";
+
 
 export function getMembershipDuration(isoDateString: string): string {
   const createdDate = new Date(isoDateString);

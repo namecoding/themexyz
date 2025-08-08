@@ -304,7 +304,7 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
                       <div className="h-4 w-32 bg-gray-200 rounded" />
                       <div className="h-4 w-16 bg-gray-200 rounded" />
                     </div>
-                    {[...Array(2)].map((_, j) => (
+                    {[...Array(1)].map((_, j) => (
                       <div key={j} className="flex gap-4 border-b pb-4 last:border-b-0">
                         <div className="w-20 h-20 bg-gray-200 rounded-md" />
                         <div className="flex flex-col gap-2 flex-grow">

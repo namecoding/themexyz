@@ -191,6 +191,19 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
     const [recording2, setRecording2] = useState(false);
     const recognitionRef2 = useRef(null);
 
+    const [showSpeechHelp, setShowSpeechHelp] = useState(false);
+    const [browserName, setBrowserName] = useState("");
+
+    const getBrowserName = () => {
+        const userAgent = navigator.userAgent;
+
+        if (/chrome|crios|crmo/i.test(userAgent)) return "Chrome";
+        if (/firefox|fxios/i.test(userAgent)) return "Firefox";
+        if (/safari/i.test(userAgent) && !/chrome|crios|crmo/i.test(userAgent)) return "Safari";
+        if (/edg/i.test(userAgent)) return "Edge";
+        if (/opr\//i.test(userAgent)) return "Opera";
+        return "Unknown";
+    };
 
     //update when done
     const handleMicClick_2 = () => {
@@ -262,7 +275,11 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
     const handleMicClick = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            alert("Your browser does not support speech recognition.");
+            // alert("Your browser does not support speech recognition.");
+            const detected = getBrowserName();
+            setBrowserName(detected);
+            setShowSpeechHelp(true);
+
             return;
         }
 
@@ -332,7 +349,10 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
     const handleMicClick2 = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            alert("Your browser does not support speech recognition.");
+            // alert("Your browser does not support speech recognition.");
+            const detected = getBrowserName();
+            setBrowserName(detected);
+            setShowSpeechHelp(true);
             return;
         }
 
@@ -1511,13 +1531,14 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                     className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 min-h-[120px] focus:border-green-500 focus:ring-1 focus:ring-green-500 pr-10" // extra padding for icon
                                 /> */}
 
-                                    <Textarea
+                                    <textarea
                                         id="downloadInstructions"
-                                        placeholder="Describe your product..."
+                                        rows={5}
                                         value={`${formData.downloadInstructions}${interimTranscript2 ? ' ' + interimTranscript2 : ''}`}
                                         onChange={(e) => handleChange("downloadInstructions", e.target.value)}
-                                        className="..."
-                                    />
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                                        placeholder="Describe your product..."
+                                    ></textarea>
 
 
                                     {/* Mic icon button */}
@@ -2160,6 +2181,53 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                 />
             )}
 
+            {showSpeechHelp && (
+                <Dialog open={true} onOpenChange={() => setShowSpeechHelp(false)}>
+                    <DialogContent className="w-full max-w-full max-h-[90vh] p-6 flex flex-col bg-white text-gray-900 border-0 sm:max-w-md overflow-hidden [&>button]:hidden">
+
+
+
+
+                        <VisuallyHidden>
+                            <DialogTitle>Speech Recognition Unsupported</DialogTitle>
+                        </VisuallyHidden>
+
+                        <div className="flex items-center justify-between border-b border-gray-200">
+                            <div className="flex items-center gap-4">
+                                <h2 className="text-lg font-semibold text-red-500 mb-2">Speech Recognition Not Supported</h2>
+                            </div>
+                            <div className="text-sm text-gray-600">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setShowSpeechHelp(false)}
+                                    className="text-gray-600 hover:text-gray-900"
+                                >
+                                    <X className="h-6 w-6 text-red-500" />
+                                </Button>
+
+                            </div>
+                        </div>
+
+
+                        <p className="text-sm text-gray-600 mb-4">
+                            Your current browser <strong className="text-red-500">({browserName})</strong> does not support speech recognition.
+                        </p>
+                        <p className="text-sm text-gray-600">
+                            Try using the latest version of <strong className="text-green-500">Google Chrome</strong> or <strong className="text-green-500">Microsoft Edge</strong> on Desktop or Android.
+                        </p>
+
+                        <button
+                            onClick={() => setShowSpeechHelp(false)}
+                            className="mt-6 self-end bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"
+                        >
+                            Okay, Got it
+                        </button>
+                    </DialogContent>
+                </Dialog>
+            )}
+
+
 
             <Dialog open={open} onOpenChange={handleCloseClick}>
                 {/*<DialogContent className="w-full max-w-full h-full p-0 flex flex-col bg-white text-gray-900 border-0 sm:max-w-4xl sm:h-auto">*/}
@@ -2291,12 +2359,12 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                         value={
                                             currentContactMethod === "Email"
                                                 ? user.email || currentContactValue
-                                                : user.phone || currentContactValue
+                                                : user.generalInfo?.phone || currentContactValue
                                         }
                                         placeholder={
                                             (currentContactMethod === "Email" && !user.email)
                                                 ? "your@email.com"
-                                                : (currentContactMethod !== "Email" && !user.phone)
+                                                : (currentContactMethod !== "Email" && !user.generalInfo?.phone)
                                                     ? (currency === "NGN" ? "+234XXXXXXXXXX" : "+1XXXXXXXXXX")
                                                     : undefined
                                         }
@@ -2306,7 +2374,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                         // }
                                         readOnly={
                                             (currentContactMethod === "Email" && !!user.email) ||
-                                            (currentContactMethod !== "Email" && !!user.phone)
+                                            (currentContactMethod !== "Email" && !!user?.generalInfo?.phone)
                                         }
                                         onChange={(e) => setCurrentContactValue(e.target.value)}
                                         className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
@@ -2325,7 +2393,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                     (
                                         currentContactMethod === "Email"
                                             ? !(user.email || currentContactValue.trim())
-                                            : !(user.phone || currentContactValue.trim())
+                                            : !(user.generalInfo?.phone || currentContactValue.trim())
                                     )
                                 }
                                 className="bg-green-600 hover:bg-green-600 text-white"
