@@ -114,7 +114,7 @@ export async function POST(request: Request) {
                 ...updatedUser,
                 password: undefined,
             },
-        });
+        }, { status: 200, headers: corsHeaders });
 
     } catch (error) {
         console.error("Author registration error:", error);
