@@ -71,7 +71,8 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
                 console.log("✅ Email sent using Webmail");
             } catch (webmailError) {
                 console.error("❌ All email services failed:", webmailError);
-                throw new Error("All email services failed");
+                // throw new Error("All email services failed");
+                return false;
             }
         }
     }
