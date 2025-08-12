@@ -24,9 +24,9 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
     username: user?.profile?.displayName || "",
     bio: user?.profile?.bio || "",
     website: user?.profile?.website || "",
-    location: user?.state || "",
-    country: user?.country || "",
-    phone: user?.phone || "",
+    location: user?.generalInfo?.city || "",
+    country: user?.generalInfo?.country || "",
+    phone: user?.generalInfo?.phone || "",
     company: user?.company || ""
   })
   const [passwordForm, setPasswordForm] = useState({

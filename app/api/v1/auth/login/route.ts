@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import clientPromise from "@/lib/mongodb";
-import { corsHeaders } from '@/lib/cors'
-
+import { corsHeaders } from "@/lib/cors";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -25,22 +24,15 @@ export async function POST(request: Request) {
     if (!user) {
       return new NextResponse(
         JSON.stringify({ success: false, message: "Invalid credentials" }),
-        {
-          status: 401,
-          headers: corsHeaders,
-        }
+        { status: 401, headers: corsHeaders }
       );
     }
 
-    // Compare passwords
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+    // Single combined check for both missing password and wrong password
+    if (!user.password || !(await bcrypt.compare(password, user.password))) {
       return new NextResponse(
         JSON.stringify({ success: false, message: "Invalid credentials" }),
-        {
-          status: 401,
-          headers: corsHeaders,
-        }
+        { status: 401, headers: corsHeaders }
       );
     }
 
@@ -63,18 +55,12 @@ export async function POST(request: Request) {
         token,
         user: userWithoutPassword,
       }),
-      {
-        status: 200,
-        headers: corsHeaders,
-      }
+      { status: 200, headers: corsHeaders }
     );
   } catch (error) {
     return new NextResponse(
-      JSON.stringify({ success: false, message: "Internal Server Error", error }),
-      {
-        status: 500,
-        headers: corsHeaders,
-      }
+      JSON.stringify({ success: false, message: "Internal Server Error" }),
+      { status: 500, headers: corsHeaders }
     );
   }
 }
