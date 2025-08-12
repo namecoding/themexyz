@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     return new NextResponse(
-      JSON.stringify({ success: false, message: "Internal Server Error" }),
+      JSON.stringify({ success: false, message: "Internal Server Error", error }),
       {
         status: 500,
         headers: corsHeaders,
