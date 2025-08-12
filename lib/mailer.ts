@@ -8,15 +8,21 @@ type SendEmailOptions = {
 };
 
 export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
-    const gmailUser = process.env.GMAIL_USER!;
-    const yahooUser = process.env.YAHOO_USER!;
-    const webMailUser = process.env.WEB_MAIL_USER!;
     const senderName = metaData.name + " Team";
+
+    const brevoTransporter = nodemailer.createTransport({
+        host: "smtp-relay.brevo.com",
+        port: 587,
+        auth: {
+            user: process.env.BREVO_USER,
+            pass: process.env.BREVO_API_KEY,
+        },
+    });
 
     const gmailTransporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-            user: gmailUser,
+            user: process.env.GMAIL_USER!,
             pass: process.env.GMAIL_PASS,
         },
     });
@@ -26,7 +32,7 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
         port: 465,
         secure: true,
         auth: {
-            user: yahooUser,
+            user: process.env.YAHOO_USER!,
             pass: process.env.YAHOO_PASS,
         },
     });
@@ -36,46 +42,58 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
         port: Number(process.env.WEB_MAIL_PORT),
         secure: process.env.WEB_MAIL_SECURE === "true",
         auth: {
-            user: webMailUser,
+            user: process.env.WEB_MAIL_USER!,
             pass: process.env.WEB_MAIL_PASS,
         },
     });
 
     try {
-        await gmailTransporter.sendMail({
-            from: `"${senderName}" <${gmailUser}>`,
+        await brevoTransporter.sendMail({
+            from: `"${senderName}" <${process.env.BREVO_SENDER_EMAIL}>`,
             to,
             subject,
             html,
         });
-        console.log("✅ Email sent using Gmail");
-    } catch (gmailError) {
-
+        console.log("✅ Email sent using Brevo");
+    } catch (brevoError) {
+        // console.error("❌ Brevo failed:", brevoError);
         try {
-            await yahooTransporter.sendMail({
-                from: `"${senderName}" <${yahooUser}>`,
+            await gmailTransporter.sendMail({
+                from: `"${senderName}" <${process.env.GMAIL_USER}>`,
                 to,
                 subject,
                 html,
             });
-            console.log("✅ Email sent using Yahoo");
-        } catch (yahooError) {
-
+            console.log("✅ Email sent using Gmail");
+        } catch (gmailError) {
+            // console.error("❌ Gmail failed:", gmailError);
             try {
-                await webMailTransporter.sendMail({
-                    from: `"${senderName}" <${webMailUser}>`,
+                await yahooTransporter.sendMail({
+                    from: `"${senderName}" <${process.env.YAHOO_USER}>`,
                     to,
                     subject,
                     html,
                 });
-                console.log("✅ Email sent using Webmail");
-            } catch (webmailError) {
-                console.error("❌ All email services failed:", webmailError);
-                // throw new Error("All email services failed");
-                return false;
+                console.log("✅ Email sent using Yahoo");
+            } catch (yahooError) {
+                // console.error("❌ Yahoo failed:", yahooError);
+                try {
+                    await webMailTransporter.sendMail({
+                        from: `"${senderName}" <${process.env.WEB_MAIL_USER}>`,
+                        to,
+                        subject,
+                        html,
+                    });
+                    console.log("✅ Email sent using Webmail");
+                } catch (webmailError) {
+                    console.error("❌ All email services failed:", webmailError);
+                    return false;
+                }
             }
         }
     }
+
+    return true;
 };
 
-export const allowEmailSending = 1; // 1, yes send and 0, no don't send
+export const allowEmailSending = 1; // 1 = send, 0 = don't send
