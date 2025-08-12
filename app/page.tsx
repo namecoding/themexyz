@@ -545,7 +545,7 @@ export default function Home() {
             callbackUrl: '/', // or your desired post-logout page
             redirect: true,
         });
-
+        return;
     }
 
 
