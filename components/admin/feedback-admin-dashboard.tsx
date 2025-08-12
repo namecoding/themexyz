@@ -39,6 +39,29 @@ export default function FeedbackAdminDashboard({ currentUser, onClose }: Feedbac
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [loadingFeedBack, setLoadingFeedBack] = useState(false)
 
+  const [role, setRole] = useState(
+    () =>
+      localStorage.getItem("confirmedAdminType") ||
+      currentUser?.admin?.permission?.[0] ||
+      ""
+  );
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newRole = e.target.value;
+    setRole(newRole);
+    localStorage.setItem("confirmedAdminType", newRole);
+    window.location.reload();
+  };
+
+  // Keep role state in sync if currentUser changes
+  useEffect(() => {
+    if (!role && currentUser?.admin?.permission?.length) {
+      const defaultRole = currentUser.admin.permission[0];
+      setRole(defaultRole);
+      localStorage.setItem("confirmedAdminType", defaultRole);
+    }
+  }, [currentUser, role]);
+
   const filteredFeedback = feedback.filter((item) => {
     const matchesSearch =
       item.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -208,7 +231,20 @@ export default function FeedbackAdminDashboard({ currentUser, onClose }: Feedbac
               </Avatar>
               <div className="text-right">
                 <div className="text-sm font-medium text-gray-900">{currentUser.name}</div>
-                <div className="text-xs text-purple-600">Feedback Admin</div>
+                <select
+                  value={role}
+                  // onChange={(e) => setRole(e.target.value)}
+                  onChange={handleRoleChange}
+                  className="text-xs border-none focus:ring-0 bg-transparent text-green-500 cursor-pointer"
+                >
+                  {currentUser?.admin?.permission?.map((perm) => (
+                    <option key={perm} value={perm}>
+                      {perm
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (char) => char.toUpperCase())}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>

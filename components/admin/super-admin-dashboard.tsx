@@ -69,6 +69,29 @@ export default function SuperAdminDashboard({ currentUser, onClose }: SuperAdmin
   const [isProcessing, setIsProcessing] = useState('')
   const [selectedUser, setSelectedUser] = useState(null)
 
+  const [role, setRole] = useState(
+    () =>
+      localStorage.getItem("confirmedAdminType") ||
+      currentUser?.admin?.permission?.[0] ||
+      ""
+  );
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newRole = e.target.value;
+    setRole(newRole);
+    localStorage.setItem("confirmedAdminType", newRole);
+    window.location.reload();
+  };
+
+  // Keep role state in sync if currentUser changes
+  useEffect(() => {
+    if (!role && currentUser?.admin?.permission?.length) {
+      const defaultRole = currentUser.admin.permission[0];
+      setRole(defaultRole);
+      localStorage.setItem("confirmedAdminType", defaultRole);
+    }
+  }, [currentUser, role]);
+
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -258,7 +281,20 @@ export default function SuperAdminDashboard({ currentUser, onClose }: SuperAdmin
                 </Avatar>
                 <div className="text-right">
                   <div className="text-sm font-medium text-gray-900">{currentUser.name}</div>
-                  <div className="text-xs text-red-600">Super Admin</div>
+                  <select
+                    value={role}
+                    // onChange={(e) => setRole(e.target.value)}
+                    onChange={handleRoleChange}
+                    className="text-xs border-none focus:ring-0 bg-transparent text-red-500 cursor-pointer"
+                  >
+                    {currentUser?.admin?.permission?.map((perm) => (
+                      <option key={perm} value={perm}>
+                        {perm
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (char) => char.toUpperCase())}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>
@@ -323,170 +359,170 @@ export default function SuperAdminDashboard({ currentUser, onClose }: SuperAdmin
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
-            
+
                 <Table className="min-w-full">
-                                            <TableHeader>
-                                                <TableRow>
-                                                <TableHead>User</TableHead>
-                                                <TableHead>Role</TableHead>
-                                                <TableHead>Status</TableHead>
-                                                <TableHead>Join Date</TableHead>
-                                                <TableHead>Last Login</TableHead>
-                                                <TableHead>Actions</TableHead>
-                                                </TableRow>
-                                            </TableHeader>
-                
-                                            <TableBody>
-                                                {fetchingUsers
-                                                ? [...Array(3)].map((_, i) => (
-                                                    <TableRow key={`loading-${i}`} className="animate-pulse">
-                                                        <TableCell>
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-                                                            <div className="flex flex-col gap-1">
-                                                            <div className="w-32 h-3 bg-gray-200 rounded"></div>
-                                                            <div className="w-24 h-2 bg-gray-100 rounded"></div>
-                                                            </div>
-                                                        </div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        <div className="w-24 h-3 bg-gray-200 rounded"></div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        <div className="w-16 h-3 bg-gray-200 rounded"></div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        <div className="w-24 h-3 bg-gray-200 rounded"></div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        <div className="w-24 h-3 bg-gray-200 rounded"></div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        <div className="w-8 h-3 bg-gray-200 rounded mx-auto"></div>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    ))
-                                                : filteredUsers.map((user) => (
-                                                    <TableRow key={user.id}>
-                                                        <TableCell>
-                                                        <div className="flex items-center gap-3">
-                                                            <Avatar className="w-8 h-8">
-                                                                {
-                                                                    isProcessing === user.id && <div className="absolute inset-0 rounded-full border-[3px] border-t-green-500 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
-                                                                }
-                                                            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                                                            <AvatarFallback className="bg-gray-100 text-gray-600 text-xs">
-                                                                {user.name
-                                                                .split(" ")
-                                                                .map((n) => n[0])
-                                                                .join("")}
-                                                            </AvatarFallback>
-                                                            </Avatar>
-                                                            <div>
-                                                            <div className="font-medium text-gray-900">{user.name}</div>
-                                                            <div className="text-sm text-gray-500">{user.email}</div>
-                                                            </div>
-                                                        </div>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        {user?.permission ? (
-                                                            <Badge className={getRoleColor(user?.permission)}>
-                                                            <Shield className="w-3 h-3 mr-1" />
-                                                            {formatAdminPermissions(user?.permission)}
-                                                            </Badge>
-                                                        ) : (
-                                                            <Badge variant="outline">Regular User</Badge>
-                                                        )}
-                                                        </TableCell>
-                                                        <TableCell>
-                                                        <Badge className={getStatusColor(user.status)}>{user.status}</Badge>
-                                                        </TableCell>
-                                                        <TableCell className="text-sm text-gray-600">{formatDate(user.joinDate)}</TableCell>
-                                                        <TableCell className="text-sm text-gray-600">
-                                                        {user.lastLogin ? formatDate(user.lastLogin) : "Never"}
-                                                        </TableCell>
-                                                        <TableCell>
-                
-                
-                                                            {
-                                                                !user?.isSystem
-                                                                ?
-                                                                <DropdownMenu>
-                                                            <DropdownMenuTrigger asChild>
-                                                            <Button variant="ghost" size="sm">
-                                                                <MoreHorizontal className="w-4 h-4" />
-                                                            </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem>
-                                                                <Edit className="w-4 h-4 mr-2" />
-                                                                Edit User
-                                                            </DropdownMenuItem>
-                
-                                                            {!user?.permission ? (
-                                                                <DropdownMenuItem onClick={() => handleMakeAdmin(user)}>
-                                                                <UserCheck className="w-4 h-4 mr-2" />
-                                                                Make Admin
-                                                                </DropdownMenuItem>
-                                                            ) : (
-                                                               
-                                                                <>
-                                                                    <DropdownMenuItem onClick={() => handleMakeAdmin(user)}>
-                                                                    <Edit className="w-4 h-4 mr-2" />
-                                                                    Change Role
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem onClick={() => handleRemoveAdmin(user.id)}>
-                                                                    <UserX className="w-4 h-4 mr-2" />
-                                                                    Remove Admin
-                                                                    </DropdownMenuItem>
-                                                                </>
-                                                                
-                                                            )}
-                
-                                                            <DropdownMenuSeparator />
-                
-                                                            <DropdownMenuItem
-                                                                onClick={() => handleSuspendUser(user.id)}
-                                                                className={user.status === "suspended" ? "text-green-600" : "text-red-600"}
-                                                            >
-                                                                {user.status === "suspended" ? (
-                                                                <>
-                                                                    <UserCheck className="w-4 h-4 mr-2" />
-                                                                    Activate User
-                                                                </>
-                                                                ) : (
-                                                                <>
-                                                                    <UserX className="w-4 h-4 mr-2" />
-                                                                    Suspend User
-                                                                </>
-                                                                )}
-                                                            </DropdownMenuItem>
-                
-                                                        
-                                                                <DropdownMenuItem className="text-red-600">
-                                                                <Trash2 className="w-4 h-4 mr-2" />
-                                                                Delete User
-                                                                </DropdownMenuItem>
-                                                            
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu> 
-                                                        :
-                                                        <DropdownMenu>
-                                                            <DropdownMenuContent align="end">
-                                                            <DropdownMenuItem disabled>
-                                                            <Lock className="w-4 h-4 mr-2 text-muted-foreground" />
-                                                            Super Admin (Locked)
-                                                            </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                            
-                                                        </DropdownMenu>
-                                                            }
-                                                        
-                                                       
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    ))}
-                                            </TableBody>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Join Date</TableHead>
+                      <TableHead>Last Login</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+                    {fetchingUsers
+                      ? [...Array(3)].map((_, i) => (
+                        <TableRow key={`loading-${i}`} className="animate-pulse">
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-gray-200"></div>
+                              <div className="flex flex-col gap-1">
+                                <div className="w-32 h-3 bg-gray-200 rounded"></div>
+                                <div className="w-24 h-2 bg-gray-100 rounded"></div>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="w-24 h-3 bg-gray-200 rounded"></div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="w-16 h-3 bg-gray-200 rounded"></div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="w-24 h-3 bg-gray-200 rounded"></div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="w-24 h-3 bg-gray-200 rounded"></div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="w-8 h-3 bg-gray-200 rounded mx-auto"></div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                      : filteredUsers.map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <Avatar className="w-8 h-8">
+                                {
+                                  isProcessing === user.id && <div className="absolute inset-0 rounded-full border-[3px] border-t-green-500 border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+                                }
+                                <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
+                                <AvatarFallback className="bg-gray-100 text-gray-600 text-xs">
+                                  {user.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>
+                                <div className="font-medium text-gray-900">{user.name}</div>
+                                <div className="text-sm text-gray-500">{user.email}</div>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {user?.permission ? (
+                              <Badge className={getRoleColor(user?.permission)}>
+                                <Shield className="w-3 h-3 mr-1" />
+                                {formatAdminPermissions(user?.permission)}
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline">Regular User</Badge>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <Badge className={getStatusColor(user.status)}>{user.status}</Badge>
+                          </TableCell>
+                          <TableCell className="text-sm text-gray-600">{formatDate(user.joinDate)}</TableCell>
+                          <TableCell className="text-sm text-gray-600">
+                            {user.lastLogin ? formatDate(user.lastLogin) : "Never"}
+                          </TableCell>
+                          <TableCell>
+
+
+                            {
+                              !user?.isSystem
+                                ?
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <MoreHorizontal className="w-4 h-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem>
+                                      <Edit className="w-4 h-4 mr-2" />
+                                      Edit User
+                                    </DropdownMenuItem>
+
+                                    {!user?.permission ? (
+                                      <DropdownMenuItem onClick={() => handleMakeAdmin(user)}>
+                                        <UserCheck className="w-4 h-4 mr-2" />
+                                        Make Admin
+                                      </DropdownMenuItem>
+                                    ) : (
+
+                                      <>
+                                        <DropdownMenuItem onClick={() => handleMakeAdmin(user)}>
+                                          <Edit className="w-4 h-4 mr-2" />
+                                          Change Role
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleRemoveAdmin(user.id)}>
+                                          <UserX className="w-4 h-4 mr-2" />
+                                          Remove Admin
+                                        </DropdownMenuItem>
+                                      </>
+
+                                    )}
+
+                                    <DropdownMenuSeparator />
+
+                                    <DropdownMenuItem
+                                      onClick={() => handleSuspendUser(user.id)}
+                                      className={user.status === "suspended" ? "text-green-600" : "text-red-600"}
+                                    >
+                                      {user.status === "suspended" ? (
+                                        <>
+                                          <UserCheck className="w-4 h-4 mr-2" />
+                                          Activate User
+                                        </>
+                                      ) : (
+                                        <>
+                                          <UserX className="w-4 h-4 mr-2" />
+                                          Suspend User
+                                        </>
+                                      )}
+                                    </DropdownMenuItem>
+
+
+                                    <DropdownMenuItem className="text-red-600">
+                                      <Trash2 className="w-4 h-4 mr-2" />
+                                      Delete User
+                                    </DropdownMenuItem>
+
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                                :
+                                <DropdownMenu>
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem disabled>
+                                      <Lock className="w-4 h-4 mr-2 text-muted-foreground" />
+                                      Super Admin (Locked)
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+
+                                </DropdownMenu>
+                            }
+
+
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
                 </Table>
               </div>
             </CardContent>

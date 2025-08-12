@@ -61,6 +61,29 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
   const [fetchingApplication, setFetchingApplication] = useState(false)
   const [statsCount, setStatsCount] = useState({})
 
+  const [role, setRole] = useState(
+    () =>
+      localStorage.getItem("confirmedAdminType") ||
+      currentUser?.admin?.permission?.[0] ||
+      ""
+  );
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newRole = e.target.value;
+    setRole(newRole);
+    localStorage.setItem("confirmedAdminType", newRole);
+    window.location.reload();
+  };
+
+  // Keep role state in sync if currentUser changes
+  useEffect(() => {
+    if (!role && currentUser?.admin?.permission?.length) {
+      const defaultRole = currentUser.admin.permission[0];
+      setRole(defaultRole);
+      localStorage.setItem("confirmedAdminType", defaultRole);
+    }
+  }, [currentUser, role]);
+
   useEffect(() => {
     // console.log(currentUser, 'currentUser')
     fetchAuthorsApplications()
@@ -223,13 +246,13 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
                                 <ArrowLeft className="w-4 h-4 mr-2" />
                                 Back
                             </Button> */}
-              <UserCheck className="w-8 h-8 text-green-600" />
+              <UserCheck className="w-8 h-8 text-blue-500" />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Author Admin Dashboard</h1>
                 <p className="text-sm text-gray-500">Review and approve author applications</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <Avatar className="w-8 h-8">
                 <AvatarImage src={currentUser.avatar || "/placeholder.svg"} alt={currentUser.name} />
                 <AvatarFallback className="bg-green-100 text-green-600 text-sm">
@@ -243,7 +266,48 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
                 <div className="text-sm font-medium text-gray-900">{currentUser.name}</div>
                 <div className="text-xs text-green-600">Author Admin</div>
               </div>
+            </div> */}
+
+
+            <div className="flex items-center gap-3">
+              <Avatar className="w-8 h-8">
+                <AvatarImage
+                  src={currentUser.avatar || "/placeholder.svg"}
+                  alt={currentUser.name}
+                />
+                <AvatarFallback className="bg-green-100 text-green-600 text-sm">
+                  {currentUser.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className="text-right">
+                <div className="text-sm font-medium text-gray-900">
+                  {currentUser.name}
+                </div>
+
+                {/* Role selector */}
+                <select
+                  value={role}
+                  // onChange={(e) => setRole(e.target.value)}
+                  onChange={handleRoleChange}
+                  className="text-xs border-none focus:ring-0 bg-transparent text-blue-500 cursor-pointer"
+                >
+                  {currentUser?.admin?.permission?.map((perm) => (
+                    <option key={perm} value={perm}>
+                      {perm
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (char) => char.toUpperCase())}
+                    </option>
+                  ))}
+                </select>
+
+              </div>
             </div>
+
+
           </div>
         </div>
       </div>
