@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle, Star, Upload, DollarSign } from "lucide-react"
-import {metaData} from "@/lib/utils";
+import { metaData } from "@/lib/utils";
 
 interface CompletionStepProps {
   user: any
@@ -70,7 +70,7 @@ export default function CompletionStep({ user, data, onComplete }: CompletionSte
       </div>
 
       <div className="space-y-4">
-        <Button onClick={onComplete} className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg w-full">
+        <Button onClick={onComplete} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 text-lg w-full">
           Go to Author Dashboard
         </Button>
 

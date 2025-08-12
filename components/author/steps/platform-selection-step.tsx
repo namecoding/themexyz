@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft, Code, Palette, Smartphone, Globe } from "lucide-react"
-import {metaData} from "@/lib/utils";
+import { metaData } from "@/lib/utils";
 
 interface PlatformSelectionStepProps {
   data: any
@@ -28,7 +28,7 @@ export default function PlatformSelectionStep({
     {
       id: metaData.name,
       name: metaData.name,
-      description: metaData.name+" marketplace",
+      description: metaData.name + " marketplace",
       icon: Code,
       popular: true,
     },
@@ -54,7 +54,7 @@ export default function PlatformSelectionStep({
 
   const handleNext = () => {
     if (selectedPlatforms.length > 0) {
-      console.log(selectedPlatforms,'selectedPlatforms')
+      console.log(selectedPlatforms, 'selectedPlatforms')
       onNext()
     }
   }
@@ -76,9 +76,8 @@ export default function PlatformSelectionStep({
           return (
             <Card
               key={platform.id}
-              className={`cursor-pointer transition-all hover:shadow-md ${
-                isSelected ? "ring-2 ring-green-500 bg-green-50" : ""
-              }`}
+              className={`cursor-pointer transition-all hover:shadow-md ${isSelected ? "ring-2 ring-green-500 bg-green-50" : ""
+                }`}
               onClick={() => handlePlatformToggle(platform.id)}
             >
               <CardContent className="p-6">
@@ -90,7 +89,7 @@ export default function PlatformSelectionStep({
                       <h3 className="font-semibold text-gray-900">
                         {platform.name}
                         {platform.popular && (
-                          <span className="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                          <span className="ml-2 text-xs bg-purple-200 text-green-500 px-2 py-1 rounded-full">
                             Recommended
                           </span>
                         )}
@@ -114,7 +113,7 @@ export default function PlatformSelectionStep({
         <Button
           onClick={handleNext}
           disabled={selectedPlatforms.length === 0}
-          className="bg-green-600 hover:bg-green-700 text-white"
+          className="bg-green-500 hover:bg-green-600 text-white"
         >
           Continue
         </Button>

@@ -144,9 +144,8 @@ export default function SpecialtyStep({ data, onNext, onPrev, onUpdate }: Specia
           return (
             <Card
               key={specialty.id}
-              className={`cursor-pointer transition-all hover:shadow-md ${
-                isSelected ? "ring-2 ring-green-500 bg-green-50" : ""
-              }`}
+              className={`cursor-pointer transition-all hover:shadow-md ${isSelected ? "ring-2 ring-green-500 bg-green-50" : ""
+                }`}
               onClick={() => handleSpecialtyToggle(specialty.id)}
             >
               <CardContent className="p-6">
@@ -175,7 +174,7 @@ export default function SpecialtyStep({ data, onNext, onPrev, onUpdate }: Specia
         <Button
           onClick={handleNext}
           disabled={selectedSpecialties.length === 0}
-          className="bg-green-600 hover:bg-green-700 text-white"
+          className="bg-green-500 hover:bg-green-600 text-white"
         >
           Continue
         </Button>

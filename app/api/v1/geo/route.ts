@@ -1,5 +1,13 @@
 export const runtime = "nodejs";
+import { NextResponse } from "next/server";
+import { corsHeaders } from '@/lib/cors';
 
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: corsHeaders,
+    });
+}
 
 export async function GET() {
     const IPDATA_API_KEY = process.env.IPDATA_API_KEY;
@@ -87,12 +95,13 @@ export async function GET() {
     if (result) {
         return new Response(JSON.stringify(result), {
             status: 200,
-            headers: { "Content-Type": "application/json" }
+            headers: corsHeaders
         });
     } else {
         return new Response(JSON.stringify({ error: "Geo detection failed" }), {
             status: 500,
-            headers: { "Content-Type": "application/json" }
+            headers: corsHeaders
         });
     }
 }
+//{ status: 400, headers: corsHeaders }

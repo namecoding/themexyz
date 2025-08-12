@@ -290,7 +290,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
 
         <Button
           onClick={handleNext}
-          className="bg-green-600 hover:bg-green-700 text-white"
+          className="bg-green-500 hover:bg-green-600 text-white"
           disabled={
             loading ||
             (traderStatus.isTrader && (

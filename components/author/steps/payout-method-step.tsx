@@ -8,8 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ArrowLeft, Trash2, University, UniversityIcon, LucideUniversity } from "lucide-react";
 import toast from "react-hot-toast";
-import {useActiveCurrency} from "@/lib/currencyTag";
-import {defaultCurrency} from "@/lib/utils";
+import { useActiveCurrency } from "@/lib/currencyTag";
+import { defaultCurrency } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 
@@ -44,9 +44,9 @@ const fieldLabels: Record<string, string> = {
 };
 
 function BankSelect({
-                        value,
-                        onChange,
-                    }: {
+    value,
+    onChange,
+}: {
     value: string;
     onChange: (val: string) => void;
 }) {
@@ -129,16 +129,16 @@ function BankSelect({
 }
 
 export default function PayoutMethodStep({
-                                             data,
-                                             onNext,
-                                             onPrev,
-                                             onUpdate,
-                                         }: PayoutMethodStepProps) {
+    data,
+    onNext,
+    onPrev,
+    onUpdate,
+}: PayoutMethodStepProps) {
     const [accounts, setAccounts] = useState(data.payoutMethod || []);
     const [showForm, setShowForm] = useState(false);
     const [formCurrency, setFormCurrency] = useState<"NGN" | "USD" | null>(null);
     const [formDetails, setFormDetails] = useState<any>({});
-    const {currency, symbol} = useActiveCurrency(defaultCurrency)
+    const { currency, symbol } = useActiveCurrency(defaultCurrency)
     const [showConfirm, setShowConfirm] = useState(false);
     const [removeIndex, setRemoveIndex] = useState<number | null>(null);
     const handleAddAccount = () => {
@@ -256,7 +256,7 @@ export default function PayoutMethodStep({
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() =>  handleRemoveAccount(index)}
+                                    onClick={() => handleRemoveAccount(index)}
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
@@ -274,6 +274,7 @@ export default function PayoutMethodStep({
                             setFormDetails({})
                             setShowForm(true);
                         }}
+                        className="bg-green-500 hover:bg-green-600"
                     >
                         Add NGN Account
                     </Button>
@@ -283,6 +284,7 @@ export default function PayoutMethodStep({
                             setFormDetails({})
                             setShowForm(true);
                         }}
+                        className="bg-green-500 hover:bg-green-600"
                     >
                         Add USD Account
                     </Button>
@@ -376,7 +378,7 @@ export default function PayoutMethodStep({
                             </Button>
                             <Button
                                 onClick={handleAddAccount}
-                                className="bg-green-600 hover:bg-green-700 text-white"
+                                className="bg-green-500 hover:bg-green-600 text-white"
                             >
                                 Save Account
                             </Button>
@@ -393,16 +395,16 @@ export default function PayoutMethodStep({
                 </Button>
                 <Button
                     onClick={onNext}
-                    disabled={accounts.length === 0}
-                    className="bg-green-600 hover:bg-green-700 text-white"
+                    disabled={!accounts.length}
+                    className="bg-green-500 hover:bg-green-600 text-white"
                 >
                     Continue
                 </Button>
             </div>
 
             <div className="bg-green-50 rounded-lg p-4 mb-8 pt-5 mt-8">
-                <h3 className="font-semibold text-green-800 mb-2">Payout Tips</h3>
-                <ul className="text-sm text-gray-700 space-y-1">
+                <h3 className="font-semibold text-green-500 mb-2">Payout Tips</h3>
+                <ul className="text-sm text-green-500 space-y-1">
                     <li>
                         • For security reasons, always use a bank account that matches your
                         registered name.

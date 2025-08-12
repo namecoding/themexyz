@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle, DollarSign, Users, Zap } from "lucide-react"
-import {metaData} from "@/lib/utils";
+import { metaData } from "@/lib/utils";
 
 interface WelcomeStepProps {
   user: any
@@ -15,8 +15,8 @@ export default function WelcomeStep({ user, onNext, isFirstStep }: WelcomeStepPr
   return (
     <div className="max-w-2xl mx-auto text-center">
       <div className="mb-8">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <CheckCircle className="w-10 h-10 text-green-600" />
+        <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle className="w-10 h-10 text-green-500" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Let's get started!</h1>
         <p className="text-lg text-gray-600 mb-8">
@@ -52,15 +52,15 @@ export default function WelcomeStep({ user, onNext, isFirstStep }: WelcomeStepPr
       </div>
 
       <div className="bg-green-50 rounded-lg p-6 mb-8">
-        <h3 className="font-semibold text-green-800 mb-2">What you'll need:</h3>
-        <ul className="text-sm text-green-700 space-y-1">
+        <h3 className="font-semibold text-green-500 mb-2">What you'll need:</h3>
+        <ul className="text-sm text-green-500 space-y-1">
           <li>• A few minutes to complete your profile</li>
           <li>• Your payout information</li>
           <li>• Some details about what you want to sell</li>
         </ul>
       </div>
 
-      <Button onClick={onNext} className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg">
+      <Button onClick={onNext} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 text-lg">
         Let's Begin
       </Button>
     </div>

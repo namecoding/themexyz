@@ -50,7 +50,7 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
         });
         console.log("✅ Email sent using Gmail");
     } catch (gmailError) {
-        console.error("❌ Gmail failed:", gmailError);
+
         try {
             await yahooTransporter.sendMail({
                 from: `"${senderName}" <${yahooUser}>`,
@@ -60,7 +60,7 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
             });
             console.log("✅ Email sent using Yahoo");
         } catch (yahooError) {
-            console.error("❌ Yahoo failed:", yahooError);
+
             try {
                 await webMailTransporter.sendMail({
                     from: `"${senderName}" <${webMailUser}>`,

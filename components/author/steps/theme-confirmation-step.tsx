@@ -38,9 +38,9 @@ export default function ThemeConfirmationStep({ data, onNext, onPrev }: ThemeCon
   // Get specialty names as a string
   const getSpecialtyNames = () => {
     return data?.specialties
-        ?.map((id: string) => specialtyMap[id])
-        .filter(Boolean)
-        .join(", ") || ""
+      ?.map((id: string) => specialtyMap[id])
+      .filter(Boolean)
+      .join(", ") || ""
   }
 
   useEffect(() => {
@@ -126,50 +126,50 @@ export default function ThemeConfirmationStep({ data, onNext, onPrev }: ThemeCon
 
 
   return (
-      <div className="max-w-2xl mx-auto text-center">
-        <div className="mb-8">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-green-600" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Let’s review your selections!</h1>
-          <p className="text-lg text-gray-600 mb-8">
-            {getDynamicMessage()}
-          </p>
+    <div className="max-w-2xl mx-auto text-center">
+      <div className="mb-8">
+        <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+          <CheckCircle className="w-10 h-10 text-green-500" />
         </div>
-
-        <div className="space-y-4 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Your Platforms</h3>
-              <p className="text-gray-600 capitalize">{data?.platforms?.join(", ") || ""}</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Your Specialties</h3>
-              <p className="text-gray-600">{getSpecialtyNames()}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="bg-green-50 rounded-lg p-6 mb-8">
-          <h3 className="font-semibold text-green-800 mb-2">What's next?</h3>
-          <p className="text-sm text-green-700">
-            Now we'll help you set up your author profile and payment information so you can start selling right away.
-          </p>
-        </div>
-
-        <div className="flex justify-between">
-          <Button variant="outline" onClick={onPrev}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
-
-          <Button onClick={onNext} className="bg-green-600 hover:bg-green-700 text-white">
-            Continue to Profile
-          </Button>
-        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">Let’s review your selections!</h1>
+        <p className="text-lg text-gray-600 mb-8">
+          {getDynamicMessage()}
+        </p>
       </div>
+
+      <div className="space-y-4 mb-8">
+        <Card>
+          <CardContent className="p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Your Platforms</h3>
+            <p className="text-gray-600 capitalize">{data?.platforms?.join(", ") || ""}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Your Specialties</h3>
+            <p className="text-gray-600">{getSpecialtyNames()}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="bg-green-50 rounded-lg p-6 mb-8">
+        <h3 className="font-semibold text-green-500 mb-2">What's next?</h3>
+        <p className="text-sm text-green-500">
+          Now we'll help you set up your author profile and payment information so you can start selling right away.
+        </p>
+      </div>
+
+      <div className="flex justify-between">
+        <Button variant="outline" onClick={onPrev}>
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+
+        <Button onClick={onNext} className="bg-green-500 hover:bg-green-600 text-white">
+          Continue to Profile
+        </Button>
+      </div>
+    </div>
   )
 }
