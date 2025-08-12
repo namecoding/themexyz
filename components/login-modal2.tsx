@@ -38,7 +38,7 @@ export function LoginModal2({ onClose, onLogin, onSwitchToSignup, pleaseWaitWhil
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle login logic here
-    console.log("Login with:", email, password)
+    //console.log("Login with:", email, password)
     onLogin(email, password)
   }
 

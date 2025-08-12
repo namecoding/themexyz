@@ -94,7 +94,7 @@ export async function POST(request: Request) {
                 html: `
                     <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333;">
                         <h2>Hello, ${updatedUser.name}!</h2>
-                        <p>Thank you for completing your author profile on <strong>${metaData.name}</strong>.</p>
+                        <p>Thank you for completing your author profile on <strong>${metaData.name}.com</strong></p>
                         <p>Your application to become an author has been received and is currently under review by our team.</p>
                         <p>Once approved, you'll be granted permission to start publishing and selling your software on the platform.</p>
                         <p>We appreciate your interest in joining our community of creators.</p>

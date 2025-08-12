@@ -162,12 +162,12 @@ export default function Home() {
 
                     } else {
                         toast.error("Login failed: " + data.message);
-                        console.log("Login failed:", data.message);
+                        //console.log("Login failed:", data.message);
                     }
                 } catch (error) {
                     //setIsLoaded(false);
                     setIsFetchingGoogleData(false);
-                    console.log("Google login error:", error);
+                    //console.log("Google login error:", error);
                 }
             })();
         }
@@ -196,7 +196,7 @@ export default function Home() {
             try {
                 setCartItems(JSON.parse(savedCartItems));
             } catch (e) {
-                console.log("Error parsing cart items", e);
+                //console.log("Error parsing cart items", e);
             }
         }
 
@@ -204,7 +204,7 @@ export default function Home() {
             try {
                 setWishlistItems(JSON.parse(savedWishlistItems));
             } catch (e) {
-                console.log("Error parsing wishlist items", e);
+                //console.log("Error parsing wishlist items", e);
             }
         }
 
@@ -468,7 +468,7 @@ export default function Home() {
             closeLoginModal()
         } catch (error) {
             setPleaseWaitWhileYourTransactionIsProcessing(false)
-            console.log("Login request error:", error)
+            // console.log("Login request error:", error)
             toast.error('Login request error', { id: toastId });
         }
     }
@@ -568,7 +568,7 @@ export default function Home() {
         fetch(`${SERVER_PUBLIC}/themes/fetch`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result?.data, 'theme result')
+                //console.log(result?.data, 'theme result')
                 setFeaturedTheme(result?.data?.featured || [])
                 setBestSelling(result?.data?.bestSelling || [])
                 setNewestThemes(result?.data?.newest || [])
@@ -577,7 +577,7 @@ export default function Home() {
             })
             .catch(error => {
                 setPleaseWaitWhileYourTransactionIsProcessing(false)
-                console.log('error', error)
+                //console.log('error', error)
             });
     }
 

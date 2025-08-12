@@ -1,10 +1,10 @@
 "use client"
 
-import {useState, useEffect, useRef} from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import AuthorRegistrationFlow from "@/components/author/author-registration-flow"
 import ScreenLoading from "@/components/screenLoading";
-import {useAuthStore} from "@/lib/store/auth";
+import { useAuthStore } from "@/lib/store/auth";
 
 export default function AuthorRegisterPage() {
   const { isLoggedIn, setIsLoggedIn, user, setUser, token, hasHydrated } = useAuthStore()
@@ -60,7 +60,7 @@ export default function AuthorRegisterPage() {
       try {
         setCartItems(JSON.parse(savedCartItems))
       } catch (e) {
-        console.log("Error parsing cart items", e)
+        //console.log("Error parsing cart items", e)
       }
     }
 
@@ -68,7 +68,7 @@ export default function AuthorRegisterPage() {
       try {
         setWishlistItems(JSON.parse(savedWishlistItems))
       } catch (e) {
-        console.log("Error parsing wishlist items", e)
+        //console.log("Error parsing wishlist items", e)
       }
     }
 
@@ -76,8 +76,8 @@ export default function AuthorRegisterPage() {
     setWishlistInitialized(true)
 
     if (
-        !hasVisited ||
-        (lastVisit && now - Number.parseInt(lastVisit) > 7 * 24 * 60 * 60 * 1000)
+      !hasVisited ||
+      (lastVisit && now - Number.parseInt(lastVisit) > 7 * 24 * 60 * 60 * 1000)
     ) {
       if (!cookieConsent || cookieConsent !== "accepted") {
         setTimeout(() => {
@@ -119,12 +119,12 @@ export default function AuthorRegisterPage() {
   }, [])
 
   useEffect(() => {
-    console.log(user, 'user on the become author')
+    //console.log(user, 'user on the become author')
   }, [])
 
 
   useEffect(() => {
-    console.log(user, 'user on the become author')
+    // console.log(user, 'user on the become author')
     // Wait for hydration and user load
     const timer = setTimeout(() => {
       const loggedIn = localStorage.getItem("isLoggedIn") === "true"
@@ -140,7 +140,7 @@ export default function AuthorRegisterPage() {
 
   if (!hasHydrated) {
     return (
-      <ScreenLoading/>
+      <ScreenLoading />
     )
   }
 

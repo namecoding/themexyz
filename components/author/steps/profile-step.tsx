@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Upload, User } from "lucide-react";
-import { baseUrl } from "@/lib/utils";
+import { SERVER_PUBLIC } from "@/lib/utils";
 
 interface ProfileStepProps {
   data: any;
@@ -37,47 +37,6 @@ export default function ProfileStep({ data, onNext, onPrev, onUpdate }: ProfileS
     onUpdate({ profile: updated });
   };
 
-  const handleNext__ = async () => {
-    if (!isValid) return;
-
-    try {
-      let avatar = profile.avatarUrl || null;
-
-      if (profile.avatar instanceof File) {
-        const formData = new FormData();
-        formData.append("avatar", profile.avatar);
-
-        const res = await fetch(`http://localhost:3000/api/upload-avatar`, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error || "Upload failed");
-        }
-
-        const data = await res.json();
-        avatar = data.url;  // The uploaded avatar URL
-        console.log("Avatar uploaded to:", avatar);
-      }
-
-      const { avatarPreview, avatarUrl, ...rest } = profile;
-
-      const updatedProfile = {
-        ...rest,
-        avatar,  // Final URL or existing URL
-      };
-
-      setProfile(updatedProfile);
-      onUpdate({ profile: updatedProfile });
-      onNext();
-
-    } catch (error) {
-      console.error("Failed to upload avatar or proceed:", error);
-      alert("Failed to upload avatar. Please try again.");
-    }
-  };
 
   const handleNext = () => {
     if (!isValid) return;
@@ -86,9 +45,9 @@ export default function ProfileStep({ data, onNext, onPrev, onUpdate }: ProfileS
   };
 
 
-  useEffect(() => {
-    console.log(data, "profile screen");
-  }, []);
+  // useEffect(() => {
+  //   console.log(data, "profile screen");
+  // }, []);
 
   useEffect(() => {
     return () => {

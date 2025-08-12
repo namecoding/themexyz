@@ -298,9 +298,9 @@ export default function GeneralInfoStep({
     }
   };
 
-  useEffect(() => {
-    console.log(data, "general info");
-  }, []);
+  // useEffect(() => {
+  //   console.log(data, "general info");
+  // }, []);
 
   const isValid = generalInfo.country && generalInfo.city && generalInfo.phone;
 

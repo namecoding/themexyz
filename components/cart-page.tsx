@@ -92,7 +92,7 @@ export default function CartPage({ cartItems, setCartItems, onClose, userData }:
         }
       } catch (error) {
         setReupdatingCart(false);
-        console.log('Error verifying cart items:', error);
+        //console.log('Error verifying cart items:', error);
       }
     };
 

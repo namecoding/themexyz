@@ -32,23 +32,23 @@ interface AuthorAdminDashboardProps {
 }
 
 const SkeletonApplicationCard = () => (
-  <Card className="animate-pulse border-l-4 border-l-gray-300">
-    <CardContent className="p-6">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 bg-gray-200 rounded-full" />
-        <div className="flex-1 space-y-2">
-          <div className="w-1/2 h-4 bg-gray-200 rounded" />
-          <div className="w-1/3 h-3 bg-gray-200 rounded" />
-          <div className="w-full h-3 bg-gray-200 rounded" />
-          <div className="w-5/6 h-3 bg-gray-200 rounded" />
-          <div className="flex gap-2 mt-2">
-            <div className="w-12 h-4 bg-gray-200 rounded" />
-            <div className="w-16 h-4 bg-gray-200 rounded" />
-          </div>
-        </div>
-      </div>
-    </CardContent>
-  </Card>
+    <Card className="animate-pulse border-l-4 border-l-gray-300">
+        <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                <div className="flex-1 space-y-2">
+                    <div className="w-1/2 h-4 bg-gray-200 rounded" />
+                    <div className="w-1/3 h-3 bg-gray-200 rounded" />
+                    <div className="w-full h-3 bg-gray-200 rounded" />
+                    <div className="w-5/6 h-3 bg-gray-200 rounded" />
+                    <div className="flex gap-2 mt-2">
+                        <div className="w-12 h-4 bg-gray-200 rounded" />
+                        <div className="w-16 h-4 bg-gray-200 rounded" />
+                    </div>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
 )
 
 
@@ -61,44 +61,44 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
     const [fetchingApplication, setFetchingApplication] = useState(false)
     const [statsCount, setStatsCount] = useState({})
 
-    useEffect(()=>{
-       // console.log(currentUser, 'currentUser')
+    useEffect(() => {
+        // console.log(currentUser, 'currentUser')
         fetchAuthorsApplications()
-    },[])
+    }, [])
 
     const fetchAuthorsApplications = async () => {
-  try {
-    const token = localStorage.getItem("token")
-    if (!token) throw new Error("No token found")
+        try {
+            const token = localStorage.getItem("token")
+            if (!token) throw new Error("No token found")
 
-    setFetchingApplication(true)
+            setFetchingApplication(true)
 
-    const response = await fetch(`${SERVER_PUBLIC}/admin/author-applications`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+            const response = await fetch(`${SERVER_PUBLIC}/admin/author-applications`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch applications")
+            if (!response.ok) {
+                throw new Error("Failed to fetch applications")
+            }
+
+            const data = await response.json()
+
+            //console.log(data.applications, 'users applications')
+
+            // ✅ Update your state
+            setApplications(data.applications || [])
+            setStatsCount(data.stats)
+
+        } catch (error) {
+            //console.error("Error fetching applications:", error)
+        } finally {
+            // ✅ Always stop the loading indicator
+            setFetchingApplication(false)
+        }
     }
-
-    const data = await response.json()
-
-    console.log(data.applications, 'users applications')
-
-    // ✅ Update your state
-    setApplications(data.applications || [])
-    setStatsCount(data.stats)
-
-  } catch (error) {
-    console.error("Error fetching applications:", error)
-  } finally {
-    // ✅ Always stop the loading indicator
-    setFetchingApplication(false)
-  }
-}
 
 
 
@@ -118,49 +118,49 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
         setIsModalOpen(true)
     }
 
-  const handleApplicationDecision = async (
-  applicationId: string,
-  status: "approved" | "rejected",
-  notes: string
-) => {
-  console.log(applicationId, status, notes)
+    const handleApplicationDecision = async (
+        applicationId: string,
+        status: "approved" | "rejected",
+        notes: string
+    ) => {
+        //console.log(applicationId, status, notes)
 
-  try {
-    const token = localStorage.getItem("token")
+        try {
+            const token = localStorage.getItem("token")
 
-    if (!token) {
-      console.error("No token found")
-      return
+            if (!token) {
+                //console.error("No token found")
+                return
+            }
+
+            const res = await fetch(`${SERVER_PUBLIC}/admin/author-decision`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    userId: applicationId,
+                    decision: status,
+                    notes
+                })
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                throw new Error(data.message || "Failed to process decision")
+            }
+
+            // ✅ After success
+            setIsModalOpen(false)
+            setSelectedApplication(null)
+            //console.log(`Application ${status} successfully`)
+        } catch (error: any) {
+            //console.log("Decision error:", error)
+            //alert(error.message || "An error occurred")
+        }
     }
-
-    const res = await fetch(`${SERVER_PUBLIC}/admin/author-decision`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        userId: applicationId,
-        decision: status,
-        notes
-      })
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-      throw new Error(data.message || "Failed to process decision")
-    }
-
-    // ✅ After success
-    setIsModalOpen(false)
-    setSelectedApplication(null)
-    console.log(`Application ${status} successfully`)
-  } catch (error: any) {
-    console.log("Decision error:", error)
-    //alert(error.message || "An error occurred")
-  }
-}
 
 
     const formatDate = (dateString: string) => {
@@ -330,136 +330,136 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
                                 </div>
 
                                 {/* Applications List */}
-                        
+
                                 <div className="space-y-4">
                                     {fetchingApplication ? (
                                         // Show 4 loading skeletons
                                         <>
-                                        <SkeletonApplicationCard />
-                                        <SkeletonApplicationCard />
-                                        <SkeletonApplicationCard />
-                                        <SkeletonApplicationCard />
+                                            <SkeletonApplicationCard />
+                                            <SkeletonApplicationCard />
+                                            <SkeletonApplicationCard />
+                                            <SkeletonApplicationCard />
                                         </>
                                     ) : filteredApplications.length > 0 ? (
                                         filteredApplications.map((application) => (
-                                        <Card
-                                            key={application.id}
-                                            className={`border-l-4 ${getPriorityColor(application)} hover:shadow-md transition-shadow`}
-                                        >
-                                            <CardContent className="p-6">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-start gap-4 flex-1">
-                                                        <Avatar className="w-12 h-12">
-                                                            <AvatarImage
-                                                                src={application.userAvatar || "/placeholder.svg"}
-                                                                alt={application.userName}
-                                                            />
-                                                            <AvatarFallback className="bg-green-100 text-green-600">
-                                                                {application.userName
-                                                                    .split(" ")
-                                                                    .map((n) => n[0])
-                                                                    .join("")}
-                                                            </AvatarFallback>
-                                                        </Avatar>
+                                            <Card
+                                                key={application.id}
+                                                className={`border-l-4 ${getPriorityColor(application)} hover:shadow-md transition-shadow`}
+                                            >
+                                                <CardContent className="p-6">
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="flex items-start gap-4 flex-1">
+                                                            <Avatar className="w-12 h-12">
+                                                                <AvatarImage
+                                                                    src={application.userAvatar || "/placeholder.svg"}
+                                                                    alt={application.userName}
+                                                                />
+                                                                <AvatarFallback className="bg-green-100 text-green-600">
+                                                                    {application.userName
+                                                                        .split(" ")
+                                                                        .map((n) => n[0])
+                                                                        .join("")}
+                                                                </AvatarFallback>
+                                                            </Avatar>
 
-                                                        <div className="flex-1">
-                                                            <div className="flex items-start justify-between mb-2">
-                                                                <div>
-                                                                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{application.userName}</h3>
-                                                                    <p className="text-sm text-gray-600 mb-2">{currentUser.isSystem ? application.userEmail : maskEmail(application.userEmail)}</p>
+                                                            <div className="flex-1">
+                                                                <div className="flex items-start justify-between mb-2">
+                                                                    <div>
+                                                                        <h3 className="text-lg font-semibold text-gray-900 mb-1">{application.userName}</h3>
+                                                                        <p className="text-sm text-gray-600 mb-2">{currentUser.isSystem ? application.userEmail : maskEmail(application.userEmail)}</p>
+                                                                    </div>
+                                                                    {getStatusBadge(application.status)}
                                                                 </div>
-                                                                {getStatusBadge(application.status)}
-                                                            </div>
 
-                                                            <div className="mb-3">
-                                                                <p className="text-sm text-gray-700 line-clamp-2">{application.experience}</p>
-                                                            </div>
-
-                                                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
-                                                                <div className="flex items-center gap-1">
-                                                                    <Clock className="w-4 h-4" />
-                                                                    <span>Applied: {formatDate(application.applicationDate)}</span>
+                                                                <div className="mb-3">
+                                                                    <p className="text-sm text-gray-700 line-clamp-2">{application.experience}</p>
                                                                 </div>
-                                                                {application.portfolio && (
+
+                                                                <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
                                                                     <div className="flex items-center gap-1">
-                                                                        <Globe className="w-4 h-4" />
+                                                                        <Clock className="w-4 h-4" />
+                                                                        <span>Applied: {formatDate(application.applicationDate)}</span>
+                                                                    </div>
+                                                                    {application.portfolio && (
+                                                                        <div className="flex items-center gap-1">
+                                                                            <Globe className="w-4 h-4" />
+                                                                            <a
+                                                                                href={application.portfolio}
+                                                                                target="_blank"
+                                                                                rel="noopener noreferrer"
+                                                                                className="text-green-600 hover:underline"
+                                                                            >
+                                                                                Portfolio
+                                                                            </a>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                <div className="flex flex-wrap gap-2 mb-3">
+                                                                    {application.specialties.map((specialty, index) => (
+                                                                        <Badge key={index} variant="secondary" className="text-xs">
+                                                                            {specialty}
+                                                                        </Badge>
+                                                                    ))}
+                                                                </div>
+
+                                                                <div className="flex items-center gap-3">
+                                                                    {application.socialLinks.map((link, index) => (
                                                                         <a
-                                                                            href={application.portfolio}
+                                                                            key={index}
+                                                                            href={link.url}
                                                                             target="_blank"
                                                                             rel="noopener noreferrer"
-                                                                            className="text-green-600 hover:underline"
+                                                                            className="text-gray-500 hover:text-gray-700"
                                                                         >
-                                                                            Portfolio
+                                                                            {link.platform === "GitHub" && <Github className="w-4 h-4" />}
+                                                                            {link.platform === "LinkedIn" && <Linkedin className="w-4 h-4" />}
+                                                                            {link.platform === "Dribbble" && <Globe className="w-4 h-4" />}
+                                                                            {link.platform === "Behance" && <Globe className="w-4 h-4" />}
                                                                         </a>
-                                                                    </div>
-                                                                )}
+                                                                    ))}
+                                                                </div>
                                                             </div>
+                                                        </div>
 
-                                                            <div className="flex flex-wrap gap-2 mb-3">
-                                                                {application.specialties.map((specialty, index) => (
-                                                                    <Badge key={index} variant="secondary" className="text-xs">
-                                                                        {specialty}
-                                                                    </Badge>
-                                                                ))}
-                                                            </div>
-
-                                                            <div className="flex items-center gap-3">
-                                                                {application.socialLinks.map((link, index) => (
-                                                                    <a
-                                                                        key={index}
-                                                                        href={link.url}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="text-gray-500 hover:text-gray-700"
-                                                                    >
-                                                                        {link.platform === "GitHub" && <Github className="w-4 h-4" />}
-                                                                        {link.platform === "LinkedIn" && <Linkedin className="w-4 h-4" />}
-                                                                        {link.platform === "Dribbble" && <Globe className="w-4 h-4" />}
-                                                                        {link.platform === "Behance" && <Globe className="w-4 h-4" />}
-                                                                    </a>
-                                                                ))}
-                                                            </div>
+                                                        <div className="flex flex-col gap-2 ml-4">
+                                                            <Button
+                                                                size="sm"
+                                                                variant="outline"
+                                                                onClick={() => handleReviewApplication(application)}
+                                                                className="flex items-center gap-2"
+                                                            >
+                                                                <Eye className="w-4 h-4" />
+                                                                Review
+                                                            </Button>
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex flex-col gap-2 ml-4">
-                                                        <Button
-                                                            size="sm"
-                                                            variant="outline"
-                                                            onClick={() => handleReviewApplication(application)}
-                                                            className="flex items-center gap-2"
-                                                        >
-                                                            <Eye className="w-4 h-4" />
-                                                            Review
-                                                        </Button>
-                                                    </div>
-                                                </div>
-
-                                                {application.reviewNotes && (
-                                                    <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                                                        <div className="flex items-center gap-2 mb-1">
-                                                            <Package className="w-4 h-4 text-gray-600" />
-                                                            <span className="text-sm font-medium text-gray-900">Review Notes:</span>
+                                                    {application.reviewNotes && (
+                                                        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <Package className="w-4 h-4 text-gray-600" />
+                                                                <span className="text-sm font-medium text-gray-900">Review Notes:</span>
+                                                            </div>
+                                                            <p className="text-sm text-gray-700">{application.reviewNotes}</p>
+                                                            {application.reviewedBy && application.reviewedAt && (
+                                                                <p className="text-xs text-gray-500 mt-1">
+                                                                    By {application.reviewedBy} on {formatDate(application.reviewedAt)}
+                                                                </p>
+                                                            )}
                                                         </div>
-                                                        <p className="text-sm text-gray-700">{application.reviewNotes}</p>
-                                                        {application.reviewedBy && application.reviewedAt && (
-                                                            <p className="text-xs text-gray-500 mt-1">
-                                                                By {application.reviewedBy} on {formatDate(application.reviewedAt)}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </CardContent>
-                                        </Card>
+                                                    )}
+                                                </CardContent>
+                                            </Card>
                                         ))
                                     ) : (
                                         <div className="text-center py-12">
-                                        <UserCheck className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                        <h3 className="text-lg font-medium text-gray-900 mb-2">No applications found</h3>
-                                        <p className="text-gray-600">Try adjusting your search or filter criteria</p>
+                                            <UserCheck className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                            <h3 className="text-lg font-medium text-gray-900 mb-2">No applications found</h3>
+                                            <p className="text-gray-600">Try adjusting your search or filter criteria</p>
                                         </div>
                                     )}
-                                    </div>
+                                </div>
                             </TabsContent>
 
                             <TabsContent value="activity" className="space-y-4">
@@ -519,8 +519,8 @@ export default function AuthorAdminDashboard({ currentUser, onClose }: AuthorAdm
                                                                 <p className="text-sm text-gray-600 mt-1">{activity.details}</p>
                                                             </div>
                                                             <span className="text-xs text-gray-500 whitespace-nowrap ml-4">
-                                {formatDate(activity.timestamp)}
-                              </span>
+                                                                {formatDate(activity.timestamp)}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>

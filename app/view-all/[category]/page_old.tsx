@@ -55,7 +55,7 @@ export default function ViewAllPage() {
       fetch(`${SERVER_PUBLIC}/themes/fetch2`, requestOptions)
         .then(response => response.json())
         .then(result => {
-          console.log(result?.data, 'theme result');
+          //console.log(result?.data, 'theme result');
           const data = result?.data || [];
           setPleaseWaitWhileYourTransactionIsProcessing(false)
           setItems(data);           // Populate with fetched items
@@ -64,7 +64,7 @@ export default function ViewAllPage() {
         })
         .catch(error => {
           setPleaseWaitWhileYourTransactionIsProcessing(false)
-          console.log('Fetch error', error);
+          //console.log('Fetch error', error);
           setIsLoaded(true); // Prevent loading state hanging
         });
     };
@@ -187,7 +187,7 @@ export default function ViewAllPage() {
   const getCategoryTitle = () => {
     if (!category) return "All Items"
 
-    console.log(category, 'getCategoryTitle')
+    //console.log(category, 'getCategoryTitle')
 
     switch (category) {
       case "wordpress":
@@ -217,7 +217,7 @@ export default function ViewAllPage() {
   }
 
   const handleCategoryToggle = (category) => {
-    console.log(category, 'handleCategoryToggle')
+    //console.log(category, 'handleCategoryToggle')
     setSelectedCategories((prev) => {
       if (prev.includes(category)) {
         return prev.filter((c) => c !== category)
@@ -818,8 +818,8 @@ function ThemeListItem({ item, addToCart, isInCart, toggleWishlist, isInWishlist
                 <Button
                   size="sm"
                   className={`text-xs flex items-center justify-center ${isInCart
-                      ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                      : "bg-green-600 hover:bg-green-600 text-white"
+                    ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    : "bg-green-600 hover:bg-green-600 text-white"
                     }`}
                   onClick={() => !isInCart && addToCart(item)}
                   disabled={isInCart}

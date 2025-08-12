@@ -63,7 +63,7 @@ export default function DashboardLayout({
       try {
         setWishlistItems(JSON.parse(savedWishlistItems));
       } catch (e) {
-        console.log("Error parsing wishlist items", e);
+        //console.log("Error parsing wishlist items", e);
       }
     }
 

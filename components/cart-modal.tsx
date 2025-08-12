@@ -23,7 +23,7 @@ export default function CartModal({ onClose, item, onViewChat }: CartModalProps)
   }
 
   useEffect(() => {
-    console.log(item);
+    // console.log(item);
 
     // Disable scroll
     document.body.style.overflow = "hidden";

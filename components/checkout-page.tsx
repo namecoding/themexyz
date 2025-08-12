@@ -83,9 +83,9 @@ export default function CheckoutPage({
     phone: "",
   })
 
-  useEffect(() => {
-    console.log(userData, 'checkout user data')
-  }, [])
+  // useEffect(() => {
+  //   console.log(userData, 'checkout user data')
+  // }, [])
 
   const pathname = usePathname()
   const [isPurchaseFeedbackOpen, setIsPurchaseFeedbackOpen] = useState(false)
@@ -98,7 +98,7 @@ export default function CheckoutPage({
     currency: ''
   })
   const handleFeedbackSubmit = (feedback: any) => {
-    console.log("Feedback submitted:", feedback)
+    // console.log("Feedback submitted:", feedback)
     // Handle feedback submission here
   }
 
@@ -199,10 +199,10 @@ export default function CheckoutPage({
       if (userData?.phone && userData?.country && userData?.address && userData?.company) {
         setHasBillingDetails(true);
         setShowBillingForm(false);
-        console.log('phone good')
+        //console.log('phone good')
 
       } else {
-        console.log('phone not good')
+        //console.log('phone not good')
       }
 
     }
@@ -215,14 +215,14 @@ export default function CheckoutPage({
         const res = await fetch("https://ipapi.co/json/");
         const data = await res.json();
 
-        console.log(data)
+        //console.log(data)
 
         if (data?.country_name) {
           setBillingDetails((prev) => ({
             ...prev,
             country: data.country_name,
           }));
-          console.log(data.country_name)
+          //console.log(data.country_name)
         }
       } catch (error) {
         console.error("Failed to fetch user country:", error);
@@ -343,13 +343,13 @@ export default function CheckoutPage({
             toastId,
             currency,
             onSuccess: (res) => {
-              console.log("🧾 User paid successfully!", res);
+              //console.log("🧾 User paid successfully!", res);
               // Optionally process here
               //res.reference
             },
             onClose: async () => {
               setProcessingPayment(false);
-              console.log("Payment modal closed");
+              //console.log("Payment modal closed");
 
               // ✅ Call backend to update payment status to Cancelled
               try {
@@ -449,7 +449,7 @@ export default function CheckoutPage({
 
           } catch (err) {
             toast.error("Failed to verify payment", { id: toastId });
-            console.log("Verification error:", err);
+            //console.log("Verification error:", err);
             setProcessingPayment(false);
           }
 
@@ -466,7 +466,7 @@ export default function CheckoutPage({
           setProcessingPayment(false);
       }
     } catch (error: any) {
-      console.log("Payment error:", error);
+      //console.log("Payment error:", error);
       toast.dismiss(toastId);
       setProcessingPayment(false);
     }
@@ -523,8 +523,8 @@ export default function CheckoutPage({
           avatar: data.user.avatar || "/placeholder.svg?height=40&width=40", // fallback avatar
         })
 
-        console.log(data?.user, 'user')
-        console.log(data.token, 'token')
+        // console.log(data?.user, 'user')
+        // console.log(data.token, 'token')
 
       } else {
         setPleaseWaitWhileYourTransactionIsProcessing(false)

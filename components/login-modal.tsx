@@ -25,7 +25,7 @@ export default function LoginModal({ onClose, onLogin, onSwitchToSignup }: Login
 
   const handleGoogleLogin = () => {
     // In a real app, you would implement Google OAuth here
-    console.log("Google login clicked")
+    // console.log("Google login clicked")
   }
 
   return (

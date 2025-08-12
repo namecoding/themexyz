@@ -23,7 +23,7 @@ export async function GET() {
         });
         if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
             const data = await res.json();
-            console.log("ipapi.co:", data);
+            //console.log("ipapi.co:", data);
             result = {
                 ip: data.ip,
                 country: data.country_name,
@@ -41,7 +41,7 @@ export async function GET() {
             const res = await fetch(`https://api.ipdata.co?api-key=${IPDATA_API_KEY}`);
             if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
                 const data = await res.json();
-                console.log("ipdata.co:", data);
+                //console.log("ipdata.co:", data);
                 result = {
                     ip: data.ip,
                     country: data.country_name,
@@ -60,7 +60,7 @@ export async function GET() {
             const res = await fetch(`https://ipinfo.io?token=${IPINFO_API_KEY}`);
             if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
                 const data = await res.json();
-                console.log("ipinfo.io:", data);
+                //console.log("ipinfo.io:", data);
                 result = {
                     ip: data.ip,
                     country: data.country,
@@ -69,7 +69,7 @@ export async function GET() {
                 };
             }
         } catch (err) {
-            console.warn("ipinfo.io failed:", err);
+            //console.warn("ipinfo.io failed:", err);
         }
     }
 
@@ -79,7 +79,7 @@ export async function GET() {
             const res = await fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=${IPGEOLOCATION_API_KEY}`);
             if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
                 const data = await res.json();
-                console.log("ipgeolocation.io:", data);
+                //console.log("ipgeolocation.io:", data);
                 result = {
                     ip: data.ip,
                     country: data.country_name,

@@ -66,9 +66,9 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
 
         if (data.success) {
           setAllProducts(data.themes);
-          console.log(data.themes, 'authors themes');
+          //console.log(data.themes, 'authors themes');
         } else {
-          console.log("Failed to fetch recent purchases:", data.message);
+          //console.log("Failed to fetch recent purchases:", data.message);
           toast.error("Failed to fetch recent purchases");
         }
 
@@ -76,7 +76,7 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
 
       } catch (error) {
         setIsLoadingPurchase(false)
-        console.log("Fetch error:", error);
+        //console.log("Fetch error:", error);
         toast.error("Fetch error");
       }
     };
@@ -85,7 +85,7 @@ export default function MyProductsDashboard({ user }: MyProductsDashboardProps) 
   }, []);
 
   const handlePublish = (id: string) => {
-    console.log(id, 'publishing id')
+    //console.log(id, 'publishing id')
   }
 
   const handleView = (theme: any) => {

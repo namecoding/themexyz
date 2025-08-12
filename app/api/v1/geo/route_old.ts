@@ -21,7 +21,7 @@ export async function GET(req: Request) {
         });
         const data = await geoRes.json();
 
-        console.log("IPAPI Response:", data);
+        // console.log("IPAPI Response:", data);
 
         return Response.json({
             ip: realIp,

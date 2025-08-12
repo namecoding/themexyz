@@ -41,7 +41,7 @@ export async function GET(request: Request) {
       );
     }
 
-    console.log("✅ Authenticated user:", user);
+    //console.log("✅ Authenticated user:", user);
 
     return new NextResponse(
       JSON.stringify({

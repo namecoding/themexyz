@@ -314,7 +314,7 @@ export const usePaystack = ({
       });
     } catch (err) {
       // toast.error("Paystack failed to load", { id: toastId });
-      console.log("Paystack client error:", err);
+      //console.log("Paystack client error:", err);
       reject(err);
     }
   });

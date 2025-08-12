@@ -62,10 +62,10 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
         if (data.success) {
           setActivities(data.activities);
         } else {
-          console.log("Failed to fetch activities:", data.message);
+          //console.log("Failed to fetch activities:", data.message);
         }
       } catch (error) {
-        console.log("Fetch error:", error);
+        //console.log("Fetch error:", error);
       } finally {
         setLoading(false);
       }
@@ -111,12 +111,12 @@ export default function AccountDashboard({ user }: AccountDashboardProps) {
         if (data.success) {
           setRecentPurchases(data.purchases);
         } else {
-          console.log("Failed to fetch purchases:", data.message);
+          //console.log("Failed to fetch purchases:", data.message);
           toast.error("Failed to fetch purchases");
         }
       } catch (error) {
         setIsLoadingPurchase(false)
-        console.log("Fetch error:", error);
+        //console.log("Fetch error:", error);
         toast.error("Fetch error");
       }
     };

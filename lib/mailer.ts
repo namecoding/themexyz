@@ -7,7 +7,19 @@ type SendEmailOptions = {
     html: string;
 };
 
+// Control flags
+const gmail = "allow";   // allow || deny
+const yahoo = "deny";   // allow || deny
+const webmail = "deny"; // allow || deny
+const brevo = "allow";   // allow || deny
+export const allowEmailSending = 1; // 1 = send, 0 = don't send
+
 export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
+    if (!allowEmailSending) {
+        console.warn("❌ Email sending is disabled globally");
+        return false;
+    }
+
     const senderName = metaData.name + " Team";
 
     const brevoTransporter = nodemailer.createTransport({
@@ -47,53 +59,28 @@ export const sendEmail = async ({ to, subject, html }: SendEmailOptions) => {
         },
     });
 
-    try {
-        await brevoTransporter.sendMail({
-            from: `"${senderName}" <${process.env.BREVO_SENDER_EMAIL}>`,
-            to,
-            subject,
-            html,
-        });
-        console.log("✅ Email sent using Brevo");
-    } catch (brevoError) {
-        // console.error("❌ Brevo failed:", brevoError);
-        try {
-            await gmailTransporter.sendMail({
-                from: `"${senderName}" <${process.env.GMAIL_USER}>`,
-                to,
-                subject,
-                html,
-            });
-            console.log("✅ Email sent using Gmail");
-        } catch (gmailError) {
-            // console.error("❌ Gmail failed:", gmailError);
-            try {
-                await yahooTransporter.sendMail({
-                    from: `"${senderName}" <${process.env.YAHOO_USER}>`,
-                    to,
-                    subject,
-                    html,
-                });
-                console.log("✅ Email sent using Yahoo");
-            } catch (yahooError) {
-                // console.error("❌ Yahoo failed:", yahooError);
-                try {
-                    await webMailTransporter.sendMail({
-                        from: `"${senderName}" <${process.env.WEB_MAIL_USER}>`,
-                        to,
-                        subject,
-                        html,
-                    });
-                    console.log("✅ Email sent using Webmail");
-                } catch (webmailError) {
-                    console.error("❌ All email services failed:", webmailError);
-                    return false;
-                }
-            }
+    const tryService = async (enabled: string, transporter: any, from: string, serviceName: string) => {
+        if (enabled !== "allow") {
+            //console.log(`⏩ Skipping ${serviceName} (disabled)`);
+            return false;
         }
-    }
+        try {
+            await transporter.sendMail({ from, to, subject, html });
+            //console.log(`✅ Email sent using ${serviceName}`);
+            return true;
+        } catch (err) {
+            //console.warn(`❌ ${serviceName} failed:`, err.message);
+            return false;
+        }
+    };
 
-    return true;
+    // Priority order
+    if (await tryService(brevo, brevoTransporter, `"${senderName}" <${process.env.BREVO_SENDER_EMAIL}>`, "Brevo")) return true;
+    if (await tryService(gmail, gmailTransporter, `"${senderName}" <${process.env.GMAIL_USER}>`, "Gmail")) return true;
+    if (await tryService(yahoo, yahooTransporter, `"${senderName}" <${process.env.YAHOO_USER}>`, "Yahoo")) return true;
+    if (await tryService(webmail, webMailTransporter, `"${senderName}" <${process.env.WEB_MAIL_USER}>`, "Webmail")) return true;
+
+    console.error("❌ All allowed email services failed");
+    return false;
 };
 
-export const allowEmailSending = 1; // 1 = send, 0 = don't send

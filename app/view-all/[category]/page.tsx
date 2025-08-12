@@ -54,7 +54,7 @@ export default function ViewAllPage() {
         const parsedUser = JSON.parse(savedUser)
         setUser(parsedUser)
       } catch (e) {
-        console.log("Error parsing user data", e)
+        //console.log("Error parsing user data", e)
       }
     }
   }, [])
@@ -73,7 +73,7 @@ export default function ViewAllPage() {
       fetch(`${SERVER_PUBLIC}/themes/fetch2`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          console.log(result?.data, "theme result")
+          // console.log(result?.data, "theme result")
           const data = result?.data || []
           setPleaseWaitWhileYourTransactionIsProcessing(false)
           setItems(data) // Populate with fetched items
@@ -82,7 +82,7 @@ export default function ViewAllPage() {
         })
         .catch((error) => {
           setPleaseWaitWhileYourTransactionIsProcessing(false)
-          console.log("Fetch error", error)
+          //console.log("Fetch error", error)
           setIsLoaded(true) // Prevent loading state hanging
         })
     }
@@ -112,9 +112,9 @@ export default function ViewAllPage() {
   useEffect(() => {
     let result = [...items]
 
-    console.log("=== FILTERING DEBUG ===")
-    console.log("Original items count:", items.length)
-    console.log("Original items:", items)
+    //console.log("=== FILTERING DEBUG ===")
+    //console.log("Original items count:", items.length)
+    //console.log("Original items:", items)
 
     // Apply search filter
     if (searchQuery) {
@@ -124,7 +124,7 @@ export default function ViewAllPage() {
           item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
           item.author?.toLowerCase().includes(searchQuery.toLowerCase()),
       )
-      console.log(`Search filter: ${beforeSearch} -> ${result.length} (removed ${beforeSearch - result.length})`)
+      //console.log(`Search filter: ${beforeSearch} -> ${result.length} (removed ${beforeSearch - result.length})`)
     }
 
     // Apply price range filter
@@ -132,11 +132,11 @@ export default function ViewAllPage() {
     result = result.filter((item) => {
       const hasValidPrice = currency === 'NGN' ? item.priceNGN : item.priceUSD >= priceRange[0] && currency === 'NGN' ? item.priceNGN : item.priceUSD <= priceRange[1]
       if (!hasValidPrice) {
-        console.log("Item filtered out by price:", item.title, "Price:", currency === 'NGN' ? item.priceNGN : item.priceUSD, "Range:", priceRange)
+        //console.log("Item filtered out by price:", item.title, "Price:", currency === 'NGN' ? item.priceNGN : item.priceUSD, "Range:", priceRange)
       }
       return hasValidPrice
     })
-    console.log(`Price filter: ${beforePrice} -> ${result.length} (removed ${beforePrice - result.length})`)
+    //console.log(`Price filter: ${beforePrice} -> ${result.length} (removed ${beforePrice - result.length})`)
 
     // Apply rating filter
     if (selectedRating > 0) {
@@ -144,11 +144,11 @@ export default function ViewAllPage() {
       result = result.filter((item) => {
         const hasValidRating = item.rating >= selectedRating
         if (!hasValidRating) {
-          console.log("Item filtered out by rating:", item.title, "Rating:", item.rating, "Required:", selectedRating)
+          //console.log("Item filtered out by rating:", item.title, "Rating:", item.rating, "Required:", selectedRating)
         }
         return hasValidRating
       })
-      console.log(`Rating filter: ${beforeRating} -> ${result.length} (removed ${beforeRating - result.length})`)
+      //console.log(`Rating filter: ${beforeRating} -> ${result.length} (removed ${beforeRating - result.length})`)
     }
 
     // Apply category filters
@@ -157,18 +157,18 @@ export default function ViewAllPage() {
       result = result.filter((item) => {
         const hasValidCategory = selectedCategories.includes(item.isCategory)
         if (!hasValidCategory) {
-          console.log(
-            "Item filtered out by category:",
-            item.title,
-            "Category:",
-            item.isCategory,
-            "Selected:",
-            selectedCategories,
-          )
+          // console.log(
+          //   "Item filtered out by category:",
+          //   item.title,
+          //   "Category:",
+          //   item.isCategory,
+          //   "Selected:",
+          //   selectedCategories,
+          // )
         }
         return hasValidCategory
       })
-      console.log(`Category filter: ${beforeCategory} -> ${result.length} (removed ${beforeCategory - result.length})`)
+      //console.log(`Category filter: ${beforeCategory} -> ${result.length} (removed ${beforeCategory - result.length})`)
     }
 
     // Apply category-specific filters based on URL parameter
@@ -179,14 +179,14 @@ export default function ViewAllPage() {
       if (category === "featured") {
         result = result.filter((item) => {
           if (!item.featured) {
-            console.log("Item filtered out - not featured:", item.title)
+            //console.log("Item filtered out - not featured:", item.title)
           }
           return item.featured
         })
       } else if (category === "bestsellers") {
         result = result.filter((item) => {
           if (!item.bestseller) {
-            console.log("Item filtered out - not bestseller:", item.title)
+            //console.log("Item filtered out - not bestseller:", item.title)
           }
           return item.bestseller
         })
@@ -196,7 +196,7 @@ export default function ViewAllPage() {
         result = result.filter((item) => {
           const isNew = new Date(item.date) > thirtyDaysAgo
           if (!isNew) {
-            console.log("Item filtered out - not new:", item.title, "Date:", item.date)
+            //console.log("Item filtered out - not new:", item.title, "Date:", item.date)
           }
           return isNew
         })
@@ -206,21 +206,21 @@ export default function ViewAllPage() {
             typeof item.isCategory === "string" &&
             (item.isCategory.toLowerCase() === categoryTitle || item.isCategory.toLowerCase().includes(categoryTitle))
           if (!matchesCategory) {
-            console.log(
-              "Item filtered out by URL category:",
-              item.title,
-              "Item category:",
-              item.isCategory,
-              "URL category:",
-              categoryTitle,
-            )
+            // console.log(
+            //   "Item filtered out by URL category:",
+            //   item.title,
+            //   "Item category:",
+            //   item.isCategory,
+            //   "URL category:",
+            //   categoryTitle,
+            // )
           }
           return matchesCategory
         })
       }
-      console.log(
-        `URL Category filter: ${beforeUrlCategory} -> ${result.length} (removed ${beforeUrlCategory - result.length})`,
-      )
+      // console.log(
+      //   `URL Category filter: ${beforeUrlCategory} -> ${result.length} (removed ${beforeUrlCategory - result.length})`,
+      // )
     }
 
     // Apply sorting
@@ -249,9 +249,9 @@ export default function ViewAllPage() {
         })
     }
 
-    console.log("Final filtered items count:", result.length)
-    console.log("Final filtered items:", result)
-    console.log("=== END FILTERING DEBUG ===")
+    // console.log("Final filtered items count:", result.length)
+    // console.log("Final filtered items:", result)
+    // console.log("=== END FILTERING DEBUG ===")
 
     setFilteredItems(result)
   }, [items, searchQuery, sortBy, priceRange, selectedRating, selectedCategories, category])
@@ -290,7 +290,7 @@ export default function ViewAllPage() {
   const getCategoryTitle = () => {
     if (!category) return "All Items"
 
-    console.log(category, "getCategoryTitle")
+    //console.log(category, "getCategoryTitle")
 
     switch (category) {
       case "wordpress":
@@ -320,7 +320,7 @@ export default function ViewAllPage() {
   }
 
   const handleCategoryToggle = (category) => {
-    console.log(category, "handleCategoryToggle")
+    //console.log(category, "handleCategoryToggle")
     setSelectedCategories((prev) => {
       if (prev.includes(category)) {
         return prev.filter((c) => c !== category)

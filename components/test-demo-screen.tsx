@@ -24,7 +24,7 @@ export default function TestDemoScreen({ onClose, item, addToCart, isInCart }: T
   useEffect(() => {
     // Reset loading state when device view changes
     // setIsLoading(true)
-    console.log(item, 'items')
+    //console.log(item, 'items')
   }, [deviceView])
 
   const handleIframeLoad = () => {

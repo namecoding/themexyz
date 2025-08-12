@@ -112,7 +112,7 @@ export async function GET() {
         );
 
     } catch (error: any) {
-        console.log("Split processing error:", error);
+        //console.log("Split processing error:", error);
 
         return new NextResponse(
             JSON.stringify({ success: false, message: 'Internal Server error' }),

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {SERVER_PUBLIC} from "@/lib/utils";
+import { SERVER_PUBLIC } from "@/lib/utils";
 
 const OPayButton = ({ amount, name, email }) => {
     const [loading, setLoading] = useState(false);
@@ -33,11 +33,11 @@ const OPayButton = ({ amount, name, email }) => {
                 customer: { name, email },
                 merchant: { merchantId: process.env.NEXT_PUBLIC_OPAY_MERCHANT_ID },
                 onSuccess: (data) => {
-                    console.log("✅ Payment successful", data);
+                    //console.log("✅ Payment successful", data);
                     // Optionally call /api/verify-payment with reference
                 },
-                onClose: () => console.log("Payment closed by user"),
-                onError: (err) => console.error("Payment error", err),
+                onClose: () => { },
+                onError: (err) => { },
             });
 
             checkout.open();

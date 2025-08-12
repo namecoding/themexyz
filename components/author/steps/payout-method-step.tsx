@@ -201,9 +201,9 @@ export default function PayoutMethodStep({
         setFormDetails({ ...formDetails, [field]: value });
     };
 
-    useEffect(() => {
-        console.log(data, "payout screen");
-    }, []);
+    // useEffect(() => {
+    //     console.log(data, "payout screen");
+    // }, []);
 
     return (
         <div className="max-w-2xl mx-auto">

@@ -338,7 +338,7 @@ export default function BecomeAuthorLanding() {
       try {
         setCartItems(JSON.parse(savedCartItems))
       } catch (e) {
-        console.log("Error parsing cart items", e)
+        //console.log("Error parsing cart items", e)
       }
     }
 
@@ -346,7 +346,7 @@ export default function BecomeAuthorLanding() {
       try {
         setWishlistItems(JSON.parse(savedWishlistItems))
       } catch (e) {
-        console.log("Error parsing wishlist items", e)
+        //console.log("Error parsing wishlist items", e)
       }
     }
 
@@ -511,7 +511,7 @@ export default function BecomeAuthorLanding() {
 
       if (!response.ok) {
 
-        console.log("Login failed:", data.error || data.message)
+        //console.log("Login failed:", data.error || data.message)
         // Optionally show error to user
         toast.error(data.message, { id: toastId });
 

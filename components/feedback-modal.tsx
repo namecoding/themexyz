@@ -1,15 +1,15 @@
 "use client"
 
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { X, Star, Gift, CheckCircle, MessageSquare, ShoppingCart, Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import {SERVER_PUBLIC, loyaltyPointsReward} from "@/lib/utils";
+import { SERVER_PUBLIC, loyaltyPointsReward } from "@/lib/utils";
 import toast from "react-hot-toast";
-import {useAuthStore} from "@/lib/store/auth";
+import { useAuthStore } from "@/lib/store/auth";
 
 interface FeedbackData {
     productTitle?: string
@@ -18,7 +18,7 @@ interface FeedbackData {
     name: string
     avatar?: string
     total?: number
-    currency:string
+    currency: string
 }
 
 interface FeedbackModalProps {
@@ -31,9 +31,9 @@ interface FeedbackModalProps {
         review: string
         type: "purchase" | "product"
         data: FeedbackData
-        point:string
+        point: string
     }) => void
-    userData:any
+    userData: any
 }
 
 export default function FeedbackModal({ isOpen, onClose, type, data, onSubmit, userData }: FeedbackModalProps) {
@@ -82,21 +82,21 @@ export default function FeedbackModal({ isOpen, onClose, type, data, onSubmit, u
             }
 
             const responseData = await res.json();
-            console.log('Server response:', responseData);
+            //console.log('Server response:', responseData);
 
             if (responseData.success && responseData.user) {
                 setUser({
                     ...responseData.user,
                     avatar: responseData.user.avatar || "/placeholder.svg?height=40&width=40",
                 });
-            }else {
+            } else {
                 toast.error(responseData.message || "Something went wrong");
 
                 setIsSubmitted(true);
             }
 
         } catch (error) {
-            console.error('Error submitting feedback:', error.message);
+            //console.error('Error submitting feedback:', error.message);
             // Optionally notify the user
         } finally {
             setIsSubmitting(false);
@@ -254,11 +254,10 @@ export default function FeedbackModal({ isOpen, onClose, type, data, onSubmit, u
                                             className="transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded"
                                         >
                                             <Star
-                                                className={`w-8 h-8 transition-colors ${
-                                                    star <= (hoveredRating || rating)
+                                                className={`w-8 h-8 transition-colors ${star <= (hoveredRating || rating)
                                                         ? "fill-current text-yellow-400"
                                                         : "text-gray-300 hover:text-yellow-200"
-                                                }`}
+                                                    }`}
                                             />
                                         </button>
                                     ))}

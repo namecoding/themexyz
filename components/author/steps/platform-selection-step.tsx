@@ -49,12 +49,12 @@ export default function PlatformSelectionStep({
     setSelectedPlatforms(updated)
     onUpdate({ platforms: updated })
 
-    console.log(platformId)
+    //console.log(platformId)
   }
 
   const handleNext = () => {
     if (selectedPlatforms.length > 0) {
-      console.log(selectedPlatforms, 'selectedPlatforms')
+      //console.log(selectedPlatforms, 'selectedPlatforms')
       onNext()
     }
   }

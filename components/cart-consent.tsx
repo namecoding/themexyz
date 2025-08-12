@@ -15,9 +15,9 @@ interface CartConsentProps {
 
 export default function CartConsent({ onCheckout, onViewCart, itemCount, subtotal }: CartConsentProps) {
 
-  useEffect(() => {
-    console.log(subtotal)
-  }, [])
+  // useEffect(() => {
+  //   console.log(subtotal)
+  // }, [])
   const { currency, symbol } = useActiveCurrency(defaultCurrency)
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg z-50 border-t border-gray-200 animate-slide-up">

@@ -152,7 +152,7 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
         if (data.success) {
           setAllPurchases(data.purchases);
         } else {
-          console.log("Failed to fetch recent purchases:", data.message);
+          //console.log("Failed to fetch recent purchases:", data.message);
           toast.error("Failed to fetch recent purchases");
         }
 
@@ -160,7 +160,7 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
 
       } catch (error) {
         setIsLoadingPurchase(false)
-        console.log("Fetch error:", error);
+        //console.log("Fetch error:", error);
         toast.error("Fetch error");
       }
     };
@@ -171,9 +171,9 @@ export default function PurchasesDashboard({ user }: PurchasesDashboardProps) {
 
   const handleDownload = (purchase: any) => {
     if (isExpired(purchase)) {
-      console.log("This item has expired.");
+      //console.log("This item has expired.");
     } else {
-      console.log(purchase)
+      //console.log(purchase)
     }
 
   }

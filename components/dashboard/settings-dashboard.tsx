@@ -95,7 +95,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
       }
     } catch (error) {
       setIsProcessingAccessCode(false)
-      console.log("Access code update error:", error);
+      //console.log("Access code update error:", error);
       toast.error("An error occurred while updating access code.");
     }
   };
@@ -152,7 +152,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // In a real app, you would update the user profile with an API call
-    console.log("Profile update:", profileForm)
+    //console.log("Profile update:", profileForm)
     setSuccessMessage("Profile updated successfully!")
     setTimeout(() => setSuccessMessage(""), 3000)
   }
@@ -207,7 +207,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
       });
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Password update error:", err);
+      //console.error("Password update error:", err);
       toast.error("Something went wrong", { id: toastId });
       setErrorMessage("Something went wrong");
       //setTimeout(() => setErrorMessage(""), 3000);
@@ -218,7 +218,7 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
   const handleNotificationSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // In a real app, you would update notification settings with an API call
-    console.log("Notification settings update:", notificationSettings)
+    //console.log("Notification settings update:", notificationSettings)
     setSuccessMessage("Notification settings updated successfully!")
     setTimeout(() => setSuccessMessage(""), 3000)
 

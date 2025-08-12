@@ -36,7 +36,7 @@ export async function GET() {
       }
     );
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return new NextResponse(
       JSON.stringify({ success: false, message: 'Server error' }),
       {

@@ -28,7 +28,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const { data: session } = useSession()
-const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false)
   const [accessCode, setAccessCode] = useState("")
   const [selectedAdminType, setSelectedAdminType] = useState("")
@@ -67,12 +67,12 @@ const [showPassword, setShowPassword] = useState(false)
   // }, [isAdminModalOpen])
 
   useEffect(() => {
-  if (isAdminModalOpen) {
-    localStorage.setItem("isAdminModalOpen", "true");
-  } else {
-    localStorage.removeItem("isAdminModalOpen");
-  }
-}, [isAdminModalOpen]);
+    if (isAdminModalOpen) {
+      localStorage.setItem("isAdminModalOpen", "true");
+    } else {
+      localStorage.removeItem("isAdminModalOpen");
+    }
+  }, [isAdminModalOpen]);
 
 
   useEffect(() => {
@@ -153,38 +153,38 @@ const [showPassword, setShowPassword] = useState(false)
 
 
 
-const verifyAccessCodeWithBackend = async () => {
-  try {
-    const token = localStorage.getItem("token")
-    if (!token) throw new Error("No token found")
+  const verifyAccessCodeWithBackend = async () => {
+    try {
+      const token = localStorage.getItem("token")
+      if (!token) throw new Error("No token found")
 
-    setCheckingAccessCode(true)
+      setCheckingAccessCode(true)
 
-    const response = await fetch(`${SERVER_PUBLIC}/admin/verify-access-code`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        code: accessCode,
-        adminType: selectedAdminType,
-      }),
-    })
+      const response = await fetch(`${SERVER_PUBLIC}/admin/verify-access-code`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          code: accessCode,
+          adminType: selectedAdminType,
+        }),
+      })
 
-    const result = await response.json()
+      const result = await response.json()
 
-    setCheckingAccessCode(false) // ✅ stop loader after successful response
+      setCheckingAccessCode(false) // ✅ stop loader after successful response
 
-    if (!response.ok) throw new Error(result?.message || "Failed to verify")
+      if (!response.ok) throw new Error(result?.message || "Failed to verify")
 
-    return result.valid === true
-  } catch (error) {
-    console.log("Access code verification failed:", error)
-    setCheckingAccessCode(false) // ✅ stop loader on failure too
-    return false
+      return result.valid === true
+    } catch (error) {
+      //console.log("Access code verification failed:", error)
+      setCheckingAccessCode(false) // ✅ stop loader on failure too
+      return false
+    }
   }
-}
 
 
 
@@ -218,7 +218,7 @@ const verifyAccessCodeWithBackend = async () => {
         <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
             <h2 className="text-xl font-semibold">Admin Access</h2>
-           <div className="relative">
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter access code"
@@ -290,7 +290,7 @@ const verifyAccessCodeWithBackend = async () => {
                 {
                   checkingAccessCode ? "Verifying..." : "Continue"
                 }
-                
+
               </button>
             </div>
           </div>

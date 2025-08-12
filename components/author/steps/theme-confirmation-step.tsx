@@ -43,9 +43,9 @@ export default function ThemeConfirmationStep({ data, onNext, onPrev }: ThemeCon
       .join(", ") || ""
   }
 
-  useEffect(() => {
-    console.log(data, 'log')
-  }, [data])
+  // useEffect(() => {
+  //   console.log(data, 'log')
+  // }, [data])
 
   const getDynamicMessage = () => {
     const specialtiesSelected = data?.specialties || [];

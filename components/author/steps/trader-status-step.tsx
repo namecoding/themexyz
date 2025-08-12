@@ -63,7 +63,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
         }
 
         const uploadData = await res.json();
-        console.log("Avatar uploaded to:", uploadData.url);
+        //console.log("Avatar uploaded to:", uploadData.url);
 
         payload.profile.avatar = uploadData.url;
       }
@@ -92,7 +92,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
       }
 
       const result = await saveRes.json();
-      console.log("Registration successful!");
+      //console.log("Registration successful!");
 
       if (result.user) {
 
@@ -107,7 +107,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
       onNext();
 
     } catch (error) {
-      console.error("Registration failed:", error);
+      //console.error("Registration failed:", error);
       toast.error("Registration failed. Please try again.");
     } finally {
       setLoading(false);
@@ -136,7 +136,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
         }
 
         const uploadData = await res.json();
-        console.log("Avatar uploaded to:", uploadData.url);
+        //console.log("Avatar uploaded to:", uploadData.url);
 
         // Replace File with the Cloudinary URL
         payload.profile.avatar = uploadData.url;
@@ -167,7 +167,7 @@ export default function TraderStatusStep({ data, onNext, onPrev, onUpdate }: Tra
       }
 
       const result = await saveRes.json();
-      console.log("Registration successful!");
+      //console.log("Registration successful!");
 
       if (result.user) {
         useAuthStore.getState().setUser(result.user);

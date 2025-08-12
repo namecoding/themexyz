@@ -332,7 +332,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         };
 
         recognition.onerror = (event) => {
-            console.log("Speech recognition error:", event.error);
+            //console.log("Speech recognition error:", event.error);
             setRecording(false);
             setInterimTranscript("");
         };
@@ -405,7 +405,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         };
 
         recognition.onerror = (event) => {
-            console.log("Speech recognition error:", event.error);
+            //console.log("Speech recognition error:", event.error);
             setRecording2(false);
             setInterimTranscript2("");
         };
@@ -670,7 +670,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         if (Object.keys(errs).length !== 0) return;  // stop if invalid
 
 
-        console.log("Submitted formData:", formData)
+        //console.log("Submitted formData:", formData)
 
         setIsProgressBar((p) => ({
             ...p,
@@ -699,7 +699,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             }))
 
             const { urls } = await imageRes.json()
-            console.log("Uploaded image URLs:", urls)
+            //console.log("Uploaded image URLs:", urls)
 
             // 3️⃣ Update formData with galleryImages
             const productData = {
@@ -732,7 +732,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             }))
 
             const productResult = await productRes.json()
-            console.log("Product saved:", productResult)
+            //console.log("Product saved:", productResult)
 
             handleClose()
         } catch (err) {
@@ -754,7 +754,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
         if (Object.keys(errs).length !== 0) return;  // stop if invalid
 
-        console.log("Submitted formData:", formData);
+        //console.log("Submitted formData:", formData);
 
         setIsProgressBar((p) => ({
             ...p,
@@ -790,7 +790,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             }));
 
             const { urls } = await imageRes.json();
-            console.log("Uploaded image URLs:", urls);
+            //console.log("Uploaded image URLs:", urls);
 
             // 3️⃣ Update formData with galleryImages
             const productData = {
@@ -822,7 +822,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             }));
 
             const productResult = await productRes.json();
-            console.log("Product saved:", productResult);
+            //console.log("Product saved:", productResult);
 
             setShowSuccess(true)
 

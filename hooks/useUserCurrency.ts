@@ -24,10 +24,10 @@ export const useUserCurrency = (): CountryCurrency => {
                 const res = await fetch(`${SERVER_PUBLIC}/geo`);
                 const data = await res.json();
 
-                console.log("Geo response:", data);
+                //console.log("Geo response:", data);
 
                 if (data.error) {
-                    console.warn("Geo service failed, using default currency USD");
+                    //console.warn("Geo service failed, using default currency USD");
                     return;
                 }
 
@@ -52,7 +52,7 @@ export const useUserCurrency = (): CountryCurrency => {
                     sessionStorage.setItem("userIp", data.ip);
                 }
             } catch (error) {
-                console.error("Geo fetch failed:", error);
+                //console.error("Geo fetch failed:", error);
             }
         };
 
