@@ -626,8 +626,6 @@ export const categories = [
   "Travel & Tourism",
   "Finance & FinTech",
   "Crypto / NFT",
-  "And More"
-
 ];
 
 export function generateSlug(title: string) {

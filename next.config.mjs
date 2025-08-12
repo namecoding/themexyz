@@ -11,6 +11,17 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-}
 
-export default nextConfig
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'themexyz.com' }],
+        destination: 'https://www.themexyz.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
+};
+
+export default nextConfig;

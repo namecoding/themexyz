@@ -243,7 +243,10 @@ export default function DashboardPage() {
               <option value="">Select admin panel</option>
               {user?.admin?.permission?.map((role) => (
                 <option key={role} value={role}>
-                  {role.replace("_", " ").toUpperCase()}
+
+                  {role
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
                 </option>
               ))}
             </select>
@@ -264,7 +267,7 @@ export default function DashboardPage() {
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+                className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
                 disabled={!accessCode || !selectedAdminType}
                 // onClick={() => {
                 //   if (verifyAccessCode()) {

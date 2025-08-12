@@ -45,6 +45,7 @@ interface FormData {
     priceNGN: number | ""
     priceUSD: number | ""
     demoUrl: string
+    protocol: string
     adminDemoUrl: string
     downloadUrl: string
     downloadInstructions: string
@@ -122,6 +123,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         priceNGN: "",
         priceUSD: "",
         demoUrl: "",
+        protocol: "https://",
         adminDemoUrl: "",
         downloadUrl: "",
         downloadInstructions: "",
@@ -572,18 +574,25 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
             // STEP 6 – demo URLs (only for “Complete Project”)
             case 6:
-                if (data.sellType === "Complete Projects") {
-                    if (!data.demoUrl.trim())
-                        errors.demoUrl = "Demo URL is required";
-                    else if (!/^https?:\/\/.+/.test(data.demoUrl))
-                        errors.demoUrl = "Enter a valid http/https URL";
+                const domainWithPathRegex =
+                    /^(?!-)(?:[A-Za-z0-9-]{1,63}\.)+[A-Za-z]{2,}(?:\/.*)?$/;
 
-                    if (
-                        data.adminDemoUrl &&
-                        !/^https?:\/\/.+/.test(data.adminDemoUrl)
-                    )
-                        errors.adminDemoUrl = "Enter a valid http/https URL";
+
+
+                if (data.sellType === "Complete Projects") {
+                    if (!data.demoUrl.trim()) {
+                        errors.demoUrl = "Demo URL is required";
+                    } else if (!domainWithPathRegex.test(data.demoUrl.trim())) {
+                        errors.demoUrl = "Enter a valid domain (e.g., example.com)";
+                    }
+
+                    if (data.adminDemoUrl) {
+                        if (!domainWithPathRegex.test(data.adminDemoUrl.trim())) {
+                            errors.adminDemoUrl = "Enter a valid domain (e.g., admin.example.com)";
+                        }
+                    }
                 }
+
                 break;
 
             // STEP 7 – download links
@@ -1121,6 +1130,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <Input
                                     id="priceNGN"
                                     type="text"
+                                    inputMode="numeric" pattern="[0-9]*"
                                     placeholder="7,000"
                                     value={formData.priceNGN ? formatPrice(formData.priceNGN) : ""}
                                     onChange={(e) => {
@@ -1140,6 +1150,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <Input
                                     id="priceUSD"
                                     type="text"
+                                    inputMode="numeric" pattern="[0-9]*"
                                     placeholder="200"
                                     value={formData.priceUSD ? formatPrice(formData.priceUSD) : ""}
                                     onChange={(e) => {
@@ -1313,7 +1324,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                             <p className="text-gray-600">Provide live demo links for your product</p>
                         </div>
 
-                        <div className="max-h-80 overflow-y-auto space-y-4 pr-2">
+                        <div className="max-h-80 overflow-y-auto space-y-4 pr-2 mx-4">
                             <div>
                                 <Label htmlFor="demoUrl" className="text-sm text-gray-700">
                                     Demo URL *
@@ -1321,13 +1332,27 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <p className="text-xs text-gray-500 mb-2">
                                     A working demo where customers can see your product in action
                                 </p>
-                                <Input
-                                    id="demoUrl"
-                                    placeholder="https://demo.example.com"
-                                    value={formData.demoUrl}
-                                    onChange={(e) => handleChange("demoUrl", e.target.value)}
-                                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                                />
+
+                                <div className="flex">
+                                    <select
+                                        value={formData.protocol || "https://"}
+                                        onChange={(e) => handleChange("protocol", e.target.value)}
+                                        className="border border-gray-300 bg-white text-gray-900 text-sm px-2 rounded-l-md focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none"
+                                    >
+                                        <option value="https://">https://</option>
+                                        <option value="http://">http://</option>
+                                    </select>
+
+                                    <Input
+                                        id="demoUrl"
+                                        placeholder="demo.example.com"
+                                        value={formData.demoUrl}
+                                        onChange={(e) => handleChange("demoUrl", e.target.value)}
+                                        className="bg-white border border-l-0 border-gray-300 text-gray-900 placeholder-gray-500 rounded-r-md focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none"
+                                    />
+                                </div>
+
+
                                 {errors.demoUrl && <p className="text-red-500 text-xs mt-1">{errors.demoUrl}</p>}
 
                                 {/* Demo URL Login Details */}
@@ -1344,7 +1369,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                             }}
                                             className="text-green-600 border-green-600 hover:bg-green-50"
                                         >
-                                            Add Login Details
+                                            Add Test Credential
                                         </Button>
                                     </div>
                                     <p className="text-xs text-gray-500 mb-2">
@@ -1418,7 +1443,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                             }}
                                             className="text-green-600 border-green-600 hover:bg-green-50"
                                         >
-                                            Add Login Details
+                                            Add Test Credential
                                         </Button>
                                     </div>
                                     <p className="text-xs text-gray-500 mb-2">
@@ -2104,10 +2129,10 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                             </section>
 
                             {/* DEMO (if applicable) */}
-                            {formData.sellType === "Complete Project" && (
+                            {formData.sellType === "Complete Projects" && (
                                 <section className="border rounded-lg p-2">
                                     <h2 className="text-sm font-semibold mb-2">Demo Links</h2>
-                                    <p className="text-xs text-gray-600"><strong>Demo URL:</strong> {formData.demoUrl || "–"}</p>
+                                    <p className="text-xs text-gray-600"><strong>Demo URL:</strong> {formData.protocol + formData.demoUrl || "–"}</p>
                                     <p className="text-xs text-gray-600"><strong>Admin Demo URL:</strong> {formData.adminDemoUrl || "–"}</p>
                                 </section>
                             )}
@@ -2227,8 +2252,6 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                 </Dialog>
             )}
 
-
-
             <Dialog open={open} onOpenChange={handleCloseClick}>
                 {/*<DialogContent className="w-full max-w-full h-full p-0 flex flex-col bg-white text-gray-900 border-0 sm:max-w-4xl sm:h-auto">*/}
                 <DialogContent className="w-full max-w-full max-h-[90vh] p-0 flex flex-col bg-white text-gray-900 border-0 sm:max-w-4xl overflow-hidden [&>button]:hidden">
@@ -2272,14 +2295,14 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                         /* ── All other steps: form + illustration split ───────────────── */
                         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
                             {/* Left: form */}
-                            <div className="flex-2 flex flex-col overflow-hidden">
-                                <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-12">
+                            <div className="flex-[3] flex flex-col overflow-hidden">
+                                <div className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-12 py-4 sm:py-6 lg:py-12">
                                     {renderStep()}
                                 </div>
                             </div>
 
                             {/* Right: illustration */}
-                            <div className="hidden lg:flex flex-1 items-center justify-center p-12">
+                            <div className="hidden lg:flex flex-[1] items-center justify-center p-12">
                                 <div className="relative">
                                     <img
                                         src={stepImages[step - 1] || "/placeholder.svg"}
@@ -2328,6 +2351,14 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                     </VisuallyHidden>
                     <div className="p-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Add Contact Method</h3>
+
+                        {currentContactMethod && (
+                            <p className="text-xs text-green-500 mb-4">
+                                You can only add one contact method at a time. To add more, please add this one and come back to add another one.
+                            </p>
+                        )
+                        }
+
                         <div className="space-y-4">
                             <div>
                                 <Label className="text-sm text-gray-700">Contact Method</Label>
@@ -2396,9 +2427,9 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                             : !(user.generalInfo?.phone || currentContactValue.trim())
                                     )
                                 }
-                                className="bg-green-600 hover:bg-green-600 text-white"
+                                className="bg-green-500 hover:bg-green-600 text-white"
                             >
-                                Add Contact Method
+                                Add
                             </Button>
                         </div>
                     </div>
@@ -2519,9 +2550,9 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                             <Button
                                 onClick={addHelpDuration}
                                 disabled={formData.helpDurationSettings.some((s) => s.type === currentHelpType)}
-                                className="bg-green-600 hover:bg-green-600 text-white"
+                                className="bg-green-500 hover:bg-green-600 text-white"
                             >
-                                Add Help Setting
+                                Add
                             </Button>
                         </div>
                     </div>
@@ -2536,8 +2567,16 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                     </VisuallyHidden>
                     <div className="p-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                            Add {loginUrlType === "demo" ? "Demo" : "Admin"} Login Details
+                            Add {loginUrlType === "demo" ? "Demo" : "Admin"} Test Credential
                         </h3>
+
+                        <div className="bg-green-50 p-2 rounded">
+                            <p className="text-xs text-green-500">
+                                Buyer will use this test credential to explore the {loginUrlType === "demo" ? "User" : "Admin"} dashboard functionality.
+                            </p>
+                        </div>
+
+
                         <div className="space-y-4">
                             <div>
                                 <Label className="text-sm text-gray-700">Username *</Label>
@@ -2566,9 +2605,9 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                             <Button
                                 onClick={addLoginDetail}
                                 disabled={!tempLoginDetails.username || !tempLoginDetails.password}
-                                className="bg-green-600 hover:bg-green-600 text-white"
+                                className="bg-green-500 hover:bg-green-600 text-white"
                             >
-                                Add Login Details
+                                Save
                             </Button>
                         </div>
                     </div>
