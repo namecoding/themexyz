@@ -537,9 +537,9 @@ export default function PreviewModal({
                       </div>
                     </div>
                   </div>
-                  <Button onClick={() => setAuthorProfileModal(true)} variant="outline" className="w-full text-sm">
+                  {/* <Button onClick={() => setAuthorProfileModal(true)} variant="outline" className="w-full text-sm">
                     View Profile
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             </div>
