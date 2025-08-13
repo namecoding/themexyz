@@ -106,18 +106,45 @@ export const authOptions: NextAuthOptions = {
             }
         },
 
-        async session({ session }) {
-            // Attach user._id from DB to session
-            const client = await clientPromise;
-            const db = client.db();
-            const dbUser = await db.collection("users").findOne({ email: session.user?.email });
+        // async session({ session }) {
+        //     // Attach user._id from DB to session
+        //     const client = await clientPromise;
+        //     const db = client.db();
+        //     const dbUser = await db.collection("users").findOne({ email: session.user?.email });
 
-            if (dbUser) {
-                session.user.id = dbUser._id.toString(); // add user ID
-            }
+        //     if (dbUser) {
+        //         session.user.id = dbUser._id.toString(); // add user ID
+        //     }
 
-            return session;
-        },
+        //     return session;
+        // },
+
+
+        async jwt({ token, account }) {
+                if (account?.provider) {
+                token.provider = account.provider; // e.g. "google" on first sign-in
+                }
+                return token;
+            },
+
+            // ⭐ UPDATED: copy provider from token to session; keep your DB user.id mapping
+            async session({ session, token }) {
+                // expose provider on session so client code can read session.provider
+                // @ts-expect-error (we'll add proper types below)
+                session.provider = token.provider as string | undefined;
+
+                // Attach user._id from DB to session.user.id
+                const client = await clientPromise;
+                const db = client.db();
+                const dbUser = await db.collection("users").findOne({ email: session.user?.email });
+
+                if (dbUser) {
+                // @ts-expect-error (typed in augmentation)
+                session.user.id = dbUser._id.toString();
+                }
+
+                return session;
+            },
 
         async redirect({ url, baseUrl }) {
                 // Always return to your site root (prevents bouncing to provider pages)
