@@ -53,7 +53,7 @@ export function FeaturesCombobox({
     onChange(next)
   }
 
-  const canCreate = !!query.trim() && !inCatalog(query) && !exists(query)
+  const canCreate = !!query.trim() //&& !inCatalog(query) //&& !exists(query)
 
   return (
     <div>
@@ -117,24 +117,6 @@ export function FeaturesCombobox({
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <Command>
-            <div className="border-b border-gray-200 p-2">
-              <CommandInput
-                value={query}
-                onValueChange={setQuery}
-                placeholder="Search features..."
-                className="border-0 focus:ring-0 text-sm"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    if (query && !inCatalog(query) && !exists(query)) {
-                      add(query)
-                    }
-                  }
-                  if (e.key === "Escape") setOpen(false)
-                }}
-              />
-            </div>
-
             <CommandList
               className="max-h-40 overflow-y-auto scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgb(156_163_175)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-gray-500"
               onWheel={(e) => {
@@ -187,7 +169,7 @@ export function FeaturesCombobox({
                     >
                       <div className="flex items-center justify-between w-full">
                         <span>{f}</span>
-                        {selected && <span className="text-green-600 text-xs">✓ Selected</span>}
+                        {selected && <span className="text-green-600 text-xs">✓</span>}
                       </div>
                     </CommandItem>
                   )
