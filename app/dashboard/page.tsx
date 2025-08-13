@@ -94,16 +94,8 @@ export default function DashboardPage() {
     }
   }, [isAdminModalOpen, confirmedAdminType])
 
-  const handleLogout__ = () => {
-    setIsLoggedIn(false)
-    setUser(null)
-    localStorage.removeItem("token")
-    localStorage.removeItem("isLoggedIn")
-    localStorage.removeItem("user")
-    localStorage.removeItem("isAdminModalOpen")
-    localStorage.removeItem("confirmedAdminType")
-    signOut({ callbackUrl: "/", redirect: true })
-  }
+
+
 
   const handleLogout = () => {
     //setUser(null)

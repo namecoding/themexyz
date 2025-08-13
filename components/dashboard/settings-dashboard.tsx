@@ -244,31 +244,34 @@ export default function SettingsDashboard({ user }: SettingsDashboardProps) {
         <p className="text-gray-600">Manage your profile, security, and preferences.</p>
       </div>
 
-      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md shadow-sm flex items-start gap-3">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-yellow-500 mt-0.5 flex-shrink-0"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c.891 0 1.337-1.077.707-1.707l-6.928-6.929a1 1 0 00-1.414 0l-6.929 6.929c-.63.63-.184 1.707.707 1.707z"
-          />
-        </svg>
-        <div>
-          <p className="text-sm text-gray-800 font-medium">
-            No password set for this account.
-          </p>
-          <p className="text-xs text-gray-600 mt-1">
-            You can create your first password to log in without Google next time, just click on "Settings" an then "Password & Security".
-          </p>
+      {
+        user?.isSocial &&
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md shadow-sm flex items-start gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-yellow-500 mt-0.5 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c.891 0 1.337-1.077.707-1.707l-6.928-6.929a1 1 0 00-1.414 0l-6.929 6.929c-.63.63-.184 1.707.707 1.707z"
+              />
+            </svg>
+            <div>
+              <p className="text-sm text-gray-800 font-medium">
+                No password set for this account.
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                You can create your first password to log in without Google next time, just click on "Settings" an then "Password & Security".
+              </p>
 
-        </div>
-      </div>
+            </div>
+          </div>
+      }
 
       {/* Settings Tabs and Content */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">

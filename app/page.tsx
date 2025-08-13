@@ -527,26 +527,21 @@ export default function Home() {
     }
 
 
-    const handleLogout = () => {
-        //setUser(null)
-        setIsLoggedIn(false)
-
-        useAuthStore.getState().setIsLoggedIn(false);
-        //useAuthStore.getState().setUser(null);
-        //useAuthStore.getState().setToken(null);
-
-
-        //localStorage.removeItem("user")
+      const handleLogout = async () => {
+      // Clear store state
+      useAuthStore.getState().setIsLoggedIn(false);
+      useAuthStore.getState().setUser(null);
+    
+      // Clear localStorage
         localStorage.removeItem("token")
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("isAdminModalOpen")
         localStorage.removeItem("confirmedAdminType")
-        signOut({
-            callbackUrl: '/', // or your desired post-logout page
-            redirect: true,
-        });
-        return;
-    }
+    
+      // Sign out and redirect
+      await signOut({ callbackUrl: '/', redirect: true });
+       return;
+    };
 
 
     const [featuredTheme, setFeaturedTheme] = useState([])

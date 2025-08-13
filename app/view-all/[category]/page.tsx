@@ -760,7 +760,7 @@ export default function ViewAllPage() {
                             key={pageNum}
                             variant={currentPage === pageNum ? "default" : "outline"}
                             size="sm"
-                            className="w-8 h-8 p-0"
+                            className="w-8 h-8 p-0 bg-green-500 hover:bg-green-600"
                             onClick={() => setCurrentPage(pageNum)}
                           >
                             {pageNum}
@@ -943,7 +943,7 @@ function ThemeListItem({ item, addToCart, isInCart, toggleWishlist, isInWishlist
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
               <h3 className="font-medium text-base mb-1">
-                <Link onClick={() => openPreview(item)} href="#" className="hover:text-[#82b440] transition-colors capitalize">
+                <Link onClick={() => openPreview(item)} href="#" className="hover:text-green-500 transition-colors capitalize">
                   {item.title}
                 </Link>
               </h3>

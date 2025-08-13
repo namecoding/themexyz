@@ -42,7 +42,7 @@ export async function GET(req: Request, { params }: Params) {
     delete theme.__v;
     delete theme.downloadUrl;
     delete theme.downloadInstructions;
-    delete theme.loginDetails;
+    // delete theme.loginDetails;
 
     return new NextResponse(
       JSON.stringify({

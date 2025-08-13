@@ -19,6 +19,7 @@ import { defaultCurrency, formatReadableDate, metaData, helpDurationLabels } fro
 import TestDemoScreen from "@/components/test-demo-screen"
 import Leaf from "@/components/leaf"
 import AuthorProfileModal from "@/components/admin/author-profile-modal";
+import TestCredentialsNotice from "@/components/TestCredentialsNotice";
 
 interface PreviewModalProps {
   onClose: () => void
@@ -297,14 +298,14 @@ export default function PreviewModal({
 
                 {
                   item.sellType && item.sellType !== 'complete projects' &&
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center pt-3">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-black border-white hover:bg-white hover:text-black"
+                      className="text-green-500 border-green-500 hover:bg-green-50 hover:text-black"
                       onClick={() => setIsPreview(true)}
                     >
-                      <ExternalLink className="h-4 w-4 mr-1" />
+                      <ExternalLink className="h-4 w-4 mr-1 text-green-500" />
                       Test Demo
                     </Button>
                   </div>
@@ -317,7 +318,7 @@ export default function PreviewModal({
                         key={section.key}
                         onClick={() => setActiveTab(section.key)}
                         className={`py-4 px-1 text-sm font-medium border-b-2 ${activeTab === section.key
-                          ? "border-[#82b440] text-green-600"
+                          ? "border-green-500 text-green-600"
                           : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                           }`}
                       >
@@ -337,6 +338,16 @@ export default function PreviewModal({
                           ? item.suitableFor.map((s, i) => <li key={i}>{s}</li>)
                           : <li>No info</li>}
                       </ul>
+
+
+
+                     {
+                      item?.sellType ==='Complete Projects' &&
+
+                      <TestCredentialsNotice loginDetails={item?.loginDetails} demoUrl={item?.demoUrl} onPreview={()=>setIsPreview(true)}/>
+
+                     }
+
                     </div>
                   )}
 
