@@ -538,13 +538,9 @@ export default function Home() {
         localStorage.removeItem("isAdminModalOpen")
         localStorage.removeItem("confirmedAdminType")
     
-      if (session?.user?.email && session?.provider === 'google') {
-    // Sign out from Google as well
-            window.open('https://accounts.google.com/Logout', '_blank', 'noopener,noreferrer');
-        }
-
-
-        await signOut({ callbackUrl: '/', redirect: true });
+      // Sign out and redirect
+        router.push('/'); // instant UI navigation
+        signOut({ redirect: false });
 
     };
 
