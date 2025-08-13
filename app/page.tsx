@@ -539,8 +539,9 @@ export default function Home() {
         localStorage.removeItem("confirmedAdminType")
     
       // Sign out and redirect
-      await signOut({ callbackUrl: '/', redirect: true });
-       return;
+        router.push('/'); // instant UI navigation
+        signOut({ redirect: false });
+        
     };
 
 
