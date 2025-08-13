@@ -25,6 +25,8 @@ import {
 import toast from "react-hot-toast"
 import SuccessSplash from "@/components/SuccessSplash";
 import { useActiveCurrency } from "@/lib/currencyTag";
+import { FeaturesCombobox } from "@/components/FeaturesCombobox"
+import ProtocolInput from "@/components/ProtocolInput";
 
 interface SellWizardModalProps {
     open: boolean
@@ -46,6 +48,8 @@ interface FormData {
     priceUSD: number | ""
     demoUrl: string
     protocol: string
+    adminProtocol: string
+    downloadProtocol: string
     adminDemoUrl: string
     downloadUrl: string
     downloadInstructions: string
@@ -124,6 +128,8 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         priceUSD: "",
         demoUrl: "",
         protocol: "https://",
+        downloadProtocol: "https://",
+        adminProtocol: "https://",
         adminDemoUrl: "",
         downloadUrl: "",
         downloadInstructions: "",
@@ -535,6 +541,10 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
         handleChange("loginDetails", newDetails)
     }
 
+    const domainWithPathRegex =
+        /^(?!-)(?:[A-Za-z0-9-]{1,63}\.)+[A-Za-z]{2,}(?:\/.*)?$/;
+
+
     function validateStep(stepNumber: number, data: FormData): ValidationErrors {
         const errors: ValidationErrors = {};
 
@@ -574,10 +584,6 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
             // STEP 6 – demo URLs (only for “Complete Project”)
             case 6:
-                const domainWithPathRegex =
-                    /^(?!-)(?:[A-Za-z0-9-]{1,63}\.)+[A-Za-z]{2,}(?:\/.*)?$/;
-
-
 
                 if (data.sellType === "Complete Projects") {
                     if (!data.demoUrl.trim()) {
@@ -597,13 +603,21 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
             // STEP 7 – download links
             case 7:
-                if (!data.downloadUrl.trim())
-                    errors.downloadUrl = "Download URL is required";
-                else if (!/^https?:\/\/.+/.test(data.downloadUrl))
-                    errors.downloadUrl = "Enter a valid http/https URL";
 
-                if (!data.downloadInstructions.trim())
+                if (!data.downloadProtocol) {
+                    errors.downloadProtocol = "Select a protocol (http:// or https://)";
+                }
+
+                if (!data.downloadUrl.trim()) {
+                    errors.downloadUrl = "Download domain/path is required";
+                } else if (!domainWithPathRegex.test(data.downloadUrl.trim())) {
+                    errors.downloadUrl = "Enter a valid domain (e.g., example.com)";
+                }
+
+                if (!data.downloadInstructions.trim()) {
                     errors.downloadInstructions = "Download instructions are required";
+                }
+
                 break;
 
             // STEP 8 – features & tags
@@ -711,10 +725,20 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             //console.log("Uploaded image URLs:", urls)
 
             // 3️⃣ Update formData with galleryImages
+            // const productData = {
+            //     ...formData,
+            //     galleryImages: urls,
+            // }
+
             const productData = {
                 ...formData,
                 galleryImages: urls,
-            }
+                demoUrl: formData.protocol + formData.demoUrl.trim(),
+                downloadUrl: formData.downloadProtocol + formData.downloadUrl.trim(),
+                adminDemoUrl: formData.adminDemoUrl
+                    ? formData.adminProtocol + formData.adminDemoUrl.trim()
+                    : "", // Only join if adminDemoUrl is provided
+            };
 
             const token = localStorage.getItem("token")
             if (!token) {
@@ -802,9 +826,19 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             //console.log("Uploaded image URLs:", urls);
 
             // 3️⃣ Update formData with galleryImages
+            // const productData = {
+            //     ...formData,
+            //     galleryImages: urls,
+            // };
+
             const productData = {
                 ...formData,
                 galleryImages: urls,
+                demoUrl: formData.protocol + formData.demoUrl.trim(),
+                downloadUrl: formData.downloadProtocol + formData.downloadUrl.trim(),
+                adminDemoUrl: formData.adminDemoUrl
+                    ? formData.adminProtocol + formData.adminDemoUrl.trim()
+                    : "", // Only join if adminDemoUrl is provided
             };
 
             const token = localStorage.getItem("token");
@@ -1333,24 +1367,14 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                     A working demo where customers can see your product in action
                                 </p>
 
-                                <div className="flex">
-                                    <select
-                                        value={formData.protocol || "https://"}
-                                        onChange={(e) => handleChange("protocol", e.target.value)}
-                                        className="border border-gray-300 bg-white text-gray-900 text-sm px-2 rounded-l-md focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none"
-                                    >
-                                        <option value="https://">https://</option>
-                                        <option value="http://">http://</option>
-                                    </select>
-
-                                    <Input
-                                        id="demoUrl"
-                                        placeholder="demo.example.com"
-                                        value={formData.demoUrl}
-                                        onChange={(e) => handleChange("demoUrl", e.target.value)}
-                                        className="bg-white border border-l-0 border-gray-300 text-gray-900 placeholder-gray-500 rounded-r-md focus:ring-1 focus:ring-green-500 focus:border-green-500 outline-none"
-                                    />
-                                </div>
+                                <ProtocolInput
+                                    protocolValue={formData.protocol}
+                                    inputValue={formData.demoUrl}
+                                    onProtocolChange={(val) => handleChange("protocol", val)}
+                                    onInputChange={(val) => handleChange("demoUrl", val)}
+                                    inputPlaceholder="demo.example.com"
+                                    id="demoUrl"
+                                />
 
 
                                 {errors.demoUrl && <p className="text-red-500 text-xs mt-1">{errors.demoUrl}</p>}
@@ -1420,13 +1444,17 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <p className="text-xs text-gray-500 mb-2">
                                     If your product has an admin panel, provide a demo link here
                                 </p>
-                                <Input
+
+                                <ProtocolInput
+                                    protocolValue={formData.adminProtocol}
+                                    inputValue={formData.adminDemoUrl}
+                                    onProtocolChange={(val) => handleChange("adminProtocol", val)}
+                                    onInputChange={(val) => handleChange("adminDemoUrl", val)}
+                                    inputPlaceholder="admin.demo.example.com"
                                     id="adminDemoUrl"
-                                    placeholder="https://admin.demo.example.com"
-                                    value={formData.adminDemoUrl}
-                                    onChange={(e) => handleChange("adminDemoUrl", e.target.value)}
-                                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                                 />
+
+
                                 {errors.adminDemoUrl && <p className="text-red-500 text-xs mt-1">{errors.adminDemoUrl}</p>}
 
                                 {/* Admin Demo URL Login Details */}
@@ -1521,13 +1549,16 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <p className="text-xs text-gray-500 mb-2">
                                     Direct link where customers can download your product after purchase
                                 </p>
-                                <Input
+
+                                <ProtocolInput
+                                    protocolValue={formData.downloadProtocol}
+                                    inputValue={formData.downloadUrl}
+                                    onProtocolChange={(val) => handleChange("downloadProtocol", val)}
+                                    onInputChange={(val) => handleChange("downloadUrl", val)}
+                                    inputPlaceholder="download.example.com"
                                     id="downloadUrl"
-                                    placeholder="https://download.example.com"
-                                    value={formData.downloadUrl}
-                                    onChange={(e) => handleChange("downloadUrl", e.target.value)}
-                                    className="bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                                 />
+
                                 {errors.downloadUrl && <p className="text-red-500 text-xs mt-1">{errors.downloadUrl}</p>}
                             </div>
 
@@ -1622,7 +1653,8 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
 
                         <div className="space-y-4">
                             {/* Features */}
-                            <div>
+
+                            {/* <div>
                                 <Label className="text-sm text-gray-700">Features</Label>
                                 <p className="text-xs text-gray-500 mb-2">
                                     Highlight the key features and capabilities of your product
@@ -1678,48 +1710,94 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                     ))}
                                 </div>
                                 {errors.features && <p className="text-red-500 text-xs mt-1">{errors.features}</p>}
-                            </div>
+                            </div> */}
 
-                            {/* Tags */}
-                            <div>
-                                <Label className="text-sm text-gray-700">Tags</Label>
+
+                            {/* <div>
+                                <Label className="text-sm text-gray-700">Features</Label>
                                 <p className="text-xs text-gray-500 mb-2">
-                                    Add relevant tags to help customers find your product in searches
+                                    Highlight the key features and capabilities of your product
                                 </p>
+
                                 <div className="relative">
                                     <Select
                                         onValueChange={(value) => {
-                                            if (!formData.tags.includes(value)) {
-                                                handleChange("tags", [...formData.tags, value])
+                                            // Handle "create new" sentinel
+                                            if (value.startsWith("__create__:")) {
+                                                const newFeature = value.replace("__create__:", "").trim()
+                                                if (newFeature && !formData.features.includes(newFeature)) {
+                                                    handleChange("features", [...formData.features, newFeature])
+                                                }
+                                                // optional: clear the search after adding
+                                                setFeatureSearch("")
+                                                return
+                                            }
+
+                                            // Handle normal selection
+                                            if (!formData.features.includes(value)) {
+                                                handleChange("features", [...formData.features, value])
                                             }
                                         }}
                                     >
                                         <SelectTrigger className="bg-white border border-gray-300 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500">
-                                            <SelectValue placeholder="Search and select tags..." />
+                                            <SelectValue placeholder="Search and select features..." />
                                         </SelectTrigger>
+
                                         <SelectContent>
+                                          
                                             <div className="sticky top-0 p-2 bg-white border-b">
                                                 <Input
-                                                    placeholder="Search tags..."
-                                                    value={tagSearch}
-                                                    onChange={(e) => setTagSearch(e.target.value)}
+                                                    placeholder="Search or type a new feature..."
+                                                    value={featureSearch}
+                                                    onChange={(e) => setFeatureSearch(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === "Enter") {
+                                                            e.preventDefault()
+                                                            const term = featureSearch.trim()
+                                                            if (
+                                                                term &&
+                                                                !formData.features.includes(term) &&
+                                                                !predefinedFeatures.some(f => f.toLowerCase() === term.toLowerCase())
+                                                            ) {
+                                                                handleChange("features", [...formData.features, term])
+                                                                setFeatureSearch("")
+                                                            }
+                                                        }
+                                                    }}
                                                     className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 text-sm focus:border-green-500 focus:ring-1 focus:ring-green-500"
                                                 />
                                             </div>
+
                                             <div className="max-h-48 overflow-y-auto">
-                                                {predefinedTags
-                                                    .filter((tag) => tag.toLowerCase().includes(tagSearch.toLowerCase()))
-                                                    .map((tag) => {
-                                                        const isSelected = formData.tags.includes(tag)
+                                                {featureSearch.trim() &&
+                                                    !predefinedFeatures.some(f => f.toLowerCase().includes(featureSearch.toLowerCase())) &&
+                                                    !formData.features.some(f => f.toLowerCase() === featureSearch.toLowerCase()) && (
+                                                        <SelectItem
+                                                            value={`__create__:${featureSearch.trim()}`}
+                                                            className="text-green-700"
+                                                        >
+                                                            ➕ Add “{featureSearch.trim()}”
+                                                        </SelectItem>
+                                                    )
+                                                }
+
+                                                {predefinedFeatures
+                                                    .filter((feature) =>
+                                                        feature.toLowerCase().includes(featureSearch.toLowerCase())
+                                                    )
+                                                    .map((feature) => {
+                                                        const isSelected = formData.features.includes(feature)
                                                         return (
                                                             <SelectItem
-                                                                key={tag}
-                                                                value={tag}
+                                                                key={feature}
+                                                                value={feature}
                                                                 className={isSelected ? "bg-green-100 text-green-800" : ""}
                                                             >
                                                                 <div className="flex items-center justify-between w-full">
-                                                                    <span>{tag}</span>
-                                                                    {isSelected && <span className="text-green-600 text-xs">✓ Selected</span>}
+                                                                    <span>{feature}</span>
+                                                                    {isSelected && (
+                                                                        <span className="text-green-600 text-xs">✓ Selected</span>
+                                                                    )}
                                                                 </div>
                                                             </SelectItem>
                                                         )
@@ -1728,15 +1806,53 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                         </SelectContent>
                                     </Select>
                                 </div>
+
+                        
                                 <div className="flex flex-wrap gap-2 mt-2">
-                                    {formData.tags.map((tag, index) => (
+                                    {formData.features.map((feature, index) => (
                                         <Badge key={index} variant="secondary" className="bg-gray-200 text-gray-800">
-                                            {tag}
-                                            <X className="h-3 w-3 ml-1 cursor-pointer" onClick={() => removeFromArray("tags", index)} />
+                                            {feature}
+                                            <X
+                                                className="h-3 w-3 ml-1 cursor-pointer"
+                                                onClick={() => removeFromArray("features", index)}
+                                            />
                                         </Badge>
                                     ))}
                                 </div>
-                                {errors.tags && <p className="text-red-500 text-xs mt-1">{errors.tags}</p>}
+
+                                {errors.features && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.features}</p>
+                                )}
+                            </div> */}
+
+
+                            <FeaturesCombobox
+                                predefinedFeatures={predefinedFeatures}
+                                value={formData.features}
+                                onChange={(next) => handleChange("features", next)}
+                                label="Features"
+                                placeholder="Type to add or pick…"
+                                subtext="Highlight the key features and capabilities of your product"
+                                errors={errors.features}
+
+                            />
+
+
+
+                            {/* Tags */}
+                            <div>
+
+                                <FeaturesCombobox
+                                    predefinedFeatures={predefinedTags}
+                                    value={formData.tags}
+                                    onChange={(next) => handleChange("tags", next)}
+                                    label="Tags"
+                                    placeholder="Type to add or pick…"
+                                    subtext="Add relevant tags to help customers find your product in searches"
+                                    errors={errors.tags}
+
+                                />
+
                             </div>
                         </div>
 
@@ -1768,119 +1884,34 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                         <div className="space-y-4">
                             {/* Built With */}
                             <div>
-                                <Label className="text-sm text-gray-700">Built With</Label>
-                                <p className="text-xs text-gray-500 mb-2">
-                                    Select the technologies and frameworks used to build your product
-                                </p>
-                                <Select
-                                    onValueChange={(value) => {
-                                        if (!formData.builtWith.includes(value)) {
-                                            handleChange("builtWith", [...formData.builtWith, value])
-                                        }
-                                    }}
-                                >
-                                    <SelectTrigger className="bg-white border border-gray-300 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500">
-                                        <SelectValue placeholder="Search and select technologies..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <div className="sticky top-0 p-2 bg-white border-b">
-                                            <Input
-                                                placeholder="Search technologies..."
-                                                value={builtWithSearch}
-                                                onChange={(e) => setBuiltWithSearch(e.target.value)}
-                                                className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 text-sm focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                                            />
-                                        </div>
-                                        <div className="max-h-48 overflow-y-auto">
-                                            {predefinedBuiltWith
-                                                .filter((tech) => tech.toLowerCase().includes(builtWithSearch.toLowerCase()))
-                                                .map((tech) => {
-                                                    const isSelected = formData.builtWith.includes(tech)
-                                                    return (
-                                                        <SelectItem
-                                                            key={tech}
-                                                            value={tech}
-                                                            className={isSelected ? "bg-green-100 text-green-800" : ""}
-                                                        >
-                                                            <div className="flex items-center justify-between w-full">
-                                                                <span>{tech}</span>
-                                                                {isSelected && <span className="text-green-600 text-xs">✓ Selected</span>}
-                                                            </div>
-                                                        </SelectItem>
-                                                    )
-                                                })}
-                                        </div>
-                                    </SelectContent>
-                                </Select>
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                    {formData.builtWith.map((tech, index) => (
-                                        <Badge key={index} variant="secondary" className="bg-gray-200 text-gray-800">
-                                            {tech}
-                                            <X className="h-3 w-3 ml-1 cursor-pointer" onClick={() => removeFromArray("builtWith", index)} />
-                                        </Badge>
-                                    ))}
-                                </div>
-                                {errors.builtWith && <p className="text-red-500 text-xs mt-1">{errors.builtWith}</p>}
+
+                                <FeaturesCombobox
+                                    predefinedFeatures={predefinedBuiltWith}
+                                    value={formData.builtWith}
+                                    onChange={(next) => handleChange("builtWith", next)}
+                                    label="Built With"
+                                    placeholder="Type to add or pick…"
+                                    subtext="Select the technologies and frameworks used to build your product"
+                                    errors={errors.builtWith}
+
+                                />
+
                             </div>
 
                             {/* Suitable For */}
                             <div>
-                                <Label className="text-sm text-gray-700">Suitable For</Label>
-                                <p className="text-xs text-gray-500 mb-2">
-                                    Who is your target audience? Select the types of users or businesses this product is best for
-                                </p>
-                                <Select
-                                    onValueChange={(value) => {
-                                        if (!formData.suitableFor.includes(value)) {
-                                            handleChange("suitableFor", [...formData.suitableFor, value])
-                                        }
-                                    }}
-                                >
-                                    <SelectTrigger className="bg-white border border-gray-300 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500">
-                                        <SelectValue placeholder="Search and select target audience..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <div className="sticky top-0 p-2 bg-white border-b">
-                                            <Input
-                                                placeholder="Search target audience..."
-                                                value={suitableForSearch}
-                                                onChange={(e) => setSuitableForSearch(e.target.value)}
-                                                className="bg-white border border-gray-300 text-gray-900 placeholder-gray-500 text-sm focus:border-green-500 focus:ring-1 focus:ring-green-500"
-                                            />
-                                        </div>
-                                        <div className="max-h-48 overflow-y-auto">
-                                            {predefinedSuitableFor
-                                                .filter((item) => item.toLowerCase().includes(suitableForSearch.toLowerCase()))
-                                                .map((item) => {
-                                                    const isSelected = formData.suitableFor.includes(item)
-                                                    return (
-                                                        <SelectItem
-                                                            key={item}
-                                                            value={item}
-                                                            className={isSelected ? "bg-green-100 text-green-800" : ""}
-                                                        >
-                                                            <div className="flex items-center justify-between w-full">
-                                                                <span>{item}</span>
-                                                                {isSelected && <span className="text-green-600 text-xs">✓ Selected</span>}
-                                                            </div>
-                                                        </SelectItem>
-                                                    )
-                                                })}
-                                        </div>
-                                    </SelectContent>
-                                </Select>
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                    {formData.suitableFor.map((item, index) => (
-                                        <Badge key={index} variant="secondary" className="bg-gray-200 text-gray-800">
-                                            {item}
-                                            <X
-                                                className="h-3 w-3 ml-1 cursor-pointer"
-                                                onClick={() => removeFromArray("suitableFor", index)}
-                                            />
-                                        </Badge>
-                                    ))}
-                                </div>
-                                {errors.suitableFor && <p className="text-red-500 text-xs mt-1">{errors.suitableFor}</p>}
+
+                                <FeaturesCombobox
+                                    predefinedFeatures={predefinedSuitableFor}
+                                    value={formData.suitableFor}
+                                    onChange={(next) => handleChange("suitableFor", next)}
+                                    label="Suitable For"
+                                    placeholder="Type to add or pick…"
+                                    subtext="Who is your target audience? Select the types of users or businesses this product is best for"
+                                    errors={errors.suitableFor}
+
+                                />
+
                             </div>
                         </div>
 
@@ -2133,14 +2164,14 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                                 <section className="border rounded-lg p-2">
                                     <h2 className="text-sm font-semibold mb-2">Demo Links</h2>
                                     <p className="text-xs text-gray-600"><strong>Demo URL:</strong> {formData.protocol + formData.demoUrl || "–"}</p>
-                                    <p className="text-xs text-gray-600"><strong>Admin Demo URL:</strong> {formData.adminDemoUrl || "–"}</p>
+                                    <p className="text-xs text-gray-600"><strong>Admin Demo URL:</strong> {formData.adminProtocol + formData.adminDemoUrl || "–"}</p>
                                 </section>
                             )}
 
                             {/* DOWNLOAD */}
                             <section className="border rounded-lg p-2">
                                 <h2 className="text-sm font-semibold mb-2">Download</h2>
-                                <p className="text-xs text-gray-600"><strong>Download URL:</strong> {formData.downloadUrl}</p>
+                                <p className="text-xs text-gray-600"><strong>Download URL:</strong> {formData.downloadProtocol + formData.downloadUrl}</p>
                                 <p className="whitespace-pre-wrap text-xs">{formData.downloadInstructions}</p>
                             </section>
 
