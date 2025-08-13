@@ -541,7 +541,7 @@ export default function Home() {
       // Sign out and redirect
         router.push('/'); // instant UI navigation
         signOut({ redirect: false });
-        
+
     };
 
 

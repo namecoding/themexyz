@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         let { email, name } = body;
 
         if (!email || !name) {
-            return NextResponse.json({ success: false, message: 'Missing email or name' }, { status: 400 });
+            return NextResponse.json({ success: false, message: 'Missing email or name' }, { status: 400, headers: corsHeaders });
         }
 
         const client = await clientPromise;
@@ -120,7 +120,9 @@ export async function POST(request: Request) {
                 id: _id.toString(),
                 ...safeUser,
             },
-        }, { status: 403, headers: corsHeaders });
+        }, { status: 200, headers: corsHeaders });
+
+
     } catch (error) {
         console.error('Google login error:', error);
         return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500, headers: corsHeaders });

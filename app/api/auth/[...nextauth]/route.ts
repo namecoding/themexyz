@@ -118,7 +118,20 @@ export const authOptions: NextAuthOptions = {
 
             return session;
         },
+
+        async redirect({ url, baseUrl }) {
+                // Always return to your site root (prevents bouncing to provider pages)
+                return baseUrl;
+
+                // If you prefer to allow internal routes, use this instead:
+                // if (url.startsWith("/")) return `${baseUrl}${url}`;
+                // if (new URL(url).origin === baseUrl) return url;
+                // return baseUrl;
+            },
+
     },
 };
 const handler = NextAuth(authOptions);
+
+
 export { handler as GET, handler as POST };

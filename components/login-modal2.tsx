@@ -45,7 +45,7 @@ export function LoginModal2({ onClose, onLogin, onSwitchToSignup, pleaseWaitWhil
   const handleGoogleSignup = () => {
     // In a real app, you would implement Google OAuth here
     setPleaseWait(true)
-    signIn("google", { prompt: "select_account" }).then(r => { })
+    signIn("google", { prompt: "select_account", redirect: false }).then(r => { })
   }
 
 
