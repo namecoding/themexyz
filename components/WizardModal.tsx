@@ -585,7 +585,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
             // STEP 6 – demo URLs (only for “Complete Project”)
             case 6:
 
-                if (data.sellType === "Complete Projects") {
+                if (data.sellType === "Complete Projects" || data.sellType === "Template") {
                     if (!data.demoUrl.trim()) {
                         errors.demoUrl = "Demo URL is required";
                     } else if (!domainWithPathRegex.test(data.demoUrl.trim())) {
@@ -2160,7 +2160,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                             </section>
 
                             {/* DEMO (if applicable) */}
-                            {formData.sellType === "Complete Projects" && (
+                            {(formData.sellType === "Complete Projects" || formData.sellType === "Template") && (
                                 <section className="border rounded-lg p-2">
                                     <h2 className="text-sm font-semibold mb-2">Demo Links</h2>
                                     <p className="text-xs text-gray-600"><strong>Demo URL:</strong> {formData.protocol + formData.demoUrl || "–"}</p>
