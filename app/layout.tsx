@@ -6,7 +6,7 @@ import { metaData } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: `Already made websites, wordpress themes, website templates from ${metaData.name}`,
-  description: 'Already made websites, wordpress themes, website templates from Themeleaf',
+  description: 'Already made websites, wordpress themes, website templates from ThemeXYZ',
   generator: 'namecoding.net',
   icons: {
     icon: [
