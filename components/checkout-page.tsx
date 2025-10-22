@@ -241,7 +241,7 @@ export default function CheckoutPage({
 
     }
 
-
+    console.log(currency)
   }, [currency]);
 
   const closeLoginModal = () => {
@@ -340,6 +340,7 @@ export default function CheckoutPage({
             email: userData?.email,
             amount: total * 100,
             reference: data.reference,
+            access_code: data.access_code,
             toastId,
             currency,
             onSuccess: (res) => {

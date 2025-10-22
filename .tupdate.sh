@@ -14,12 +14,7 @@ cd '"$REMOTE_DIR"' || exit
 
 GIT_OUTPUT=$(git pull origin main)
 
-echo "$GIT_OUTPUT"
 
-if echo "$GIT_OUTPUT" | grep -q "Already up"; then
-  echo "No changes to pull. Exiting..."
-  exit 0
-fi
 
 npm install --legacy-peer-deps
 npm run build

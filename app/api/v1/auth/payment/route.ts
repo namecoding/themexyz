@@ -77,7 +77,7 @@ export async function POST(request: Request) {
         email,
         amount: total * 100,
         reference,
-        currency: "NGN",
+        currency: "USD",
         callback_url: "https://your-domain.com/payment/verify", // Update in prod
       }),
     });
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
       JSON.stringify({
         success: true,
         message: "Payment initialized with Paystack.",
-        reference,
+        reference: initData.data.reference,
         authorization_url: initData.data.authorization_url,
         access_code: initData.data.access_code,
       }),

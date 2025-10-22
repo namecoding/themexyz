@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
@@ -394,424 +394,427 @@ export default function ViewAllPage() {
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 transition-opacity duration-500`}>
-      {/* Header with breadcrumbs */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto max-w-6xl px-4 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center text-sm text-gray-500 mb-2">
-                <Link href="/" className="hover:text-green-500">
-                  Home
-                </Link>
-                <ChevronRight className="h-4 w-4 mx-1" />
-                {category !== "items" && category !== "categories" && (
-                  <>
-                    <Link href="/view-all/items" className="hover:text-green-500">
-                      All Items
-                    </Link>
-                    <ChevronRight className="h-4 w-4 mx-1" />
-                  </>
-                )}
-                <span className="font-medium text-gray-900">{getCategoryTitle()}</span>
-              </div>
-              <h1 className="text-2xl font-bold">{getCategoryTitle()}</h1>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1 md:min-w-[240px]">
-                <input
-                  type="text"
-                  placeholder="Search in this category..."
-                  className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#82b440] focus:border-transparent"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Search className="absolute right-3 top-2 h-4 w-4 text-gray-400" />
+    <Suspense fallback={null}>
+      <div className={`min-h-screen bg-gray-50 transition-opacity duration-500`}>
+        {/* Header with breadcrumbs */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="container mx-auto max-w-6xl px-4 py-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <div className="flex items-center text-sm text-gray-500 mb-2">
+                  <Link href="/" className="hover:text-green-500">
+                    Home
+                  </Link>
+                  <ChevronRight className="h-4 w-4 mx-1" />
+                  {category !== "items" && category !== "categories" && (
+                    <>
+                      <Link href="/view-all/items" className="hover:text-green-500">
+                        All Items
+                      </Link>
+                      <ChevronRight className="h-4 w-4 mx-1" />
+                    </>
+                  )}
+                  <span className="font-medium text-gray-900">{getCategoryTitle()}</span>
+                </div>
+                <h1 className="text-2xl font-bold">{getCategoryTitle()}</h1>
               </div>
 
-              <div className="md:hidden">
-                <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="h-9 w-9">
-                      <SlidersHorizontal className="h-4 w-4" />
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-[300px] sm:w-[350px]">
-                    <SheetHeader>
-                      <SheetTitle>Filters</SheetTitle>
-                      <SheetDescription>Narrow down your search with these filters</SheetDescription>
-                    </SheetHeader>
-                    <div className="py-4">
-                      {/* Mobile filters - same as desktop but in a sheet */}
-                      <div className="space-y-6">
-                        <div>
-                          <h3 className="font-medium mb-2">Price Range</h3>
-                          <div className="px-2">
-                            <Slider
-                              max={range}
-                              step={1}
-                              value={priceRange}
-                              onValueChange={setPriceRange}
-                              className="my-4"
-                            />
-                            <div className="flex items-center justify-between text-sm">
-                              <span>{symbol}{priceRange[0].toLocaleString()}</span>
-                              <span>{symbol}{priceRange[1].toLocaleString()}</span>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1 md:min-w-[240px]">
+                  <input
+                    type="text"
+                    placeholder="Search in this category..."
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#82b440] focus:border-transparent"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <Search className="absolute right-3 top-2 h-4 w-4 text-gray-400" />
+                </div>
+
+                <div className="md:hidden">
+                  <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="icon" className="h-9 w-9">
+                        <SlidersHorizontal className="h-4 w-4" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="w-[300px] sm:w-[350px]">
+                      <SheetHeader>
+                        <SheetTitle>Filters</SheetTitle>
+                        <SheetDescription>Narrow down your search with these filters</SheetDescription>
+                      </SheetHeader>
+                      <div className="py-4">
+                        {/* Mobile filters - same as desktop but in a sheet */}
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="font-medium mb-2">Price Range</h3>
+                            <div className="px-2">
+                              <Slider
+                                max={range}
+                                step={1}
+                                value={priceRange}
+                                onValueChange={setPriceRange}
+                                className="my-4"
+                              />
+                              <div className="flex items-center justify-between text-sm">
+                                <span>{symbol}{priceRange[0].toLocaleString()}</span>
+                                <span>{symbol}{priceRange[1].toLocaleString()}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div>
-                          <h3 className="font-medium mb-2">Rating</h3>
-                          <div className="space-y-2">
-                            {[5, 4, 3, 2, 1].map((rating) => (
-                              <div key={rating} className="flex items-center">
-                                <Checkbox
-                                  id={`rating-${rating}-mobile`}
-                                  checked={selectedRating === rating}
-                                  onCheckedChange={() => setSelectedRating(selectedRating === rating ? 0 : rating)}
-                                />
-                                <label htmlFor={`rating-${rating}-mobile`} className="ml-2 text-sm flex items-center">
-                                  {Array.from({ length: 5 }).map((_, i) => (
-                                    <svg
-                                      key={i}
-                                      className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                                        }`}
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                    </svg>
-                                  ))}
-                                  <span className="ml-1">& Up</span>
-                                </label>
-                              </div>
-                            ))}
+                          <div>
+                            <h3 className="font-medium mb-2">Rating</h3>
+                            <div className="space-y-2">
+                              {[5, 4, 3, 2, 1].map((rating) => (
+                                <div key={rating} className="flex items-center">
+                                  <Checkbox
+                                    id={`rating-${rating}-mobile`}
+                                    checked={selectedRating === rating}
+                                    onCheckedChange={() => setSelectedRating(selectedRating === rating ? 0 : rating)}
+                                  />
+                                  <label htmlFor={`rating-${rating}-mobile`} className="ml-2 text-sm flex items-center">
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                      <svg
+                                        key={i}
+                                        className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                                          }`}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                      </svg>
+                                    ))}
+                                    <span className="ml-1">& Up</span>
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
 
-                        <div>
-                          <h3 className="font-medium mb-2">Categories</h3>
-                          <div className="space-y-2">
-                            {["WordPress", "eCommerce", "Site Templates", "Marketing", "CMS", "Blogging"].map((cat) => (
-                              <div key={cat} className="flex items-center">
-                                <Checkbox
-                                  id={`category-${cat.toLowerCase()}-mobile`}
-                                  checked={selectedCategories.includes(cat)}
-                                  onCheckedChange={() => handleCategoryToggle(cat)}
-                                />
-                                <label htmlFor={`category-${cat.toLowerCase()}-mobile`} className="ml-2 text-sm">
-                                  {cat}
-                                </label>
-                              </div>
-                            ))}
+                          <div>
+                            <h3 className="font-medium mb-2">Categories</h3>
+                            <div className="space-y-2">
+                              {["WordPress", "eCommerce", "Site Templates", "Marketing", "CMS", "Blogging"].map((cat) => (
+                                <div key={cat} className="flex items-center">
+                                  <Checkbox
+                                    id={`category-${cat.toLowerCase()}-mobile`}
+                                    checked={selectedCategories.includes(cat)}
+                                    onCheckedChange={() => handleCategoryToggle(cat)}
+                                  />
+                                  <label htmlFor={`category-${cat.toLowerCase()}-mobile`} className="ml-2 text-sm">
+                                    {cat}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
 
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => {
-                            resetFilters()
-                            setIsMobileFilterOpen(false)
-                          }}
-                        >
-                          Reset Filters
-                        </Button>
-                      </div>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
-
-              <div className="hidden md:flex items-center gap-2">
-                <Button
-                  variant={viewMode === "grid" ? "default" : "outline"}
-                  size="icon"
-                  className="h-9 w-9"
-                  onClick={() => setViewMode("grid")}
-                >
-                  <Grid className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant={viewMode === "list" ? "default" : "outline"}
-                  size="icon"
-                  className="h-9 w-9"
-                  onClick={() => setViewMode("list")}
-                >
-                  <List className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main content */}
-      <div className="container mx-auto max-w-6xl px-4 py-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar filters - desktop only */}
-          <div className="hidden md:block w-64 space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-4">
-              <h2 className="font-bold text-lg mb-4">Filters</h2>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-medium mb-2">Price Range</h3>
-                  <div className="px-2">
-                    <Slider
-                      defaultValue={[0, range]}
-                      max={range}
-                      step={1}
-                      value={priceRange}
-                      onValueChange={setPriceRange}
-                      className="my-4"
-                    />
-                    <div className="flex items-center justify-between text-sm">
-                      <span>{symbol}{priceRange[0].toLocaleString()}</span>
-                      <span>{symbol}{priceRange[1].toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-medium mb-2">Rating</h3>
-                  <div className="space-y-2">
-                    {[5, 4, 3, 2, 1].map((rating) => (
-                      <div key={rating} className="flex items-center">
-                        <Checkbox
-                          id={`rating-${rating}`}
-                          checked={selectedRating === rating}
-                          onCheckedChange={() => setSelectedRating(selectedRating === rating ? 0 : rating)}
-                        />
-                        <label htmlFor={`rating-${rating}`} className="ml-2 text-sm flex items-center">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <svg
-                              key={i}
-                              className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                            </svg>
-                          ))}
-                          <span className="ml-1">& Up</span>
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-medium mb-2">Categories</h3>
-                  <div className="space-y-2">
-                    {categories.map((cat) => (
-                      <div key={cat} className="flex items-center">
-                        <Checkbox
-                          id={`category-${cat.toLowerCase()}`}
-                          checked={selectedCategories.includes(cat)}
-                          onCheckedChange={() => handleCategoryToggle(cat)}
-                        />
-                        <label htmlFor={`category-${cat.toLowerCase()}`} className="ml-2 text-sm">
-                          {cat}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <Button variant="outline" className="w-full" onClick={resetFilters}>
-                  Reset Filters
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Main content area */}
-          <div className="flex-1">
-            {/* Sort and filter bar */}
-            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center">
-                  <span className="text-sm text-gray-500 mr-2">Sort by:</span>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[180px] h-9">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="featured">Featured</SelectItem>
-                      <SelectItem value="bestselling">Best Selling</SelectItem>
-                      <SelectItem value="rating">Highest Rated</SelectItem>
-                      <SelectItem value="newest">Newest</SelectItem>
-                      <SelectItem value="price-low">Price: Low to High</SelectItem>
-                      <SelectItem value="price-high">Price: High to Low</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="text-sm text-gray-500">
-                  Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
-                  <span className="font-medium">{Math.min(endIndex, filteredItems.length)}</span> of{" "}
-                  <span className="font-medium">{filteredItems.length}</span> items
-                  {totalPages > 1 && (
-                    <span className="ml-2">
-                      (Page {currentPage} of {totalPages})
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {pleaseWaitWhileYourTransactionIsProcessing ? (
-              Array.from({ length: 3 }).map((_, index) => (
-                <div key={index} className="h-64 rounded-lg dark:bg-gray-800 animate-pulse">
-                  <div className="space-y-2 p-4 border rounded-md bg-white dark:bg-muted animate-pulse">
-                    <div className="h-40 bg-gray-300 dark:bg-gray-700 rounded-md" />
-                    <div className="h-4 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" />
-                    <div className="h-3 w-1/2 bg-gray-300 dark:bg-gray-700 rounded" />
-                  </div>
-                </div>
-              ))
-            ) : (
-              <>
-                {/* Items grid/list */}
-                {filteredItems.length === 0 ? (
-                  <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                    <div className="mb-4">
-                      <Search className="h-12 w-12 mx-auto text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-medium mb-2">No items found</h3>
-                    <p className="text-gray-500 mb-4">
-                      We couldn't find any items matching your criteria. Try adjusting your filters.
-                    </p>
-                    <Button className="bg-green-500" onClick={resetFilters}>
-                      Reset Filters
-                    </Button>
-                  </div>
-                ) : viewMode === "grid" ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {paginatedItems.map((item) => (
-                      <ThemeCard
-                        key={item.id}
-                        openPreview={openPreview}
-                        item={item}
-                        addToCart={addToCart}
-                        isInCart={isItemInCart(item.id)}
-                        toggleWishlist={toggleWishlist}
-                        isInWishlist={isItemInWishlist}
-                        currency={currency}
-                        symbol={symbol}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {paginatedItems.map((item) => (
-                      <ThemeListItem
-                        key={item.id}
-                        openPreview={openPreview}
-                        item={item}
-                        addToCart={addToCart}
-                        isInCart={isItemInCart(item.id)}
-                        toggleWishlist={toggleWishlist}
-                        isInWishlist={isItemInWishlist}
-                        currency={currency}
-                        symbol={symbol}
-                      />
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* Pagination - Show when there are items */}
-            {filteredItems.length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm p-4 mt-6">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div className="text-sm text-gray-500">
-                    Page {currentPage} of {totalPages} ({filteredItems.length} total items)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                      disabled={currentPage === 1}
-                    >
-                      Previous
-                    </Button>
-
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                        let pageNum
-                        if (totalPages <= 5) {
-                          pageNum = i + 1
-                        } else if (currentPage <= 3) {
-                          pageNum = i + 1
-                        } else if (currentPage >= totalPages - 2) {
-                          pageNum = totalPages - 4 + i
-                        } else {
-                          pageNum = currentPage - 2 + i
-                        }
-
-                        return (
                           <Button
-                            key={pageNum}
-                            variant={currentPage === pageNum ? "default" : "outline"}
-                            size="sm"
-                            className="w-8 h-8 p-0 bg-green-500 hover:bg-green-600"
-                            onClick={() => setCurrentPage(pageNum)}
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => {
+                              resetFilters()
+                              setIsMobileFilterOpen(false)
+                            }}
                           >
-                            {pageNum}
+                            Reset Filters
                           </Button>
-                        )
-                      })}
-                    </div>
+                        </div>
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
 
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                    </Button>
+                <div className="hidden md:flex items-center gap-2">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "outline"}
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => setViewMode("grid")}
+                  >
+                    <Grid className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "outline"}
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => setViewMode("list")}
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="container mx-auto max-w-6xl px-4 py-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Sidebar filters - desktop only */}
+            <div className="hidden md:block w-64 space-y-6">
+              <div className="bg-white rounded-lg shadow-sm p-4">
+                <h2 className="font-bold text-lg mb-4">Filters</h2>
+
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-medium mb-2">Price Range</h3>
+                    <div className="px-2">
+                      <Slider
+                        defaultValue={[0, range]}
+                        max={range}
+                        step={1}
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                        className="my-4"
+                      />
+                      <div className="flex items-center justify-between text-sm">
+                        <span>{symbol}{priceRange[0].toLocaleString()}</span>
+                        <span>{symbol}{priceRange[1].toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium mb-2">Rating</h3>
+                    <div className="space-y-2">
+                      {[5, 4, 3, 2, 1].map((rating) => (
+                        <div key={rating} className="flex items-center">
+                          <Checkbox
+                            id={`rating-${rating}`}
+                            checked={selectedRating === rating}
+                            onCheckedChange={() => setSelectedRating(selectedRating === rating ? 0 : rating)}
+                          />
+                          <label htmlFor={`rating-${rating}`} className="ml-2 text-sm flex items-center">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <svg
+                                key={i}
+                                className={`h-4 w-4 ${i < rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                              </svg>
+                            ))}
+                            <span className="ml-1">& Up</span>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-medium mb-2">Categories</h3>
+                    <div className="space-y-2">
+                      {categories.map((cat) => (
+                        <div key={cat} className="flex items-center">
+                          <Checkbox
+                            id={`category-${cat.toLowerCase()}`}
+                            checked={selectedCategories.includes(cat)}
+                            onCheckedChange={() => handleCategoryToggle(cat)}
+                          />
+                          <label htmlFor={`category-${cat.toLowerCase()}`} className="ml-2 text-sm">
+                            {cat}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button variant="outline" className="w-full" onClick={resetFilters}>
+                    Reset Filters
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Main content area */}
+            <div className="flex-1">
+              {/* Sort and filter bar */}
+              <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex items-center">
+                    <span className="text-sm text-gray-500 mr-2">Sort by:</span>
+                    <Select value={sortBy} onValueChange={setSortBy}>
+                      <SelectTrigger className="w-[180px] h-9">
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="featured">Featured</SelectItem>
+                        <SelectItem value="bestselling">Best Selling</SelectItem>
+                        <SelectItem value="rating">Highest Rated</SelectItem>
+                        <SelectItem value="newest">Newest</SelectItem>
+                        <SelectItem value="price-low">Price: Low to High</SelectItem>
+                        <SelectItem value="price-high">Price: High to Low</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="text-sm text-gray-500">
+                    Showing <span className="font-medium">{startIndex + 1}</span> to{" "}
+                    <span className="font-medium">{Math.min(endIndex, filteredItems.length)}</span> of{" "}
+                    <span className="font-medium">{filteredItems.length}</span> items
+                    {totalPages > 1 && (
+                      <span className="ml-2">
+                        (Page {currentPage} of {totalPages})
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
+
+              {pleaseWaitWhileYourTransactionIsProcessing ? (
+                Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index} className="h-64 rounded-lg dark:bg-gray-800 animate-pulse">
+                    <div className="space-y-2 p-4 border rounded-md bg-white dark:bg-muted animate-pulse">
+                      <div className="h-40 bg-gray-300 dark:bg-gray-700 rounded-md" />
+                      <div className="h-4 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" />
+                      <div className="h-3 w-1/2 bg-gray-300 dark:bg-gray-700 rounded" />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <>
+                  {/* Items grid/list */}
+                  {filteredItems.length === 0 ? (
+                    <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+                      <div className="mb-4">
+                        <Search className="h-12 w-12 mx-auto text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-medium mb-2">No items found</h3>
+                      <p className="text-gray-500 mb-4">
+                        We couldn't find any items matching your criteria. Try adjusting your filters.
+                      </p>
+                      <Button className="bg-green-500" onClick={resetFilters}>
+                        Reset Filters
+                      </Button>
+                    </div>
+                  ) : viewMode === "grid" ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {paginatedItems.map((item) => (
+                        <ThemeCard
+                          key={item.id}
+                          openPreview={openPreview}
+                          item={item}
+                          addToCart={addToCart}
+                          isInCart={isItemInCart(item.id)}
+                          toggleWishlist={toggleWishlist}
+                          isInWishlist={isItemInWishlist}
+                          currency={currency}
+                          symbol={symbol}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {paginatedItems.map((item) => (
+                        <ThemeListItem
+                          key={item.id}
+                          openPreview={openPreview}
+                          item={item}
+                          addToCart={addToCart}
+                          isInCart={isItemInCart(item.id)}
+                          toggleWishlist={toggleWishlist}
+                          isInWishlist={isItemInWishlist}
+                          currency={currency}
+                          symbol={symbol}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Pagination - Show when there are items */}
+              {filteredItems.length > 0 && (
+                <div className="bg-white rounded-lg shadow-sm p-4 mt-6">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-sm text-gray-500">
+                      Page {currentPage} of {totalPages} ({filteredItems.length} total items)
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          let pageNum
+                          if (totalPages <= 5) {
+                            pageNum = i + 1
+                          } else if (currentPage <= 3) {
+                            pageNum = i + 1
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNum = totalPages - 4 + i
+                          } else {
+                            pageNum = currentPage - 2 + i
+                          }
+
+                          return (
+                            <Button
+                              key={pageNum}
+                              variant={currentPage === pageNum ? "default" : "outline"}
+                              size="sm"
+                              className="w-8 h-8 p-0 bg-green-500 hover:bg-green-600"
+                              onClick={() => setCurrentPage(pageNum)}
+                            >
+                              {pageNum}
+                            </Button>
+                          )
+                        })}
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {showCartPage && <CartPage cartItems={cartItems} setCartItems={setCartItems} onClose={closeCartPage} userData={user} />}
+
+            {cartItems.length > 0 && !showCartPage && (
+              <CartConsent
+                onCheckout={() => {
+                  viewCart()
+                }}
+                onViewCart={() => viewCart()}
+                itemCount={cartItems.length}
+                subtotal={cartItems.reduce((sum, item) => {
+                  const price = currency === 'NGN' ? item.priceNGN : item.priceUSD;
+                  return sum + (price || 0);
+                }, 0)}
+              />
+            )}
+
+            {/* Preview Modal */}
+            {showPreview && (
+              <PreviewModal
+                onClose={closePreview}
+                addToCart={addToCart}
+                isInCart={previewItem && isItemInCart(previewItem.id)}
+                item={previewItem}
+                cartCount={getCartCount()}
+              />
             )}
           </div>
-
-          {showCartPage && <CartPage cartItems={cartItems} setCartItems={setCartItems} onClose={closeCartPage} userData={user} />}
-
-          {cartItems.length > 0 && !showCartPage && (
-            <CartConsent
-              onCheckout={() => {
-                viewCart()
-              }}
-              onViewCart={() => viewCart()}
-              itemCount={cartItems.length}
-              subtotal={cartItems.reduce((sum, item) => {
-                const price = currency === 'NGN' ? item.priceNGN : item.priceUSD;
-                return sum + (price || 0);
-              }, 0)}
-            />
-          )}
-
-          {/* Preview Modal */}
-          {showPreview && (
-            <PreviewModal
-              onClose={closePreview}
-              addToCart={addToCart}
-              isInCart={previewItem && isItemInCart(previewItem.id)}
-              item={previewItem}
-              cartCount={getCartCount()}
-            />
-          )}
         </div>
       </div>
-    </div>
+    </Suspense>
+
   )
 }
 

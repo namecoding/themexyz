@@ -270,6 +270,7 @@ export const loginHandler = async ({
 };
 
 type UsePaystackProps = {
+  access_code: string,
   email: string;
   amount: number;
   reference: string;
@@ -280,6 +281,7 @@ type UsePaystackProps = {
 };
 
 export const usePaystack = ({
+  access_code,
   email,
   amount,
   reference,
@@ -296,24 +298,27 @@ export const usePaystack = ({
       const paystack = new PaystackPop();
 
       paystack.newTransaction({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_KEY!,
+        key: process.env.NEXT_PUBLIC_PAYSTACK_KEY,
+        access_code,
         email,
         amount,
         reference,
         currency,
         onSuccess: (response: any) => {
-          // toast.success(`Payment successful: ${response.reference}`, { id: toastId });
+          toast.success(`Payment successful: ${response.reference}`, { id: toastId });
+
+          toast.success(`Payment key: ${process.env.NEXT_PUBLIC_PAYSTACK_KEY}`, { id: toastId });
           onSuccess?.(response);
           resolve(response); // ✅ Return response here
         },
         onCancel: () => {
-          // toast.error("Payment modal closed", { id: toastId });
+          toast.error("Payment modal closed", { id: toastId });
           onClose?.();
           reject("Payment cancelled");
         },
-      });
+      } as any);
     } catch (err) {
-      // toast.error("Paystack failed to load", { id: toastId });
+      toast.error("Paystack failed to load", { id: toastId });
       //console.log("Paystack client error:", err);
       reject(err);
     }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Search, ChevronRight, Heart, ShoppingCart, Check, Monitor, Trash2, X, ArrowLeft } from "lucide-react"
@@ -120,119 +120,122 @@ export default function WishlistPage() {
   }
 
   return (
-    <div
-      className={`min-h-screen bg-gray-50 ${isLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-500`}
-    >
-      {/* Header with breadcrumbs */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto max-w-6xl px-4 py-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center text-sm text-gray-500 mb-2">
-                <Link href="/" className="hover:text-[#82b440]">
-                  Home
-                </Link>
-                <ChevronRight className="h-4 w-4 mx-1" />
-                <span className="font-medium text-gray-900">My Wishlist</span>
+    <Suspense fallback={null}>
+      <div
+        className={`min-h-screen bg-gray-50 ${isLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-500`}
+      >
+        {/* Header with breadcrumbs */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="container mx-auto max-w-6xl px-4 py-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <div className="flex items-center text-sm text-gray-500 mb-2">
+                  <Link href="/" className="hover:text-[#82b440]">
+                    Home
+                  </Link>
+                  <ChevronRight className="h-4 w-4 mx-1" />
+                  <span className="font-medium text-gray-900">My Wishlist</span>
+                </div>
+                <h1 className="text-2xl font-bold">My Wishlist</h1>
               </div>
-              <h1 className="text-2xl font-bold">My Wishlist</h1>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1 md:min-w-[240px]">
-                <input
-                  type="text"
-                  placeholder="Search in wishlist..."
-                  className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#82b440] focus:border-transparent"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Search className="absolute right-3 top-2 h-4 w-4 text-gray-400" />
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1 md:min-w-[240px]">
+                  <input
+                    type="text"
+                    placeholder="Search in wishlist..."
+                    className="w-full border border-gray-300 rounded-md py-2 px-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#82b440] focus:border-transparent"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <Search className="absolute right-3 top-2 h-4 w-4 text-gray-400" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main content */}
-      <div className="container mx-auto max-w-6xl px-4 py-6">
-        {wishlistItems.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <div className="mb-4">
-              <Heart className="h-12 w-12 mx-auto text-gray-400" />
+        {/* Main content */}
+        <div className="container mx-auto max-w-6xl px-4 py-6">
+          {wishlistItems.length === 0 ? (
+            <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+              <div className="mb-4">
+                <Heart className="h-12 w-12 mx-auto text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium mb-2">Your wishlist is empty</h3>
+              <p className="text-gray-500 mb-4">
+                Browse our marketplace and add items to your wishlist to save them for later.
+              </p>
+              <Button asChild className="bg-green-500">
+                <Link href="/">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Continue Shopping
+                </Link>
+              </Button>
             </div>
-            <h3 className="text-lg font-medium mb-2">Your wishlist is empty</h3>
-            <p className="text-gray-500 mb-4">
-              Browse our marketplace and add items to your wishlist to save them for later.
-            </p>
-            <Button asChild className="bg-green-500">
-              <Link href="/">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Continue Shopping
-              </Link>
-            </Button>
-          </div>
-        ) : (
-          <>
-            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="text-sm text-gray-500">
-                  <span className="font-medium">{filteredItems.length}</span> items in your wishlist
-                </div>
+          ) : (
+            <>
+              <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="text-sm text-gray-500">
+                    <span className="font-medium">{filteredItems.length}</span> items in your wishlist
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={addAllToCart} className="text-xs">
-                    <ShoppingCart className="h-3 w-3 mr-1" />
-                    Add All to Cart
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={addAllToCart} className="text-xs">
+                      <ShoppingCart className="h-3 w-3 mr-1" />
+                      Add All to Cart
+                    </Button>
 
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-xs text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-                      >
-                        <Trash2 className="h-3 w-3 mr-1" />
-                        Clear Wishlist
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Clear your wishlist?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will remove all items from your wishlist. This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={clearWishlist} className="bg-red-500 hover:bg-red-600">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 className="h-3 w-3 mr-1" />
                           Clear Wishlist
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Clear your wishlist?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will remove all items from your wishlist. This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={clearWishlist} className="bg-red-500 hover:bg-red-600">
+                            Clear Wishlist
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredItems.map((item) => (
-                <WishlistCard
-                  key={item.id}
-                  item={item}
-                  removeFromWishlist={removeFromWishlist}
-                  addToCart={addToCart}
-                  isInCart={isItemInCart(item.id)}
-                  currency={currency}
-                  symbol={symbol}
-                />
-              ))}
-            </div>
-          </>
-        )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredItems.map((item) => (
+                  <WishlistCard
+                    key={item.id}
+                    item={item}
+                    removeFromWishlist={removeFromWishlist}
+                    addToCart={addToCart}
+                    isInCart={isItemInCart(item.id)}
+                    currency={currency}
+                    symbol={symbol}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </Suspense>
+
   )
 }
 
