@@ -1328,7 +1328,7 @@ export default function SellWizardModal({ open, onClose, user }: SellWizardModal
                 )
 
             case 6:
-                if (formData.sellType !== "Complete Projects") {
+                if (formData.sellType !== "Complete Projects" && formData.sellType !== "Template") {
                     return (
                         <div className="w-full max-w-md text-center space-y-6">
                             <h1 className="text-3xl font-bold text-gray-900">No Demo Required</h1>
