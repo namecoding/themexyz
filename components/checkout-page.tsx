@@ -241,7 +241,7 @@ export default function CheckoutPage({
 
     }
 
-    console.log(currency)
+
   }, [currency]);
 
   const closeLoginModal = () => {

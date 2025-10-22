@@ -77,7 +77,7 @@ export async function POST(request: Request) {
         email,
         amount: total * 100,
         reference,
-        currency: "USD",
+        currency: currency,
         callback_url: "https://your-domain.com/payment/verify", // Update in prod
       }),
     });
